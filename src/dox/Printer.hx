@@ -240,6 +240,7 @@ class Printer
 				switch (field.type)
 				{
 					case TFun(args, ret):
+						if (field.meta.has(":impl")) args.shift();
 						var argLinks = args.map(argLink).join(", ");
 						var retLink = typeLink(ret);
 						buf.add('<a name="$name"></a><h3><code><span class="k">function</span> <span class="i">$name</span>($argLinks):$retLink</code></h3>\n');
