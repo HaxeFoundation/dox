@@ -32,7 +32,7 @@ class Model
 
 			if (base.isPrivate) continue;
 
-			typeMap.set(base.name, base);
+			typeMap.set(getClassTypeID(base), base);
 			
 			var pack = base.pack.join(".");
 			if (!packages.exists(pack))
@@ -150,18 +150,17 @@ class Model
 
 	public function markup(source:String):String
 	{
-		var process = new sys.io.Process("neko", ["markdown.n", source]);
+		var process = new sys.io.Process("neko", ["markdown.n", source]);		
+		var doc = process.stdout.readAll().toString();
 		if (process.exitCode() != 0)
 		{
 			var error = process.stderr.readAll().toString();
 			return '<pre>$error</pre>';
-		}
-		
-		var doc = process.stdout.readAll().toString();
+		}		
 		process.close();
 
 		doc = ~/href="(.+?)"/ig.map(doc, redirectLinks);
-		doc = ~/\[([a-z\.]+)\]/ig.map(doc, replaceLinks);
+		doc = ~/\[([a-z\.0-9]+)\]/ig.map(doc, replaceLinks);
 
 		return doc;
 	}
@@ -194,19 +193,34 @@ class Model
 	function replaceLinks(ereg:EReg):String
 	{
 		var id = ereg.matched(1);
-		var parts = id.split(".");
-		var href = '#'+parts[parts.length-1];
-		if (typeMap.exists(parts[0]))
-		{
-			var base = typeMap.get(parts[0]);
-			href = Printer.baseurl + "/" + base.pack.concat([base.name]).join("/") + ".html";
-			if (parts.length > 1) href += '#'+parts[parts.length-1];
-		}
-		return '<code><a href="$href">$id</a></code>';
+		var href = resolveId(id);
+		if (href == null) return '<code>$id</code>';
+		else return '<code><a href="$href">$id</a></code>';
 	}
 
 	public function getClassTypeID(type:BaseType):String
 	{
-		return type.pack.join(".") + "." + type.module + "." + type.name;
+		return getPathString(type.pack, type.name);
+	}
+	
+	function getPathString(pack:Array<String>, name:String, sep:String = "."):String
+	{
+		return (pack.length == 0 ? "" : pack.join(sep) + sep) + name;
+	}
+	
+	function getTypePath(base:BaseType):String
+	{
+		return Printer.baseurl + "/" + getPathString(base.pack, base.name, "/") + ".html";
+	}
+	
+	function resolveId(id:String)
+	{
+		if (typeMap.exists(id)) return getTypePath(typeMap.get(id));
+		var parts = id.split(".");
+		if (parts.length == 1) return null;
+		var methodName = parts.pop();
+		var id = parts.join(".");
+		if (typeMap.exists(id)) return getTypePath(typeMap.get(id)) + "#" + methodName;
+		return null;
 	}
 }
