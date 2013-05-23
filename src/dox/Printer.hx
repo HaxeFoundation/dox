@@ -10,7 +10,7 @@ using StringTools;
 
 class Printer
 {
-	public static var baseurl = "/dox";
+	public static var baseurl = "C:\\Users\\simn\\Documents\\GitHub\\dox\\pages";
 
 	var model:Model;
 	var buf:StringBuf;
