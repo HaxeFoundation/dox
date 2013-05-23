@@ -1,0 +1,6 @@
+-js api.js
+--no-output
+-dce no
+-D use_rtti_doc
+-cp src
+--macro dox.Macro.init(['js','haxe'])
