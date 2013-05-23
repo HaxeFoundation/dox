@@ -169,8 +169,15 @@ class Printer
 		if (type.impl != null)
 		{
 			var impl = type.impl.get();
-			printClassFields(impl.statics.get(), "Class Fields");
-			printClassFields(impl.fields.get(), "Instance Fields");
+			var fields = [];
+			var statics = [];
+			for (field in impl.statics.get())
+			{
+				if (field.meta.has(":impl")) fields.push(field);
+				else statics.push(field);
+			}
+			printClassFields(statics, "Class Fields");
+			printClassFields(fields, "Instance Fields");
 		}
 	}
 
@@ -240,6 +247,7 @@ class Printer
 				switch (field.type)
 				{
 					case TFun(args, ret):
+						if (field.meta.has(":impl")) args.shift();
 						var argLinks = args.map(argLink).join(", ");
 						var retLink = typeLink(ret);
 						buf.add('<a name="$name"></a><h3><code><span class="k">function</span> <span class="i">$name</span>($argLinks):$retLink</code></h3>\n');
