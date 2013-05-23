@@ -169,8 +169,15 @@ class Printer
 		if (type.impl != null)
 		{
 			var impl = type.impl.get();
-			printClassFields(impl.statics.get(), "Class Fields");
-			printClassFields(impl.fields.get(), "Instance Fields");
+			var fields = [];
+			var statics = [];
+			for (field in impl.statics.get())
+			{
+				if (field.meta.has(":impl")) fields.push(field);
+				else statics.push(field);
+			}
+			printClassFields(statics, "Class Fields");
+			printClassFields(fields, "Instance Fields");
 		}
 	}
 
