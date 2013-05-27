@@ -1,7 +1,7 @@
 package dox;
 
 import haxe.macro.Type;
-using dox.TypeTools;
+using xray.TypeTools;
 
 class Model
 {
@@ -31,7 +31,7 @@ class Model
 			if (base == null) continue;
 
 			if (base.isPrivate) continue;
-
+			
 			typeMap.set(getClassTypeID(base), base);
 			
 			var pack = base.pack.join(".");
@@ -45,7 +45,7 @@ class Model
 				case _:
 			}
 		}
-
+		
 		for (type in types)
 		{
 			var base = type.toBaseType();
@@ -150,36 +150,18 @@ class Model
 
 	public function markup(source:String):String
 	{
-		var process = new sys.io.Process("neko", ["markdown.n", source]);		
-		var doc = process.stdout.readAll().toString();
-		if (process.exitCode() != 0)
-		{
-			var error = process.stderr.readAll().toString();
-			return '<pre>$error</pre>';
-		}		
-		process.close();
+		// TODO: markdown lib should take care of this error handler
+		var doc:String;
+		try {
+			doc = Markdown.markdownToHtml(source);
+		} catch (e:Dynamic) {
+			doc = '<pre>$e</pre>';
+		}
 
 		doc = ~/href="(.+?)"/ig.map(doc, redirectLinks);
 		doc = ~/\[([a-z\.0-9]+)\]/ig.map(doc, replaceLinks);
 
 		return doc;
-	}
-
-	public function markupFile(path:String):String
-	{
-		return path;
-		// var process = new sys.io.Process("haxelib", ["run", "markdown", "-f", path]);
-		// if (process.exitCode() != 0)
-		// {
-		// 	var error = process.stderr.readAll().toString();
-		// 	return '<pre>$error</pre>';
-		// }
-
-		// var doc = process.stdout.readAll().toString();
-		// doc = ~/href="(.+?)"/ig.map(doc, redirectLinks);
-		// doc = ~/\[([a-z\.]+)\]/ig.map(doc, replaceLinks);
-
-		// return doc;
 	}
 
 	function redirectLinks(ereg:EReg):String

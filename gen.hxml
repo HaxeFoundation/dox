@@ -1,0 +1,57 @@
+-cmd touch model.txt
+-cmd rm model.txt
+
+--next
+
+-neko api
+-cp src
+--no-output
+-dce no
+-D use_rtti_doc
+--macro xray.Macro.build()
+
+# --next
+
+# -js api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+# -swf api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+# -cpp api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+# -php api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+# -swf api
+# -swf-version 8
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()

@@ -5,7 +5,7 @@ import haxe.macro.Compiler;
 import haxe.macro.Type;
 using haxe.macro.Tools;
 using Lambda;
-using dox.TypeTools;
+using xray.TypeTools;
 
 class Macro
 {

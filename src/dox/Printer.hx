@@ -1,6 +1,6 @@
 package dox;
 
-using dox.TypeTools;
+using xray.TypeTools;
 import haxe.macro.Context;
 import haxe.macro.Compiler;
 import haxe.macro.Type;
@@ -10,7 +10,8 @@ using StringTools;
 
 class Printer
 {
-	public static var baseurl = "/dox";
+	// public static var baseurl = "/dox";
+	public static var baseurl = "/dox/pages";
 
 	var model:Model;
 	var buf:StringBuf;

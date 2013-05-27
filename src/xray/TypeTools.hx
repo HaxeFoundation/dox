@@ -1,4 +1,4 @@
-package dox;
+package xray;
 
 import haxe.macro.Type;
 
@@ -10,10 +10,10 @@ class TypeTools
 		return switch (type)
 		{
 			case TType(t, _): t.get();
-			case TLazy(f): toBaseType(f());
 			case TInst(t, _): t.get();
 			case TEnum(t, _): t.get();
 			case TAbstract(t, _): t.get();
+			case TLazy(f): toBaseType(f());
 			case _: null;
 		}
 	}
