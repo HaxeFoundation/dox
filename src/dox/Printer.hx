@@ -3,6 +3,7 @@ package dox;
 using xray.TypeTools;
 import haxe.macro.Context;
 import haxe.macro.Compiler;
+import haxe.macro.Expr;
 import haxe.macro.Type;
 using haxe.macro.Tools;
 using Lambda;
@@ -10,18 +11,20 @@ using StringTools;
 
 class Printer
 {
-	// public static var baseurl = "/dox";
-	public static var baseurl = "/dox/pages";
+	public static var baseurl = "/dox";
+	// public static var baseurl = "/dox/pages";
 
 	var model:Model;
 	var buf:StringBuf;
 	var nav:String;
+	var sources:Map<String,String>;
 
 	public function new(model:Model)
 	{
 		this.model = model;
 		buf = new StringBuf();
-
+		sources = new Map();
+		
 		nav = "";
 
 		var packs = [for (key in model.packages.keys()) key];
@@ -36,6 +39,20 @@ class Printer
 			if (pack == "") pack = "top level";
 			nav += '<li><a href="$baseurl/$href">$pack</a></li>\n';
 		}
+	}
+
+	public function getPosSource(pos:Position)
+	{
+		var source = getSource(pos.file).substring(pos.min, pos.max);
+		return xhx.HaxeMarkup.markup(source, pos.file);
+	}
+
+	public function getSource(file:String)
+	{
+		if (sources.exists(file)) return sources.get(file);
+		var source = sys.io.File.getContent(file);
+		sources.set(file, source);
+		return source;
 	}
 
 	public function printType(type:Type)
@@ -136,7 +153,7 @@ class Printer
 	function printEnumField(field:EnumField)
 	{
 		var name = field.name;
-
+		
 		switch (field.type)
 		{
 			case TFun(args, _):
@@ -257,6 +274,7 @@ class Printer
 		}
 		
 		printDoc(field.doc);
+		// buf.add(getPosSource(field.pos));
 	}
 	
 	function printMarkDownDoc(doc:String)

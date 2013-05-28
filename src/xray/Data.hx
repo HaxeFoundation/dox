@@ -42,10 +42,10 @@ class MetaData
 
 class PathData
 {
-	public var _id:String;
+	public var _key:String;
 
-	public function new(_id:String)
+	public function new(key:String)
 	{
-		this._id = _id;
+		_key = key;
 	}
 }

@@ -1,48 +1,50 @@
 package xray;
 
 import xray.Data;
+import haxe.macro.Type;
 
 class Unserializer extends haxe.Unserializer
 {
-	var refs:Array<RefData<Dynamic>>;
-	var types:Map<String, Dynamic>;
+	var paths:Array<{o:Dynamic, k:String, v:PathData}>;
 
 	public function new(buf:String)
 	{
 		super(buf);
-		refs = [];
-		types = new Map<String, Dynamic>();
+		paths = [];
 	}
 
-	override public function unserialize()
+	public function getTypes():Array<Type>
 	{
-		var v:Dynamic = super.unserialize();
+		var model = unserialize();
+		var cache:Map<String, Dynamic> = model.cache;
 
-		if (Std.is(v, RefData)) refs.push(v);
-		if (Reflect.hasField(v, "pack") && Reflect.hasField(v, "name"))
+		for (path in paths)
 		{
-			var id = v.pack.concat([v.name]).join(".");
-			types.set(id, v);
+			Reflect.setField(path.o, path.k, cache.get(path.v._key));
 		}
 
-		return v;
+		return model.types;
 	}
 
-	public function updateRefs()
+	override function unserializeObject(o)
 	{
-		for (ref in refs)
-		{
-			if (Std.is(ref._ref, String))
+		while( true ) {
+			if( pos >= length )
+				throw "Invalid object";
+			if( get(pos) == "g".code )
+				break;
+			var k = unserialize();
+			if( !Std.is(k,String) )
+				throw "Invalid object key";
+			var v = unserialize();
+
+			if (Std.is(v, PathData))
 			{
-				if (types.exists(ref._ref))
-				{
-					ref._ref = types.get(ref._ref);
-				}
-				else
-				{
-					trace(ref._ref);
-				}
+				paths.push({o:o,k:k,v:v});
 			}
+
+			Reflect.setField(o,k,v);
 		}
+		pos++;
 	}
 }

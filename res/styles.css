@@ -10,8 +10,17 @@ body { padding:16px; padding-top:60px; }
 .toggle-on .toggle-show { display:block !important; }
 .related-types .toggle-hide { padding-top:4px; }
 
-.i { color:green; }
-.k { color:red; }
-.d { color:purple; }
-.c { color:magenta; }
-.comment { color:gray; }
+code pre { background: #272822; color: #F8F8F2; tab-size:4; }
+.i { color: #F8F8F2; } /* identifier */
+.t { color: #FF9901; } /* type */
+.k { color: #F92772; } /* keyword */
+.d { color: #66D9EF; } /* directive */
+.c { color: #AE81FF; } /* constant */
+.s { color: #E6DB74; } /* string */
+.comment { color:#75715E; }
+.inactive { color: #75715E; }
+.macro { color: #A6E22A; }
+
+::selection {
+	background: #999999;
+}

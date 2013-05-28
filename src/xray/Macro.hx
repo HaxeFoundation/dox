@@ -8,6 +8,7 @@ import sys.FileSystem;
 using Lambda;
 using StringTools;
 using xray.TypeTools;
+import xray.Data;
 
 class Macro
 {
@@ -77,35 +78,12 @@ class Macro
 
 	static function generate(types:Array<Type>)
 	{
-		var model = new Map<String, Dynamic>();
+		var processor = new Processor();
+		var model = processor.process(types);
 
-		if (FileSystem.exists("model.txt"))
-		{
-			var data = sys.io.File.getContent("model.txt");
-			var unserializer = new haxe.Unserializer(data);
-			model = unserializer.unserialize();
-		}
-
-		for (type in types)
-		{
-			var base = type.toBaseType();
-			if (base == null) continue;
-
-			var key = type.getName();
-			if (model.exists(key))
-			{
-				var info = model.get(key);
-				info.platforms.remove(platform);
-				info.platforms.push(platform);
-			}
-			else
-			{
-				model.set(key, {platforms:[platform], def:type});
-			}
-		}
-		
 		var serializer = new Serializer();
 		serializer.serialize(model);
-		sys.io.File.saveContent("model.txt",  serializer.toString());
+
+		sys.io.File.saveContent("bin/" + platform + ".txt",  serializer.toString());
 	}
 }

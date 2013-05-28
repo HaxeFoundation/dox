@@ -16,20 +16,25 @@ class Generator
 		MetaData;
 		haxe.macro.ClassKind;
 
-		var data = sys.io.File.getContent("model.txt");
-		var unserializer = new xray.Unserializer(data);
-		var model:Map<String, Definition> = unserializer.unserialize();
-		unserializer.updateRefs();
+		var all = [];
+		var definitions = new Map<String, Bool>();
 
-		var types = [];
-
-		for (key in model.keys())
+		for (platform in ["cpp", "flash", "neko", "php", "js"])
 		{
-			var def = model.get(key);
-			types.push(def.def);
+			var data = sys.io.File.getContent('bin/$platform.txt');
+			var unserializer = new xray.Unserializer(data);
+			var types = unserializer.getTypes();
+
+			for (type in types)
+			{
+				var key = type.getName();
+				if (definitions.exists(key)) continue;
+				definitions.set(key, true);
+				all.push(type);
+			}
 		}
 
-		generate(types);
+		generate(all);
 	}
 
 	static function generate(types:Array<Type>)

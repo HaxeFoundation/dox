@@ -1,4 +1,4 @@
-package xray;
+package xhx;
 
 import xhx.Data;
 import xhx.HaxeLexer;
@@ -9,8 +9,9 @@ class HaxeMarkup
 	public static function markup(source:String, file:String)
 	{
 		if (source == "" || source == null) return "";
-		var parser = new Source(source, file);
-		return parser.parse();
+		var parser = new HaxeMarkup(source, file);
+		source = parser.parse();
+		return '<code><pre>$source</pre></core>';
 	}
 
 	var active:Bool;
@@ -53,6 +54,8 @@ class HaxeMarkup
 
 	function parseMacro():Bool
 	{
+		return true;
+		
 		var token = stream.peek();
 		return switch (token.tok)
 		{

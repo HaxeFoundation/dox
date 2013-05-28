@@ -1,10 +1,8 @@
-# -js api.js
-# --no-output
-# -dce no
-# -D use_rtti_doc
-# -cp src
-# --macro dox.Macro.init(['js','haxe'])
+-cmd cp res/* pages
+
+--next
 
 -x dox.Generator
 -cp /ws/markdown/src
 -cp src
+-cp /ws/hxparse/src

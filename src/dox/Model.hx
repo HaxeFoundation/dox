@@ -167,9 +167,20 @@ class Model
 	function redirectLinks(ereg:EReg):String
 	{
 		var href = ereg.matched(1);
-		if (href.indexOf(".md") == -1) return ereg.matched(0);
-		href = href.split(".md").join(".html");
-		return 'href="$href"';
+		
+		if (StringTools.endsWith(href, ".md"))
+		{
+			href = href.split(".md").join(".html");
+			return 'href="$href"';
+		}
+
+		if (StringTools.startsWith(href, "/api/")) 
+		{
+			href = href.split("/api").join(Printer.baseurl) + ".html";
+			return 'href="$href"';
+		}
+		
+		return ereg.matched(0);
 	}
 
 	function replaceLinks(ereg:EReg):String
