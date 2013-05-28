@@ -13,7 +13,8 @@ import xray.Data;
 class Macro
 {
 	static var platform = getPlatform();
-
+	static var std = Sys.getEnv("HAXE_STD_PATH").split(":")[0];
+	
 	public static function build()
 	{
 		Sys.println(platform);
@@ -62,7 +63,7 @@ class Macro
 
 			if (FileSystem.isDirectory(entry))
 			{
-				if (path == "/usr/lib/haxe/std" && file != platform && file != "haxe") continue;
+				if (path == std && file != platform && file != "haxe") continue;
 				includePath(entry, (pack == "" ? file : pack + "." + file));
 			}
 			else

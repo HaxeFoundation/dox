@@ -6,7 +6,7 @@ using haxe.macro.Tools;
 using Lambda;
 using xray.TypeTools;
 
-typedef Definition = {platforms:Array<String>, def:Type};
+typedef Definition = {platforms:Array<String>, type:Type};
 
 class Generator
 {
@@ -17,7 +17,7 @@ class Generator
 		haxe.macro.ClassKind;
 
 		var all = [];
-		var definitions = new Map<String, Bool>();
+		var platforms = new Map<String, Array<String>>();
 
 		for (platform in ["cpp", "flash", "neko", "php", "js"])
 		{
@@ -28,16 +28,20 @@ class Generator
 			for (type in types)
 			{
 				var key = type.getName();
-				if (definitions.exists(key)) continue;
-				definitions.set(key, true);
+				if (platforms.exists(key))
+				{
+					platforms.get(key).push(platform);
+					continue;
+				}
+				platforms.set(key, [platform]);
 				all.push(type);
 			}
 		}
 
-		generate(all);
+		generate(all, platforms);
 	}
 
-	static function generate(types:Array<Type>)
+	static function generate(types:Array<Type>, platforms:Map<String, Array<String>>)
 	{
 		// only public types
 		types = types.filter(TypeTools.isPublic);
@@ -55,7 +59,7 @@ class Generator
 			var path = type.getPath();
 			var name = path.join(".");
 			Sys.println('Generating $name');
-			printer.printType(type);
+			printer.printType(type, platforms.get(name));
 
 			// write page
 			var file = "pages/" + path.join("/") + ".html";

@@ -55,7 +55,7 @@ class Printer
 		return source;
 	}
 
-	public function printType(type:Type)
+	public function printType(type:Type, platforms:Array<String>)
 	{
 		var base = type.toBaseType();
 
@@ -69,6 +69,8 @@ class Printer
 		var kind = typeKind(type);
 		var link = typeLink(type);
 		buf.add('<h1><span class="d">$kind</span> $link</h1>\n');
+		buf.add('<p>available in ${platforms.join(", ")}</p>');
+		buf.add('<p>import ${base.module}</p>');
 
 		switch (type)
 		{

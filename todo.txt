@@ -1,0 +1,6 @@
+Todo:
+
+Field available in (platforms)
+Field variations
+Read/Write (default, null)... better?
+Platform dropdown
