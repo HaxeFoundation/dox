@@ -1,20 +1,25 @@
 package xray;
 
-class RefData
+class RefData<T>
 {
-	public var _ref:Dynamic;
-
-	public function new(t:Dynamic)
+	public static function of<T>(ref:T):RefData<T>
 	{
-		_ref = t;
+		return new RefData(ref);
 	}
 
-	public function get()
+	public var _ref:T;
+
+	public function new(ref:T)
+	{
+		_ref = ref;
+	}
+
+	public function get():T
 	{
 		return _ref;
 	}
 
-	public function toString()
+	public function toString():String
 	{
 		return null;
 	}
@@ -32,5 +37,15 @@ class MetaData
 	public function has(name:String):Bool
 	{
 		return impl && name == ":impl";
+	}
+}
+
+class PathData
+{
+	public var _id:String;
+
+	public function new(_id:String)
+	{
+		this._id = _id;
 	}
 }

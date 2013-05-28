@@ -4,7 +4,7 @@ import xray.Data;
 
 class Unserializer extends haxe.Unserializer
 {
-	var refs:Array<RefData>;
+	var refs:Array<RefData<Dynamic>>;
 	var types:Map<String, Dynamic>;
 
 	public function new(buf:String)
