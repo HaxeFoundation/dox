@@ -3,6 +3,6 @@
 --next
 
 -x dox.Generator
--cp /ws/markdown/src
+-lib markdown
+-lib hxparse
 -cp src
--cp /ws/hxparse/src
