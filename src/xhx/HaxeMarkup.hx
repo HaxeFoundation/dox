@@ -6,6 +6,15 @@ import hxparse.LexerStream;
 
 class HaxeMarkup
 {
+	public inline static var DIRECTIVE = "directive";
+	public inline static var KEYWORD = "keyword";
+	public inline static var IDENTIFIER = "identifier";
+	public inline static var STRING = "string";
+	public inline static var CONSTANT = "constant";
+	public inline static var COMMENT = "comment";
+	public inline static var MACRO = "macro";
+	public inline static var TYPE = "type";
+
 	public static function markup(source:String, file:String)
 	{
 		if (source == "" || source == null) return "";
@@ -60,16 +69,16 @@ class HaxeMarkup
 		return switch (token.tok)
 		{
 			case Const(CIdent(s)):
-				add(token, "macro");
+				add(token, MACRO);
 				defines.exists(s);
 			case Kwd(Macro):
-				add(token, "macro");
-				defines.exists("macro");
+				add(token, MACRO);
+				defines.exists(MACRO);
 			case Unop(OpNot):
-				add(token, "macro");
+				add(token, MACRO);
 				!parseMacro();
 			case POpen:
-				add(token, "macro");
+				add(token, MACRO);
 				var val = parseMacro();
 				token = stream.peek();
 				while (token.tok != Eof)
@@ -77,13 +86,13 @@ class HaxeMarkup
 					switch (token.tok)
 					{
 						case Binop(OpBoolAnd):
-							add(token, "macro");
+							add(token, MACRO);
 							val = val && parseMacro();
 						case Binop(OpBoolOr):
-							add(token, "macro");
+							add(token, MACRO);
 							val = val || parseMacro();
 						case PClose:
-							add(token, "macro");
+							add(token, MACRO);
 							break;
 						case _:
 							throw "invalid macro condition " + token.tok;
@@ -111,7 +120,7 @@ class HaxeMarkup
 					var code = s.charCodeAt(0);
 					if (code > 64 && code < 91)
 					{
-						for (token in tokens) add(token, "t");
+						for (token in tokens) add(token, TYPE);
 						return true;
 					}
 				case Dot:
@@ -145,16 +154,16 @@ class HaxeMarkup
 			switch (token.tok)
 			{
 				case Sharp("if"):
-					add(token, "macro");
+					add(token, MACRO);
 					stack.unshift(parseMacro());
 				case Sharp("elseif"):
-					add(token, "macro");
+					add(token, MACRO);
 					if (!stack[0]) stack[0] = parseMacro();
 				case Sharp("else"):
-					add(token, "macro");
+					add(token, MACRO);
 					if (!stack[0]) stack[0] = true;
 				case Sharp("end"):
-					add(token, "macro");
+					add(token, MACRO);
 					stack.shift();
 				case _:
 					add(token, "inactive");
@@ -173,7 +182,7 @@ class HaxeMarkup
 			switch (token.tok)
 			{
 				case Sharp(s):
-					add(token, "macro");
+					add(token, MACRO);
 
 					if (s == "if")
 					{
@@ -209,20 +218,17 @@ class HaxeMarkup
 						stack.shift();
 					}
 				case Kwd(Class), Kwd(Import), Kwd(Enum), Kwd(Abstract), Kwd(Typedef), Kwd(Package):
-					add(token, "d");
+					add(token, DIRECTIVE);
 				case Kwd(_), Const(CIdent("trace")):
-					add(token, "k"); 
+					add(token, KEYWORD); 
 				case Const(CIdent(s)):
-					if (!parseTypeId()) add(token, "i"); 
-					// var code = s.charCodeAt(0);
-					// if (code > 64 && code < 91) add(token, "t"); 
-					// else add(token, "i"); 
+					if (!parseTypeId()) add(token, IDENTIFIER); 
 				case Const(CString(_)):
-					add(token, "s"); 
+					add(token, STRING); 
 				case Const(_):
-					add(token, "c"); 
+					add(token, CONSTANT); 
 				case CommentLine(_), Comment(_):
-					add(token, "comment"); 
+					add(token, COMMENT); 
 				case _:
 					add(token);
 			}

@@ -11,19 +11,33 @@ body { padding:16px; padding-top:60px; }
 .toggle-on .toggle-show { display:block !important; }
 .related-types .toggle-hide { padding-top:4px; }
 
-pre { tab-size:4; }
-h3 code { background: #272822; color: #F8F8F2; border:none; padding:4px; font-size:14px; }
-h3 code a:hover { color:white; }
-.i { color: #F8F8F2 !important; } /* identifier */
-.t { color: #FF9901 !important; } /* type */
-.k { color: #F92772 !important; } /* keyword */
-.d { color: #66D9EF !important; } /* directive */
-.c { color: #AE81FF !important; } /* constant */
-.s { color: #E6DB74 !important; } /* string */
-.comment { color:#75715E; }
-.inactive { color: #75715E; }
-.macro { color: #A6E22A; }
+h3 code { border:none; padding:4px; font-size:13px; }
+h3 code a:hover { color:white; text-decoration:none; }
+h3 code a:hover span { color:white; text-decoration:none; }
+code { tab-size:4; }
 
-::selection {
-	background: #999999;
-}
+/* monokai */
+code { background:#FDF6E3; color:#586E75; } /* light */
+h3 code { background:#272822; color:#F8F8F2; } /* dark */
+/*code .identifier { color:#F8F8F2; }*/
+code .type { color:#FF9901; }
+code .keyword { color:#F92772; }
+code .directive { color:#66D9EF; }
+code .constant { color:#AE81FF; }
+code .comment { color:#75715E; }
+code .string { color:#E6DB74; }
+code .macro { color:#A6E22A; }
+code .inactive { color:#75715E; }
+
+/* solarized */
+/*code { background:#FDF6E3; color:#586E75; }
+h3 code { background:#042029; color:#819090; }
+code .identifier { color:#268BD2; }
+code .type { color:#268BD2; }
+code .keyword { color:#859900; }
+code .directive { color:#D30102; }
+code .constant { color:#D33682; }
+code .comment { color:#93A1A1; }
+code .string { color:#2AA198; }
+code .macro { color:#B58900; }
+code .inactive { color:#93A1A1; }*/

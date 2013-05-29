@@ -1,40 +1,59 @@
--neko api
+# -neko api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+# -js api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+# -swf api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+# -cpp api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+# -php api
+# -cp src
+# --no-output
+# -dce no
+# -D use_rtti_doc
+# --macro xray.Macro.build()
+
+# --next
+
+-cs api
 -cp src
 --no-output
 -dce no
 -D use_rtti_doc
+-D unsafe
 --macro xray.Macro.build()
 
 --next
 
--js api
--cp src
---no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
-
---next
-
--swf api
--cp src
---no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
-
---next
-
--cpp api
--cp src
---no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
-
---next
-
--php api
+-java api
 -cp src
 --no-output
 -dce no

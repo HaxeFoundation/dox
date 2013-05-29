@@ -68,9 +68,12 @@ class Printer
 		// print the heading
 		var kind = typeKind(type);
 		var link = typeLink(type);
-		buf.add('<h1><span class="d">$kind</span> $link</h1>\n');
-		buf.add('<p>available in ${platforms.join(", ")}</p>');
-		buf.add('<p>import ${base.module}</p>');
+		buf.add('<h1><span class="directive">$kind</span> $link</h1>\n');
+		buf.add('<p>Available in ${platforms.join(", ")}</p>\n');
+		
+		var name = type.getName();
+		if (base.module != "StdTypes" && name != base.module)
+			buf.add('<p>Import ${base.module}</p>\n');
 
 		switch (type)
 		{
@@ -259,9 +262,15 @@ class Printer
 		
 		switch (field.kind)
 		{
-			case FVar(_,write):
+			case FVar(read,write):
 				var link = typeLink(field.type);
-				buf.add('<a name="$name"></a><h3><code><span class="k">var</span> <span class="i">$name</span>:$link</code></h3>\n');
+				var readonly = read == AccInline || write == AccNo || write == AccNever;
+				// var read = accessString(read);
+				// var write = accessString(write);
+				var access = readonly ? '<span class="comment"> // readonly</span>' : '';
+				// read == 'default' && write == 'default' ? '' :
+				// 	'(<span class="keyword">$read</span>,<span class="keyword">$write</span>)';
+				buf.add('<a name="$name"></a><h3><code><span class="keyword">var</span> <span class="identifier">$name</span>:$link;$access</code></h3>\n');
 
 			case FMethod(_):
 				switch (field.type)
@@ -270,7 +279,7 @@ class Printer
 						if (field.meta.has(":impl")) args.shift();
 						var argLinks = args.map(argLink).join(", ");
 						var retLink = typeLink(ret);
-						buf.add('<a name="$name"></a><h3><code><span class="k">function</span> <span class="i">$name</span>($argLinks):$retLink</code></h3>\n');
+						buf.add('<a name="$name"></a><h3><code><span class="keyword">function</span> <span class="identifier">$name</span>($argLinks):$retLink;</code></h3>\n');
 					case _:
 				}
 		}
@@ -279,6 +288,15 @@ class Printer
 		// buf.add(getPosSource(field.pos));
 	}
 	
+	function accessString(access:VarAccess)
+	{
+		return switch (access)
+		{
+			case AccNo, AccNever: "null";
+			case _: "default";
+		}
+	}
+
 	function printMarkDownDoc(doc:String)
 	{
 		buf.add('<div class="doc">$doc</div>\n');
@@ -294,7 +312,7 @@ class Printer
 		buf = new StringBuf();
 
 		if (pack == "") buf.add('<h1>top level<h1>');
-		else buf.add('<h1><span class="d">package</span> $pack</h1>');
+		else buf.add('<h1><span class="directive">package</span> $pack</h1>');
 		
 		// var guides = "doc/" + pack.split(".").join("/");
 		// if (pack.length > 0 && sys.FileSystem.exists(guides))
@@ -425,7 +443,7 @@ class Printer
 				case TFun(args, ret): 
 					args.map(argType).concat([ret]).map(typeLink).join(" -> ");
 				case TDynamic(_):
-					'<a href="$baseurl/Dynamic.html">Dynamic</a>';
+					'<a href="$baseurl/Dynamic.html"><span class="type">Dynamic</span></a>';
 				case TAnonymous(a):
 					"{ "+a.get().fields.map(fieldLink).join(", ")+" }";
 				case _:
@@ -434,11 +452,25 @@ class Printer
 			}
 		}
 
+		// don't link type params
+		switch (type)
+		{
+			case TInst(t,_):
+				var ref = t.get();
+				switch (ref.kind)
+				{
+					case KTypeParameter(_):
+						return '<span class="type">${base.name}</span>';
+					default:
+				}
+			default:
+		}
+
 		var link = baseTypeLink(base);
 
 		switch (type)
 		{
-			case TType(_, params), TInst(_, params), TEnum(_, params):
+			case TType(_, params), TInst(_, params), TEnum(_, params), TAbstract(_, params):
 				link += paramsLink(params);
 			case _:
 		}
@@ -472,13 +504,13 @@ class Printer
 		var opt = arg.opt ? "?" : "";
 		var name = arg.name;
 		var link = typeLink(arg.t);
-		return '$opt<span class="i">$name</span>:$link';
+		return '$opt<span class="identifier">$name</span>:$link';
 	}
 
 	function baseTypeLink(type:BaseType):String
 	{
 		var href = baseTypeURL(type);
-		return '<a href="$href">${type.name}</a>';
+		return '<a href="$href"><span class="type">${type.name}</span></a>';
 	}
 
 	function baseTypeURL(type:BaseType):String

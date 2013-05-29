@@ -159,7 +159,7 @@ class Model
 		}
 
 		doc = ~/href="(.+?)"/ig.map(doc, redirectLinks);
-		doc = ~/\[([a-z\.0-9]+)\]/ig.map(doc, replaceLinks);
+		// doc = ~/\[([a-z\.0-9]+)\]/ig.map(doc, replaceLinks);
 
 		return doc;
 	}

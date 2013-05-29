@@ -19,7 +19,7 @@ class Generator
 		var all = [];
 		var platforms = new Map<String, Array<String>>();
 
-		for (platform in ["cpp", "flash", "neko", "php", "js"])
+		for (platform in ["cpp", "flash", "neko", "php", "js", "cs", "java"])
 		{
 			var data = sys.io.File.getContent('bin/$platform.txt');
 			var unserializer = new xray.Unserializer(data);
