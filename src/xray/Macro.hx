@@ -13,7 +13,13 @@ import xray.Data;
 class Macro
 {
 	static var platform = getPlatform();
-	static var std = Sys.getEnv("HAXE_STD_PATH").split(":")[0];
+	static var std = switch(Sys.systemName()) {
+		case "Windows":
+			var path = Sys.getEnv("HAXE_STD_PATH");
+			if (path == null) Sys.getEnv("HAXEPATH") + "/std/";
+			else path;
+		case _: Sys.getEnv("HAXE_STD_PATH").split(":")[0];
+	}
 	
 	public static function build()
 	{
