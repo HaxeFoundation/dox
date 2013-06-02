@@ -223,6 +223,6 @@ class Processor
 
 	function processMeta(meta:MetaAccess):MetaAccess
 	{
-		return cast new MetaData(meta.has(":impl"));
+		return cast new MetaData(meta.get());
 	}
 }
