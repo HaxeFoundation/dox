@@ -13,20 +13,18 @@ typedef Package = { full:String, name:String, types:Array<Type>, packs:Map<Strin
 
 class Printer
 {
-	public static var baseurl = "/dox";
-	// public static var baseurl = "/dox/pages";
+	// public static var baseurl = "/dox";
+	public static var baseurl = "/dox/pages";
 
 	var model:Model;
 	var buf:StringBuf;
 	var nav:String;
-	var sources:Map<String,String>;
 
 	public function new(model:Model)
 	{
 		this.model = model;
 		buf = new StringBuf();
-		sources = new Map();
-		
+
 		nav = "";
 
 		var root = { name:"", full:"", types:[], packs:new Map<String, Package>()};
@@ -99,26 +97,9 @@ class Printer
 		return buf.toString();
 	}
 
-	public function getPosSource(pos:Position)
-	{
-		var source = getSource(pos.file).substring(pos.min, pos.max);
-		return xhx.HaxeMarkup.markup(source, pos.file);
-	}
-
-	public function getSource(file:String)
-	{
-		if (sources.exists(file)) return sources.get(file);
-		var source = sys.io.File.getContent(file);
-		sources.set(file, source);
-		return source;
-	}
-
 	public function printType(type:Type, platforms:Array<String>)
 	{
 		var base = type.toBaseType();
-
-		// only document base types (no anon, mono, fun)
-		if (base == null) return;
 
 		// reset buffer
 		buf = new StringBuf();
@@ -327,11 +308,7 @@ class Printer
 			case FVar(read,write):
 				var link = typeLink(field.type);
 				var readonly = read == AccInline || write == AccNo || write == AccNever;
-				// var read = accessString(read);
-				// var write = accessString(write);
 				var access = readonly ? '<span class="comment"> // readonly</span>' : '';
-				// read == 'default' && write == 'default' ? '' :
-				// 	'(<span class="keyword">$read</span>,<span class="keyword">$write</span>)';
 				buf.add('<a name="$name"></a><h3><code><span class="keyword">var</span> <span class="identifier">$name</span>:$link;$access</code></h3>\n');
 
 			case FMethod(_):
@@ -341,13 +318,14 @@ class Printer
 						if (field.meta.has(":impl")) args.shift();
 						var argLinks = args.map(argLink).join(", ");
 						var retLink = typeLink(ret);
-						buf.add('<a name="$name"></a><h3><code><span class="keyword">function</span> <span class="identifier">$name</span>($argLinks):$retLink;</code></h3>\n');
+						var params = field.params.map(function(p) { return p.t; });
+						var paramLinks = paramsLink(params);
+						buf.add('<a name="$name"></a><h3><code><span class="keyword">function</span> <span class="identifier">$name</span>$paramLinks($argLinks):$retLink;</code></h3>\n');
 					case _:
 				}
 		}
 		
 		printDoc(field.doc);
-		// buf.add(getPosSource(field.pos));
 	}
 	
 	function accessString(access:VarAccess)
@@ -376,40 +354,6 @@ class Printer
 		if (pack == "") buf.add('<h1>top level<h1>');
 		else buf.add('<h1><span class="directive">package</span> $pack</h1>');
 		
-		// var guides = "doc/" + pack.split(".").join("/");
-		// if (pack.length > 0 && sys.FileSystem.exists(guides))
-		// {
-		// 	for (file in sys.FileSystem.readDirectory(guides))
-		// 	{
-		// 		if (file.indexOf(".md") == -1) continue;
-		// 		Sys.println("Generating " + file);
-
-		// 		var doc = model.markupFile(guides + "/" + file);
-		// 		// doc = model.markup(doc);
-
-		// 		if (file == "index.md")
-		// 		{
-		// 			doc = shiftHeadings(doc, 3, true);
-		// 			buf.add('<h3>Overview</h3>\n');
-		// 			buf.add(doc);
-		// 		}
-		// 		else
-		// 		{
-		// 			var copy = parts.copy();
-		// 			copy.pop();
-		// 			copy.push("doc");
-		// 			var dir = out + "/"+copy.join("/");
-		// 			copy.push(file.split(".md").join(".html"));
-
-		// 			var output = out + "/" + copy.join("/");
-		// 			doc = shiftHeadings(doc, 1, true);
-
-		// 			// msys.FS.mkdir_p(dir, {});
-		// 			// sys.io.File.saveContent(output, html(doc));
-		// 		}
-		// 	}
-		// }
-
 		var interfaces:Array<BaseType> = [];
 		var classes:Array<BaseType> = [];
 		var enums:Array<BaseType> = [];
@@ -509,7 +453,6 @@ class Printer
 				case TAnonymous(a):
 					"{ "+a.get().fields.map(fieldLink).join(", ")+" }";
 				case _:
-					// return StringTools.htmlEscape(type.toString());
 					StringTools.htmlEscape(Std.string(type));
 			}
 		}
@@ -577,7 +520,6 @@ class Printer
 
 	function baseTypeURL(type:BaseType):String
 	{
-		// return "javascript:client.filter('"+baseTypePath(type).join(".")+"');";
 		return baseurl + "/" + baseTypePath(type).join("/") + ".html";
 	}
 

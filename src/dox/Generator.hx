@@ -10,8 +10,10 @@ typedef Definition = {platforms:Array<String>, type:Type};
 
 class Generator
 {
-	public static function main()
+	static function main()
 	{
+		trace(Template.page("../../", "some navigation", "some body. oh yeah."));
+		return;
 		RefData;
 		MetaData;
 		haxe.macro.ClassKind;

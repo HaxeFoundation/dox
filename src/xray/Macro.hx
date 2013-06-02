@@ -21,15 +21,18 @@ class Macro
 		case _: Sys.getEnv("HAXE_STD_PATH").split(":")[0];
 	}
 	
-	public static function build()
+	public static function includeAll()
 	{
-		Sys.println(platform);
-		
 		var classPaths = Context.getClassPath();
 		classPaths = classPaths.filter(FileSystem.exists);
 		classPaths = classPaths.map(normalizePath);
 		for (path in classPaths) includePath(path);
+	}
 
+	public static function build()
+	{
+		Sys.println(platform);
+		includeAll();
 		Context.onGenerate(generate);
 	}
 
@@ -59,7 +62,8 @@ class Macro
 		
 		for (file in FileSystem.readDirectory(path))
 		{
-			if (file == "web") continue;
+			if (file == "web" && !Context.defined("neko")) continue;
+			// if (file == "web") continue;
 			if (file == "SocketWrapper.hx") continue;
 			if (file == "SyncSocketConnection.hx") continue;
 			if (file == "ExampleJSGenerator.hx") continue;

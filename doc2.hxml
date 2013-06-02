@@ -1,0 +1,4 @@
+-x dox.GeneratorXml
+-lib markdown
+-lib hxparse
+-cp src
