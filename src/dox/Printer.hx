@@ -153,6 +153,7 @@ class Printer
 		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 		<link href="$baseurl/styles.css" rel="stylesheet">
+		<script type="text/javascript">var baseUrl = "$baseurl";</script>
 		<script type="text/javascript" src="$baseurl/index.js"></script>
 	</head>
 	<body>
