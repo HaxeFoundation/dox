@@ -9,6 +9,8 @@ using haxe.macro.Tools;
 using Lambda;
 using StringTools;
 
+typedef Package = { full:String, name:String, types:Array<Type>, packs:Map<String, Package>};
+
 class Printer
 {
 	public static var baseurl = "/dox";
@@ -27,18 +29,74 @@ class Printer
 		
 		nav = "";
 
-		var packs = [for (key in model.packages.keys()) key];
-		packs.sort(Reflect.compare);
-		for (pack in packs)
-		{
-			var parts = pack.split(".");
-			if (parts.length == 1 && parts[0] == "") parts = [];
-			parts.push("index.html");
+		var root = { name:"", full:"", types:[], packs:new Map<String, Package>()};
+		var top = { name:"global", full:"", types:[], packs:new Map<String, Package>()};
+		root.packs.set("top", top);
 
-			var href = parts.join("/");
-			if (pack == "") pack = "top level";
-			nav += '<li><a href="$baseurl/$href">$pack</a></li>\n';
+		for (pack in model.packages.keys())
+		{
+			var types = model.packages.get(pack);
+			var cur = root;
+			var parts = pack.split(".");
+			var full = [];
+
+			for (part in parts)
+			{
+				full.push(part);
+
+				if (cur.packs.exists(part))
+				{
+					cur = cur.packs.get(part);
+				}
+				else
+				{
+					var next = { full:full.join("."), name:part, types:[], packs:new Map<String, Package>()};
+					cur.packs.set(part, next);
+					cur = next;
+				}
+			}
+
+			if (pack == "") top.types = types;
+			else cur.types = types;
 		}
+
+		nav = getNav(root);
+	}
+
+	function getNav(pack:Package):String
+	{
+		var parts = pack.full.split(".");
+		if (parts.length == 1 && parts[0] == "") parts = [];
+		var href = parts.join("/");
+
+		var buf = new StringBuf();
+		var root = (pack.name == "");
+
+		if (!root)
+		{
+			buf.add('<li class="expando"><div>');
+			buf.add('<a href="#" onclick="toggleCollapsed(this)"><img src="$baseurl/triangle-closed.png"></a>');
+			buf.add('<a href="$baseurl/$href">${pack.name}</a>');
+			buf.add('</div><ul>');
+		}
+		else
+		{
+			buf.add('<ul>');
+		}
+		
+
+		for (pack in pack.packs) buf.add(getNav(pack));
+		for (type in pack.types)
+		{
+			var base = type.toBaseType();
+			var link = baseTypeLink(base);
+			buf.add('<li><div>$link</div></li>');
+		}
+		
+		buf.add('</ul>');
+		if (!root)buf.add('</li>');
+
+		return buf.toString();
 	}
 
 	public function getPosSource(pos:Position)
@@ -69,11 +127,12 @@ class Printer
 		var kind = typeKind(type);
 		var link = typeLink(type);
 		buf.add('<h1><span class="directive">$kind</span> $link</h1>\n');
-		buf.add('<p>Available in ${platforms.join(", ")}</p>\n');
 		
 		var name = type.getName();
 		if (base.module != "StdTypes" && name != base.module)
-			buf.add('<p>Import ${base.module}</p>\n');
+			buf.add('<code class="dark"><span class="directive">import</span> <span class="type">${base.module}</span>;</code>\n');
+
+		buf.add('<p>Available in ${platforms.join(", ")}</p>\n');
 
 		switch (type)
 		{
@@ -151,8 +210,11 @@ class Printer
 	{
 		printMarkDownDoc(model.getDoc(type));
 
-		buf.add('<h2>Constructs:</h2>\n');
-		for (field in type.constructs) printEnumField(field);
+		if (type.constructs.array().length > 0)
+		{
+			buf.add('<h2>Constructs:</h2>\n');
+			for (field in type.constructs) printEnumField(field);
+		}
 	}
 
 	function printEnumField(field:EnumField)
