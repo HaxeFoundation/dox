@@ -260,7 +260,10 @@ class Printer
 			var statics = [];
 			for (field in impl.statics.get())
 			{
-				if (field.meta.has(":impl")) fields.push(field);
+				if (field.meta.has(":impl")) {
+					if (field.name == "_new") field.name = "new";
+					fields.push(field);
+				}
 				else statics.push(field);
 			}
 			printClassFields(statics, "Class Fields");
