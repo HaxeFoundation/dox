@@ -127,11 +127,12 @@ class Printer
 		var kind = typeKind(type);
 		var link = typeLink(type);
 		buf.add('<h1><span class="directive">$kind</span> $link</h1>\n');
-		buf.add('<p>Available in ${platforms.join(", ")}</p>\n');
 		
 		var name = type.getName();
 		if (base.module != "StdTypes" && name != base.module)
-			buf.add('<p>Import ${base.module}</p>\n');
+			buf.add('<code class="dark"><span class="directive">import</span> <span class="type">${base.module}</span>;</code>\n');
+
+		buf.add('<p>Available in ${platforms.join(", ")}</p>\n');
 
 		switch (type)
 		{
@@ -209,8 +210,11 @@ class Printer
 	{
 		printMarkDownDoc(model.getDoc(type));
 
-		buf.add('<h2>Constructs:</h2>\n');
-		for (field in type.constructs) printEnumField(field);
+		if (type.constructs.array().length > 0)
+		{
+			buf.add('<h2>Constructs:</h2>\n');
+			for (field in type.constructs) printEnumField(field);
+		}
 	}
 
 	function printEnumField(field:EnumField)

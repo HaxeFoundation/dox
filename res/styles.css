@@ -25,6 +25,7 @@ code { tab-size:4; }
 /* monokai */
 code { background:#FDF6E3; color:#586E75; } /* light */
 h3 code { background:#272822; color:#F8F8F2; } /* dark */
+code.dark { background:#272822; color:#F8F8F2; } /* dark */
 /*code .identifier { color:#F8F8F2; }*/
 code .type { color:#FF9901; }
 code .keyword { color:#F92772; }
