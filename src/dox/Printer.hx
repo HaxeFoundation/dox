@@ -86,6 +86,7 @@ class Printer
 		
 
 		for (pack in pack.packs) buf.add(getNav(pack));
+		pack.types.sort(function(t1,t2) return t1.getName() < t2.getName() ? -1 : 1);
 		for (type in pack.types)
 		{
 			var base = type.toBaseType();
