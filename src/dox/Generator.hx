@@ -49,6 +49,9 @@ class Generator
 		// only base types
 		types = types.filter(TypeTools.isBaseType);
 
+		// respect @:noDoc
+		types = types.filter(function(t) return !t.toBaseType().meta.has(":noDoc"));
+		
 		Sys.println("Generating code model");
 		var model = new Model(types);
 		var printer = new Printer(model);

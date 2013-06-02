@@ -86,6 +86,7 @@ class Printer
 		
 
 		for (pack in pack.packs) buf.add(getNav(pack));
+		pack.types.sort(function(t1,t2) return t1.getName() < t2.getName() ? -1 : 1);
 		for (type in pack.types)
 		{
 			var base = type.toBaseType();
@@ -153,6 +154,7 @@ class Printer
 		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 		<link href="$baseurl/styles.css" rel="stylesheet">
+		<script type="text/javascript">var baseUrl = "$baseurl";</script>
 		<script type="text/javascript" src="$baseurl/index.js"></script>
 	</head>
 	<body>
@@ -258,7 +260,10 @@ class Printer
 			var statics = [];
 			for (field in impl.statics.get())
 			{
-				if (field.meta.has(":impl")) fields.push(field);
+				if (field.meta.has(":impl")) {
+					if (field.name == "_new") field.name = "new";
+					fields.push(field);
+				}
 				else statics.push(field);
 			}
 			printClassFields(statics, "Class Fields");
