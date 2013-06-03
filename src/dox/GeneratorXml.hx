@@ -323,6 +323,8 @@ class GeneratorXml
 		if (fields.length == 0) return;
 		
 		buf.add('<h2>$title</h2>\n');
+		var fields = fields.array();
+		fields.sort(function(cf1, cf2) return cf1.name == "new" ? -1 : cf2.name == "new" ? 1 : cf1.name < cf2.name ? -1 : 1);
 		for (field in fields) printClassField(field);
 	}
 
@@ -348,6 +350,8 @@ class GeneratorXml
 		}
 		
 		printDoc(field.doc);
+		
+		buf.add("<hr/>");
 	}
 
 	static function generateAbstract(type:Abstractdef)
