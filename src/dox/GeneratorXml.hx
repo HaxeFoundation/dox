@@ -201,7 +201,7 @@ class GeneratorXml
 
 	static function generatePackage(name:String, full:String, subs:Array<TypeTree>)
 	{
-		if (full == "") buf.add('<h1>top level<h1>');
+		if (full == "") buf.add('<h1>top level</h1>');
 		else buf.add('<h1><span class="directive">package</span> $full</h1>');
 
 		buf.add('<table class="table table-condensed"><tbody>');
