@@ -120,7 +120,7 @@ class GeneratorXml
 		if (doc == null || doc == '') return '<p></p>';
 		
 		var ereg = ~/^([\t ]+).+/m;
-		if (ereg.match(doc))
+		while (ereg.match(doc))
 		{
 			var tabs = new EReg("^" + ereg.matched(1), "gm");
 			doc = tabs.replace(doc, "");
