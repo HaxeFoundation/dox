@@ -1,5 +1,6 @@
 import haxe.macro.Context;
 
+// stolen from haxe/doc/ImportAll.hx
 class ImportAll {
 
 	public static function run( ?pack ) {
@@ -45,7 +46,7 @@ class ImportAll {
 			if( !sys.FileSystem.exists(p) || !sys.FileSystem.isDirectory(p) )
 				continue;
 			for( file in sys.FileSystem.readDirectory(p) ) {
-				if( file == ".svn" || file == "_std" )
+				if( file == ".svn" || file == "_std" || file == "src")
 					continue;
 				var full = (pack == "") ? file : pack + "." + file;
 				if( StringTools.endsWith(file, ".hx") ) {

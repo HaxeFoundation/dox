@@ -1,4 +1,5 @@
--cmd cp res/* pages2
+-cmd mkdir -p pages
+-cmd cp res/* pages
 
 --next
 

@@ -5,7 +5,7 @@ using Lambda;
 
 class GeneratorXml
 {
-	public static var baseurl = "/dox/pages2";
+	public static var baseurl = "/dox/pages";
 
 	static var buf:StringBuf;
 	static var nav:StringBuf;
@@ -16,55 +16,121 @@ class GeneratorXml
 		
 		for (platform in ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php']) // api difference in java?
 		{
-			Sys.println('Loading $platform');
-			var data = sys.io.File.getContent('xml/$platform.xml');
+			Sys.println('Parsing $platform');
+			var data = sys.io.File.getContent('bin/$platform.xml');
 			parser.process(Xml.parse(data).firstElement(), platform);
 		}
 
+		var root = process(parser.root);
+
 		nav = new StringBuf();
-		parser.root.iter(printNavigation.bind(_, null));
-		parser.root.iter(printTree);
+		nav.add('<ul>');
+		root.iter(printNavigationTree);
+		nav.add('</ul>');
+
+		root.iter(printTree);
+	}
+
+	static function process(root:TypeRoot)
+	{
+		Sys.println("Processing types");
+		
+		var rootTypes = [];
+		var rootPack = TPackage('top level', '', rootTypes);
+		var newRoot = [rootPack];
+
+		for (tree in root) switch (tree)
+		{
+			case TPackage(_,_,_): newRoot.push(tree);
+			default: rootTypes.push(tree);
+		}
+
+		newRoot.iter(processTree);
+		return newRoot;
+	}
+
+	static function processTree(tree:TypeTree)
+	{
+		switch (tree)
+		{
+			case TPackage(_, _, subs):
+				subs.iter(processTree);
+			case TEnumdecl(t):
+				t.doc = processDoc(t.doc);
+				t.constructors.iter(processEnumField);
+			case TTypedecl(t):
+				t.doc = processDoc(t.doc);
+			case TClassdecl(t):
+				t.doc = processDoc(t.doc);
+				t.fields.iter(processClassField);
+				t.statics.iter(processClassField);
+			case TAbstractdecl(t):
+				t.doc = processDoc(t.doc);
+		}
+	}
+
+	static function processClassField(field:ClassField)
+	{
+		field.doc = processDoc(field.doc);
+	}
+
+	static function processEnumField(field:EnumField)
+	{
+		field.doc = processDoc(field.doc);
+	}
+
+	static function processDoc(doc:String)
+	{
+		if (doc == null || doc == '') return '<p></p>';
+		
+		var ereg = ~/^([\t ]+).+/m;
+		if (ereg.match(doc))
+		{
+			var tabs = new EReg("^" + ereg.matched(1), "gm");
+			doc = tabs.replace(doc, "");
+		}
+		if (doc.charAt(doc.length - 1) == "*") doc = doc.substr(0, doc.length - 1);
+		doc = StringTools.trim(doc);
+
+		return Markdown.markdownToHtml(doc);
 	}
 
 	/**
 		Generates the navigation from the type tree, called recursively on each 
 		package and type.
 	**/
-	static function printNavigation(tree:TypeTree, ?pack:String)
+	static function printNavigationTree(tree:TypeTree)
 	{
-		var path:String;
+		var type:{path:String, isPrivate:Bool} = null;
 
 		switch (tree)
 		{
 			case TPackage(name, full, subs):
-				if (pack != null)
-				{
-					var href = full.split('.').join('/');
-					nav.add('<li class="expando"><div>');
-					nav.add('<a href="#" onclick="toggleCollapsed(this)"><img src="$baseurl/triangle-closed.png"></a>');
-					nav.add('<a href="$baseurl/$href">$name</a>');
-					nav.add('</div>');
-				}
+				if (name.charAt(0) == '_') return;
+
+				var href = full.split('.').join('/');
+				nav.add('<li class="expando"><div>');
+				nav.add('<a href="#" onclick="toggleCollapsed(this)"><img src="$baseurl/triangle-closed.png"></a>');
+				nav.add('<a href="$baseurl/$href">$name</a>');
+				nav.add('</div>');
 
 				nav.add('<ul>');
-				subs.iter(printNavigation.bind(_, full));
+				subs.iter(printNavigationTree);
 				nav.add('</ul>');
+				nav.add('</li>');
 
-				if (pack != null) nav.add('</li>');
-
-			case TEnumdecl(t): path = t.path;
-			case TTypedecl(t): path = t.path;
-			case TClassdecl(t): path = t.path;
-			case TAbstractdecl(t): path = t.path;
+			case TEnumdecl(t): type = t;
+			case TTypedecl(t): type = t;
+			case TClassdecl(t): type = t;
+			case TAbstractdecl(t): type = t;
 		}
 
-		if (path != null)
-		{
-			var parts = path.split(".");
-			var href = parts.join('/') + ".html";
-			var name = parts.pop();
-			nav.add('<li><div><a href="$baseurl/$href">$name</a></div></li>');
-		}
+		if (type == null || type.isPrivate) return;
+		
+		var parts = type.path.split(".");
+		var href = parts.join('/') + ".html";
+		var name = parts.pop();
+		nav.add('<li><div><a href="$baseurl/$href">$name</a></div></li>');
 	}
 
 	/**
@@ -73,90 +139,54 @@ class GeneratorXml
 	**/
 	static function printTree(tree:TypeTree)
 	{
-		var path:String;
 		buf = new StringBuf();
 
 		switch (tree)
 		{
 			case TPackage(name, full, subs):
-				path = full;
+				if (name.charAt(0) == '_') return;
+
 				generatePackage(name, full, subs);
+				write(full == '' ? 'index' : full + '.index');
+
 				subs.iter(printTree);
 			case TTypedecl(t):
-				path = t.path;
 				generateType(t);
-			case TEnumdecl(t):
-				path = t.path;
-				generateEnum(t);
-			case TClassdecl(t):
-				path = t.path;
-				generateClass(t);
-			case TAbstractdecl(t):
-				path = t.path;
-				generateAbstract(t);
-		}
+				write(t.path);
 
-		write(path);
+			case TEnumdecl(t):
+				generateEnum(t);
+				write(t.path);
+
+			case TClassdecl(t):
+				generateClass(t);
+				write(t.path);
+
+			case TAbstractdecl(t):
+				generateAbstract(t);
+				write(t.path);
+		}
 	}
 
 	static function generatePackage(name:String, full:String, subs:Array<TypeTree>)
 	{
+		if (full == "") buf.add('<h1>top level<h1>');
+		else buf.add('<h1><span class="directive">package</span> $full</h1>');
 
+		buf.add('<table class="table table-condensed"><tbody>');
+
+		for (tree in subs)
+		{
+			var base = baseType(tree);
+			if (base == null) continue;
+
+			var link = pathLink(base.path);
+			var desc = base.doc.substr(0, base.doc.indexOf('</p>') + 4);
+			buf.add('<tr><td width="200">$link</td><td>$desc</td></tr>');
+		}
+
+		buf.add('</tbody></table>');
 	}
-
-	// public function printPack(pack:String)
-	// {
-	// 	buf = new StringBuf();
-
-	// 	if (pack == "") buf.add('<h1>top level<h1>');
-	// 	else buf.add('<h1><span class="directive">package</span> $pack</h1>');
-		
-	// 	var interfaces:Array<BaseType> = [];
-	// 	var classes:Array<BaseType> = [];
-	// 	var enums:Array<BaseType> = [];
-	// 	var typedefs:Array<BaseType> = [];
-	// 	var abstracts:Array<BaseType> = [];
-	// 	var types = model.packages.get(pack);
-
-	// 	for (type in types)
-	// 	{
-	// 		switch (type)
-	// 		{
-	// 			case TInst(t,_):
-	// 				var ref = t.get();
-	// 				if (ref.isInterface) interfaces.push(ref);
-	// 				else classes.push(ref);
-	// 			case TEnum(t,_):
-	// 				enums.push(t.get());
-	// 			case TType(t,_):
-	// 				typedefs.push(t.get());
-	// 			case TAbstract(t,_):
-	// 				abstracts.push(t.get());
-	// 			case _:
-	// 		}
-	// 	}
-
-	// 	printPackTypes(interfaces, "Interfaces");
-	// 	printPackTypes(classes, "Classes");
-	// 	printPackTypes(typedefs, "Type Definitions");
-	// 	printPackTypes(enums, "Enums");
-	// 	printPackTypes(abstracts, "Abstracts");
-	// }
-
-	// function printPackTypes(types:Array<BaseType>, title:String)
-	// {
-	// 	if (types.length == 0) return;
-
-	// 	buf.add('<h2>$title</h2>');
-	// 	buf.add('<table class="table table-condensed"><tbody>');
-	// 	for (type in types)
-	// 	{
-	// 		var link = baseTypeLink(type);
-	// 		var desc = model.getDescription(type);
-	// 		buf.add('<tr><td width="200">$link</td><td>$desc</td></tr>');
-	// 	}
-	// 	buf.add('</tbody></table>');
-	// }
 
 	static function generateType(type:Typedef)
 	{
@@ -340,37 +370,22 @@ class GeneratorXml
 			case CAnonymous(fields):
 				"{ "+fields.map(fieldLink).join(", ")+" }";
 			case CClass(path, params):
-				pathLink(path);
+				nameParamsLink(path, params);
 			case CAbstract(path, params):
-				pathLink(path);
+				nameParamsLink(path, params);
+			case CTypedef(path, params):
+				nameParamsLink(path, params);
 			case _:
 				StringTools.htmlEscape(Std.string(type));
 		}
+	}
 
-		// don't link type params
-		// switch (type)
-		// {
-		// 	case TInst(t,_):
-		// 		var ref = t.get();
-		// 		switch (ref.kind)
-		// 		{
-		// 			case KTypeParameter(_):
-		// 				return '<span class="type">${base.name}</span>';
-		// 			default:
-		// 		}
-		// 	default:
-		// }
-
-		// var link = baseTypeLink(base);
-
-		// switch (type)
-		// {
-		// 	case TType(_, params), TInst(_, params), TEnum(_, params), TAbstract(_, params):
-		// 		link += paramsLink(params);
-		// 	case _:
-		// }
-
-		// return link;
+	static function nameParamsLink(path:String, params:List<CType>)
+	{
+		path = pathLink(path);
+		var params = params.map(typeLink).array();
+		if (params.length == 0) return path;
+		return path + '&lt;' + params.join(", ") + '&gt;';
 	}
 
 	static function argType(arg:{t:CType, opt:Bool, name:String})
@@ -394,6 +409,7 @@ class GeneratorXml
 	static function paramsLink(params:Array<String>):String
 	{
 		if (params == null || params.length == 0) return "";
+		params = params.map(pathLink);
 		return "&lt;" + params.join(", ") + "&gt;";
 	}
 
@@ -420,8 +436,10 @@ class GeneratorXml
 	**/
 	static function pathLink(path:String):String
 	{
-		var href = pathHref(path);
 		var name = path.split(".").pop();
+		if (name.length == 1) return '<span class="type">$name</span>';
+		
+		var href = pathHref(path);
 		return '<a href="$href"><span class="type">$name</span></a>';
 	}
 
@@ -438,9 +456,9 @@ class GeneratorXml
 	**/
 	static function write(path:String)
 	{
-		path = 'pages2/' + path.split('.').join('/') + '.html';
+		path = 'pages/' + path.split('.').join('/') + '.html';
 
-		var html = Template.page(baseurl, nav.toString(), buf.toString());
+		var html = getHtml();
 		var parts = path.split("/");
 		var current = [];
 		while (parts.length > 1)
@@ -454,31 +472,46 @@ class GeneratorXml
 		Sys.println('Generated $path');
 	}
 
-	/*
-	function printRelatedTypes(types:Array<ClassType>, title:String)
+	static function baseType(type:TypeTree)
 	{
-		if (types.length == 0) return;
-		
-		var table = "<table class='table table-condensed'><tbody>";
-		for (type in types)
+		var base:{doc:String, path:String} = null;
+		switch (type)
 		{
-			var link = baseTypeLink(type);
-			var desc = model.getDescription(type);
-			table += '<tr><td width="200">$link</td><td>$desc</td></tr>';
+			case TPackage(_, _, _):
+			case TTypedecl(t): base = t;
+			case TEnumdecl(t): base = t;
+			case TClassdecl(t): base = t;
+			case TAbstractdecl(t): base = t;
 		}
-		table += "</tbody></table>";
-
-		buf.add('<table class="related-types toggle" style="margin-top:16px;"><tbody>');
-		buf.add('<tr><td colspan="2">$title</td></tr>');
-
-		var links = types.map(baseTypeLink).join(", ");
-		buf.add('<tr>');
-		buf.add('<td width="12" style="vertical-align:top;"><a href="#" onclick="toggleInherited(this)"><img style="padding-top:4px;" src="$baseurl/triangle-closed.png"></a></td>');
-		buf.add('<td class="toggle-hide">$links</td>');
-		buf.add('<td class="toggle-show">$table</td>');
-		buf.add('</tr>');
-		
-		buf.add("</tbody></table>");
+		return base;
 	}
-	*/
+
+	static function getHtml() return 
+'<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+		<link href="$baseurl/styles.css" rel="stylesheet">
+		<script type="text/javascript">var baseUrl = "$baseurl";</script>
+		<script type="text/javascript" src="$baseurl/index.js"></script>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="navbar navbar-inverse navbar-fixed-top">
+				<div class="navbar-inner">
+					<ul class="nav">
+						<li class="active"><a href="#">API</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="packages">${nav.toString()}</div>
+				<div class="content">${buf.toString()}</div>
+			</div>
+		</div>
+	</body>
+</html>';
 }

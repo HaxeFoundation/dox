@@ -1,3 +1,7 @@
+-cmd mkdir -p bin
+
+--next
+
 -neko api
 -cp src
 --no-output
