@@ -11,14 +11,25 @@ class TemplateMacro
 		var fields = Context.getBuildFields();
 		var pos = Context.currentPos();
 
+		var allArgs = [];
+		var filters = new Map<String, Bool>();
+
+		for (field in fields)
+		{
+			filters.set(field.name, true);
+		}
+
 		for (file in sys.FileSystem.readDirectory("template"))
 		{
 			var args = [];
 			var content = sys.io.File.getContent("template/" + file);
 			var name = file.split(".")[0];
+			filters.set(name, true);
+
 			var e = interpolate(content, args);
 
 			var argExprs = [];
+			// trace(args);
 			for (arg in args)
 			{
 				argExprs.push({
@@ -28,6 +39,7 @@ class TemplateMacro
 					value:null
 				});
 			}
+			allArgs.push(argExprs);
 
 			var kind = FFun({
 				params:[],
@@ -45,6 +57,20 @@ class TemplateMacro
 			});
 		}
 
+		for (argExprs in allArgs)
+		{
+			var len = argExprs.length;
+			for (i in 0...len)
+			{
+				var x = len - (i + 1);
+				if (filters.exists(argExprs[x].name))
+				{
+					argExprs.splice(x, 1);
+				}
+			}
+			// trace(argExprs);
+		}
+
 		return fields;
 	}
 
@@ -52,7 +78,7 @@ class TemplateMacro
 	{
 		var pos = Context.currentPos();
 		var result = null;
-		var ereg = ~/\$\{?(\w+)\}?/;
+		var ereg = ~/\$((\{.+?\})|[\w\d]+)/mis;
 
 		while (ereg.match(s))
 		{
@@ -70,8 +96,8 @@ class TemplateMacro
 			}
 
 			var code = ereg.matched(1);
-			if (!args.has(code)) args.push(code);
 			var expr = Context.parse(code, pos);
+			for (arg in getArgs(expr)) if (!args.has(arg)) args.push(arg);
 			result = {expr:EBinop(OpAdd, result, expr), pos:pos};
 
 			s = ereg.matchedRight();
@@ -88,5 +114,22 @@ class TemplateMacro
 		}
 
 		return result;
+	}
+
+	static function getArgs(expr:Expr, ?args:Map<String,Bool>, ?ignore:Map<String,Bool>):Array<String>
+	{
+		if (args == null) args = new Map<String, Bool>();
+		if (ignore == null) ignore = new Map<String, Bool>();
+
+		switch (expr.expr)
+		{
+			case EVars(vars): for (v in vars) ignore.set(v.name, true);
+			case EConst(CIdent(i)): if (!ignore.exists(i)) args.set(i, true);
+			default:	
+				haxe.macro.ExprTools.iter(expr, getArgs.bind(_, args, ignore));
+			// default:
+		}
+
+		return [for (key in args.keys()) key];
 	}
 }

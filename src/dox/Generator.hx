@@ -12,8 +12,6 @@ class Generator
 {
 	static function main()
 	{
-		trace(Template.page("../../", "some navigation", "some body. oh yeah."));
-		return;
 		RefData;
 		MetaData;
 		haxe.macro.ClassKind;

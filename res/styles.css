@@ -17,16 +17,21 @@ body { padding:16px; padding-top:60px; }
 .packages li { margin-left:0px; }
 .packages img { padding-right:4px; }
 
-h3 code { border:none; padding:4px; font-size:13px; }
+h1 code { padding:4px; font-size:15px; border:none; }
+h1 code a:hover { color:white; text-decoration:none; }
+h1 code a:hover span { color:white; text-decoration:none; }
+h1 code { background:#272822; color:#F8F8F2; } /* dark */
+
+h3 code { padding:4px; font-size:13px; border:none; }
 h3 code a:hover { color:white; text-decoration:none; }
 h3 code a:hover span { color:white; text-decoration:none; }
+h3 code { background:#272822; color:#F8F8F2; } /* dark */
+
+code { background:#FDF6E3; color:#586E75; } /* light */
 code { tab-size:4; }
 
-/* monokai */
-code { background:#FDF6E3; color:#586E75; } /* light */
-h3 code { background:#272822; color:#F8F8F2; } /* dark */
-code.dark { background:#272822; color:#F8F8F2; } /* dark */
-/*code .identifier { color:#F8F8F2; }*/
+code.dark { background:#272822; color:#F8F8F2; border:none; } /* dark */
+code .identifier { color:#F8F8F2; }
 code .type { color:#FF9901; }
 code .keyword { color:#F92772; }
 code .directive { color:#66D9EF; }

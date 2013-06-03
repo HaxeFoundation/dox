@@ -82,7 +82,6 @@ class Printer
 			buf.add('<ul>');
 		}
 		
-
 		for (pack in pack.packs) buf.add(getNav(pack));
 		pack.types.sort(function(t1,t2) return t1.getName() < t2.getName() ? -1 : 1);
 		for (type in pack.types)
@@ -100,21 +99,28 @@ class Printer
 
 	public function printType(type:Type, platforms:Array<String>)
 	{
+		var name = type.getName();
 		var base = type.toBaseType();
 
 		// reset buffer
 		buf = new StringBuf();
 
-		// print the heading
-		var kind = typeKind(type);
-		var link = typeLink(type);
-		buf.add('<h1><span class="directive">$kind</span> $link</h1>\n');
-		
-		var name = type.getName();
-		if (base.module != "StdTypes" && name != base.module)
-			buf.add('<code class="dark"><span class="directive">import</span> <span class="type">${base.module}</span>;</code>\n');
+		// print heading
+		printHeading(type);
 
-		buf.add('<p>Available in ${platforms.join(", ")}</p>\n');
+		// platform availability
+		if (platforms.length > 1)
+		{
+			buf.add('<div><code class="dark"><span class="macro">#if (${platforms.join(" || ")})</span></code></div>\n');
+		}
+		else
+		{
+			buf.add('<div><code class="dark"><span class="macro">#if ${platforms.join("")}</span></code></div>\n');
+		}
+		
+		// module to import
+		if (base.module != "StdTypes" && name != base.module)
+			buf.add('<div><code class="dark"><span class="directive">import</span> <span class="type">${base.module}</span>;</code></div>\n');
 
 		switch (type)
 		{
@@ -126,59 +132,49 @@ class Printer
 		}
 	}
 
-	function html(body) return
-'<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8"> 
-		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
-		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-		<link href="$baseurl/styles.css" rel="stylesheet">
-		<script type="text/javascript">var baseUrl = "$baseurl";</script>
-		<script type="text/javascript" src="$baseurl/index.js"></script>
-	</head>
-	<body>
-		<div class="container-fluid">
-			<div class="navbar navbar-inverse navbar-fixed-top">
-				<div class="navbar-inner">
-					<ul class="nav">
-						<li class="active"><a href="#">API</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<div class="packages">$nav</div>
-				<div class="content">$body</div>
-			</div>
-		</div>
-	</body>
-</html>';
-	
 	public function getHtml():String
 	{
-		return html(buf.toString());
+		return Template.page(baseurl, nav, buf.toString());
 	}
 
-	public function getString():String
+	function printHeading(type:Type)
 	{
-		return buf.toString();
+		var kind = switch (type)
+		{
+			case TType(_,_): 'typedef';
+			case TInst(t,_): t.get().isInterface ? 'interface' : 'class';
+			case TEnum(_,_): 'enum';
+			case TAbstract(_,_): 'abstract';
+			case _: null;
+		}
+
+		var link = typeLink(type);
+		var api = "";
+
+		switch (type)
+		{
+			case TInst(t, _):
+				var ref = t.get();
+				if (ref.superClass != null)
+				{
+					var link = refLink(ref.superClass);
+					api += ' <span class="keyword">extends</span> $link';
+				}
+
+				if (ref.interfaces.length > 0)
+				{
+					var links = ref.interfaces.map(refLink);
+					for (link in links)
+						api += ' <span class="keyword">implements</span> $link';
+				}
+			default:
+		}
+
+		buf.add('<h1><code><span class="directive">$kind</span> $link$api</code></h1>\n');
 	}
 
 	function printClass(type:ClassType)
 	{
-		if (type.superClass != null)
-		{
-			var link = refLink(type.superClass);
-			buf.add('<div>extends $link</div>\n');
-		}
-
-		if (type.interfaces.length > 0)
-		{
-			var links = type.interfaces.map(refLink).join(" ");
-			buf.add('<div>implements $links</div>\n');
-		}
-
 		printRelatedTypes(model.getDirectSubclasses(type), "Direct Subclasses");
 		printRelatedTypes(model.getIndirectSubclasses(type), "Indirect Subclasses");
 		printRelatedTypes(model.getDirectImplementors(type), "Direct Implementors");
@@ -209,9 +205,9 @@ class Printer
 			case TFun(args, _):
 				var argLinks = args.map(argLink).join(", ");
 				if (argLinks.length > 0) argLinks = '($argLinks)';
-				buf.add('<h3><code>$name$argLinks</code></h3>\n');
+				buf.add('<h3><code><a name="$name" href="#$name"><span class="type">$name</span></a>$argLinks</code></h3>\n');
 			case _:
-				buf.add('<h3><code>$name</code></h3>\n');
+				buf.add('<h3><code><a name="$name" href="#$name"><span class="type">$name</span></a></code></h3>\n');
 		}
 
 		printDoc(field.doc);
@@ -224,8 +220,7 @@ class Printer
 		switch (type.type)
 		{
 			case TAnonymous(a):
-				var ref = a.get();
-				printClassFields(ref.fields, "Instance Fields");
+				printClassFields(a.get().fields, "Instance Fields");
 			case _:
 		}
 	}
@@ -252,56 +247,39 @@ class Printer
 		}
 	}
 
-	function printTypeNav(type:BaseType)
-	{
-		buf.add('<div class="package-nav">');
-		var nav = [];
-		var parts = [];
-		for (pack in type.pack)
-		{
-			parts.push(pack);
-			var path = parts.join("/");
-			nav.push('<a href="$baseurl/$path">$pack</a>');
-		}
-		buf.add('<a href="$baseurl">root</a> ' + nav.join("."));
-		buf.add('</div>');
-	}
-
 	function printRelatedTypes(types:Array<ClassType>, title:String)
 	{
-		if (types.length > 0)
+		if (types.length == 0) return;
+		
+		var table = "<table class='table table-condensed'><tbody>";
+		for (type in types)
 		{
-			var table = "<table class='table table-condensed'><tbody>";
-			for (type in types)
-			{
-				var link = baseTypeLink(type);
-				var desc = model.getDescription(type);
-				table += '<tr><td width="200">$link</td><td>$desc</td></tr>';
-			}
-			table += "</tbody></table>";
-
-			buf.add('<table class="related-types toggle" style="margin-top:16px;"><tbody>');
-			buf.add('<tr><td colspan="2">$title</td></tr>');
-
-			var links = types.map(baseTypeLink).join(", ");
-			buf.add('<tr>');
-			buf.add('<td width="12" style="vertical-align:top;"><a href="#" onclick="toggleInherited(this)"><img style="padding-top:4px;" src="$baseurl/triangle-closed.png"></a></td>');
-			buf.add('<td class="toggle-hide">$links</td>');
-			buf.add('<td class="toggle-show">$table</td>');
-			buf.add('</tr>');
-			
-			buf.add("</tbody></table>");
+			var link = baseTypeLink(type);
+			var desc = model.getDescription(type);
+			table += '<tr><td width="200">$link</td><td>$desc</td></tr>';
 		}
+		table += "</tbody></table>";
+
+		buf.add('<table class="related-types toggle" style="margin-top:16px;"><tbody>');
+		buf.add('<tr><td colspan="2">$title</td></tr>');
+
+		var links = types.map(baseTypeLink).join(", ");
+		buf.add('<tr>');
+		buf.add('<td width="12" style="vertical-align:top;"><a href="#" onclick="toggleInherited(this)"><img style="padding-top:4px;" src="$baseurl/triangle-closed.png"></a></td>');
+		buf.add('<td class="toggle-hide">$links</td>');
+		buf.add('<td class="toggle-show">$table</td>');
+		buf.add('</tr>');
+		
+		buf.add("</tbody></table>");
 	}
 
 	function printClassFields(fields:Array<ClassField>, title:String)
 	{
 		var fields = fields.filter(function(field){ return field.isPublic; });
-		if (fields.length > 0)
-		{
-			buf.add('<h2>$title</h2>\n');
-			for (field in fields) printClassField(field);
-		}
+		if (fields.length == 0) return;
+		
+		buf.add('<h2>$title</h2>\n');
+		for (field in fields) printClassField(field);
 	}
 
 	function printClassField(field:ClassField)
@@ -314,7 +292,7 @@ class Printer
 				var link = typeLink(field.type);
 				var readonly = read == AccInline || write == AccNo || write == AccNever;
 				var access = readonly ? '<span class="comment"> // readonly</span>' : '';
-				buf.add('<a name="$name"></a><h3><code><span class="keyword">var</span> <span class="identifier">$name</span>:$link;$access</code></h3>\n');
+				buf.add('<h3><code><span class="keyword">var</span> <a name="$name" href="#$name"><span class="identifier">$name</span></a>:$link;$access</code></h3>\n');
 
 			case FMethod(_):
 				switch (field.type)
@@ -325,21 +303,12 @@ class Printer
 						var retLink = typeLink(ret);
 						var params = field.params.map(function(p) { return p.t; });
 						var paramLinks = paramsLink(params);
-						buf.add('<a name="$name"></a><h3><code><span class="keyword">function</span> <span class="identifier">$name</span>$paramLinks($argLinks):$retLink;</code></h3>\n');
+						buf.add('<a name="$name"></a><h3><code><span class="keyword">function</span> <a name="$name" href="#$name"><span class="identifier">$name</span></a>$paramLinks($argLinks):$retLink;</code></h3>\n');
 					case _:
 				}
 		}
 		
 		printDoc(field.doc);
-	}
-	
-	function accessString(access:VarAccess)
-	{
-		return switch (access)
-		{
-			case AccNo, AccNever: "null";
-			case _: "default";
-		}
 	}
 
 	function printMarkDownDoc(doc:String)
@@ -389,40 +358,6 @@ class Printer
 		printPackTypes(typedefs, "Type Definitions");
 		printPackTypes(enums, "Enums");
 		printPackTypes(abstracts, "Abstracts");
-	}
-
-	function shiftHeadings(doc:String, start:Int, ?removeTop:Bool=false):String
-	{
-		var matches = matchAll(~/<h([1-9])>/i, doc, 1);
-		var levels = matches.map(function(m){ return m[1]; });
-		levels.sort(Reflect.compare);
-		var top = Std.parseInt(levels[0]);
-
-		if (removeTop)
-		{
-			doc = new EReg('<h$top>.+?</h$top>','i').replace(doc, "");
-		}
-
-		doc = ~/<(\/?)h([1-9])>/gi.map(doc, function(e){
-			var level = (Std.parseInt(e.matched(2)) - top) + start;
-			return "<"+e.matched(1)+"h"+level+">";
-		});
-		return doc;
-	}
-
-	function matchAll(ereg:EReg, string:String, ?groups:Int=0):Array<Array<String>>
-	{
-		var matches = [];
-		var pos = {pos:0,len:0};
-		while (ereg.matchSub(string, pos.pos + pos.len))
-		{
-			pos = ereg.matchedPos();
-
-			var match = [];
-			for (i in 0...groups+1) match.push(ereg.matched(i));
-			matches.push(match);
-		}
-		return matches;
 	}
 
 	function printPackTypes(types:Array<BaseType>, title:String)
@@ -525,23 +460,6 @@ class Printer
 
 	function baseTypeURL(type:BaseType):String
 	{
-		return baseurl + "/" + baseTypePath(type).join("/") + ".html";
-	}
-
-	function baseTypePath(type:BaseType):Array<String>
-	{
-		return type.pack.concat([type.name]);
-	}
-
-	function typeKind(type:Type):String
-	{
-		return switch (type)
-		{
-			case TType(_,_): 'typedef';
-			case TInst(t,_): t.get().isInterface ? 'interface' : 'class';
-			case TEnum(_,_): 'enum';
-			case TAbstract(_,_): 'abstract';
-			case _: null;
-		}
+		return baseurl + "/" + type.pack.concat([type.name]).join("/") + ".html";
 	}
 }

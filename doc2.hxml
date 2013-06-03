@@ -1,3 +1,7 @@
+-cmd cp res/* pages2
+
+--next
+
 -x dox.GeneratorXml
 -lib markdown
 -lib hxparse
