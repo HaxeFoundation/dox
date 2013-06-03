@@ -382,6 +382,8 @@ class GeneratorXml
 				nameParamsLink(path, params);
 			case CTypedef(path, params):
 				nameParamsLink(path, params);
+			case CEnum(path, params):
+				nameParamsLink(path, params);
 			case _:
 				StringTools.htmlEscape(Std.string(type));
 		}
