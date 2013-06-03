@@ -409,7 +409,7 @@ class GeneratorXml
 		}
 		else
 		{
-			buf.add('platforms.join("")');
+			buf.add(platforms.join(""));
 		}
 		buf.add('</span></code></div>\n');
 	}
