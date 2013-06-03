@@ -139,7 +139,7 @@ class GeneratorXml
 			case TPackage(name, full, subs):
 				if (name.charAt(0) == '_') return;
 
-				var href = full.split('.').join('/');
+				var href = full.split('.').join('/') + "/index.html";
 				nav.add('<li class="expando"><div>');
 				nav.add('<a href="#" onclick="toggleCollapsed(this)"><img src="$baseurl/triangle-closed.png"></a>');
 				nav.add('<a href="$baseurl/$href">$name</a>');
