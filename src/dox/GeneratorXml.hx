@@ -10,11 +10,15 @@ class GeneratorXml
 	static var buf:StringBuf;
 	static var nav:StringBuf;
 
+	static var numPlatforms:Int;
+	
 	static function main()
 	{
 		var parser = new haxe.rtti.XmlParser();
+		var platforms = ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php'];
+		numPlatforms = platforms.length;
 		
-		for (platform in ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php']) // api difference in java?
+		for (platform in platforms) // api difference in java?
 		{
 			// Sys.println('Parsing $platform');
 			var data = sys.io.File.getContent('bin/$platform.xml');
@@ -231,8 +235,9 @@ class GeneratorXml
 		var target = typeLink(type.type);
 		
 		buf.add('<h1><code><span class="directive">$kind</span> $link = $target</code></h1>\n');
-		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
+		printPlatforms(type.platforms);
+		printFile(type.file);
 		printDoc(type.doc);
 
 		switch (type.type)
@@ -249,8 +254,9 @@ class GeneratorXml
 		var link = typeParamsLink(type.path, type.params);
 
 		buf.add('<h1><code><span class="directive">$kind</span> $link</code></h1>\n');
-		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
+		printPlatforms(type.platforms);
+		printFile(type.file);
 		printDoc(type.doc);
 
 		if (type.constructors.array().length > 0)
@@ -297,8 +303,9 @@ class GeneratorXml
 		}
 
 		buf.add('<h1><code><span class="directive">$kind</span> $link$api</code></h1>\n');
-		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
+		printPlatforms(type.platforms);
+		printFile(type.file);
 
 		// printRelatedTypes(model.getDirectSubclasses(type), "Direct Subclasses");
 		// printRelatedTypes(model.getIndirectSubclasses(type), "Indirect Subclasses");
@@ -349,8 +356,9 @@ class GeneratorXml
 		var link = typeParamsLink(type.path, type.params);
 
 		buf.add('<h1><code><span class="directive">$kind</span> $link</code></h1>\n');
-		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
+		printPlatforms(type.platforms);
+		printFile(type.file);
 		printDoc(type.doc);
 
 		if (type.impl != null)
@@ -386,14 +394,24 @@ class GeneratorXml
 	{
 		var platforms = platforms.array();
 
-		if (platforms.length > 1)
+		buf.add('<div><code class="dark"><span class="macro">Available on ');
+		if (platforms.length == numPlatforms)
 		{
-			buf.add('<div><code class="dark"><span class="macro">#if (${platforms.join(" || ")})</span></code></div>\n');
+			buf.add('all platforms');
+		}		
+		else if (platforms.length > 1)
+		{
+			buf.add(platforms.join(", "));
 		}
 		else
 		{
-			buf.add('<div><code class="dark"><span class="macro">#if ${platforms.join("")}</span></code></div>\n');
+			buf.add('platforms.join("")');
 		}
+		buf.add('</span></code></div>\n');
+	}
+	
+	static function printFile(file:String) {
+		buf.add('<div><code class="dark"><span class="macro">Defined in $file</span></code></div>\n');
 	}
 
 	static function printDoc(doc:String)
