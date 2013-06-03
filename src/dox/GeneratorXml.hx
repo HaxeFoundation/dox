@@ -10,25 +10,72 @@ class GeneratorXml
 	static var buf:StringBuf;
 	static var nav:StringBuf;
 
+	static var numPlatforms:Int;
+	static var numGeneratedTypes(default, set) = 0;
+	static var numGeneratedPackages = 0;
+	
+	static function set_numGeneratedTypes(v) {
+		if (v & 16 == 0) Sys.print(".");
+		return numGeneratedTypes = v;
+	}
+	
 	static function main()
 	{
 		var parser = new haxe.rtti.XmlParser();
+		var platforms = ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php'];
+		numPlatforms = platforms.length;
 		
-		for (platform in ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php']) // api difference in java?
+		for (platform in platforms) // api difference in java?
 		{
-			// Sys.println('Parsing $platform');
+			Sys.println('Parsing $platform');
 			var data = sys.io.File.getContent('bin/$platform.xml');
 			parser.process(Xml.parse(data).firstElement(), platform);
 		}
 
 		var root = process(parser.root);
-
+		
+		function getName(t:TypeTree) {
+			return switch(t) {
+				case TEnumdecl(t): t.path;
+				case TTypedecl(t): t.path;
+				case TClassdecl(t): t.path;
+				case TAbstractdecl(t): t.path;
+				case TPackage(n,_,_): n;
+			}
+		}
+	
+		function compare(t1,t2) {
+			return switch [t1, t2] {
+				case [TPackage(n1,_,_),TPackage(n2,_,_)]: n1 < n2 ? -1 : 1;
+				case [TPackage(_),_]: -1;
+				case [_,TPackage(_)]: 1;
+				case [t1,t2]:
+					return getName(t1) < getName(t2) ? -1 : 1;
+			}
+		}
+		
+		function sort(t:TypeTree) {
+			switch(t) {
+				case TPackage(_, _, subs):
+					subs.sort(compare);
+					subs.iter(sort);
+				case _:
+			}
+		}
+		root.sort(compare); // we may not want this one
+		root.iter(sort);
+		
 		nav = new StringBuf();
 		nav.add('<ul>');
 		root.iter(printNavigationTree);
 		nav.add('</ul>');
 
+		sys.io.File.saveContent("pages/nav.js", "var navContent = '" + nav.toString() + "';");
+		
 		root.iter(printTree);
+		
+		Sys.println('done');
+		Sys.println('Created $numGeneratedTypes types in $numGeneratedPackages packages.');
 	}
 
 	static function process(root:TypeRoot)
@@ -65,6 +112,11 @@ class GeneratorXml
 				t.fields.iter(processClassField);
 				t.statics.iter(processClassField);
 			case TAbstractdecl(t):
+				if (t.impl != null)
+				{
+					t.impl.fields.iter(processClassField);
+					t.impl.statics.iter(processClassField);
+				}
 				t.doc = processDoc(t.doc);
 		}
 	}
@@ -84,7 +136,7 @@ class GeneratorXml
 		if (doc == null || doc == '') return '<p></p>';
 		
 		var ereg = ~/^([\t ]+).+/m;
-		if (ereg.match(doc))
+		while (ereg.match(doc))
 		{
 			var tabs = new EReg("^" + ereg.matched(1), "gm");
 			doc = tabs.replace(doc, "");
@@ -94,7 +146,7 @@ class GeneratorXml
 
 		return Markdown.markdownToHtml(doc);
 	}
-
+	
 	/**
 		Generates the navigation from the type tree, called recursively on each 
 		package and type.
@@ -108,7 +160,7 @@ class GeneratorXml
 			case TPackage(name, full, subs):
 				if (name.charAt(0) == '_') return;
 
-				var href = full.split('.').join('/');
+				var href = full.split('.').join('/') + "/index.html";
 				nav.add('<li class="expando"><div>');
 				nav.add('<a href="#" onclick="toggleCollapsed(this)"><img src="$baseurl/triangle-closed.png"></a>');
 				nav.add('<a href="$baseurl/$href">$name</a>');
@@ -150,27 +202,33 @@ class GeneratorXml
 				write(full == '' ? 'index' : full + '.index');
 
 				subs.iter(printTree);
+				numGeneratedPackages++;
+				
 			case TTypedecl(t):
 				generateType(t);
 				write(t.path);
+				numGeneratedTypes++;
 
 			case TEnumdecl(t):
 				generateEnum(t);
 				write(t.path);
+				numGeneratedTypes++;
 
 			case TClassdecl(t):
 				generateClass(t);
 				write(t.path);
+				numGeneratedTypes++;
 
 			case TAbstractdecl(t):
 				generateAbstract(t);
 				write(t.path);
+				numGeneratedTypes++;
 		}
 	}
 
 	static function generatePackage(name:String, full:String, subs:Array<TypeTree>)
 	{
-		if (full == "") buf.add('<h1>top level<h1>');
+		if (full == "") buf.add('<h1>top level</h1>');
 		else buf.add('<h1><span class="directive">package</span> $full</h1>');
 
 		buf.add('<table class="table table-condensed"><tbody>');
@@ -192,10 +250,12 @@ class GeneratorXml
 	{
 		var kind = 'typedef';
 		var link = typeParamsLink(type.path, type.params);
-
-		buf.add('<h1><code><span class="directive">$kind</span> $link</code></h1>\n');
-		printPlatforms(type.platforms);
+		var target = typeLink(type.type);
+		
+		buf.add('<h1><code><span class="directive">$kind</span> $link = $target</code></h1>\n');
 		printModule(type.path, type.module);
+		printPlatforms(type.platforms);
+		printFile(type.file);
 		printDoc(type.doc);
 
 		switch (type.type)
@@ -212,8 +272,9 @@ class GeneratorXml
 		var link = typeParamsLink(type.path, type.params);
 
 		buf.add('<h1><code><span class="directive">$kind</span> $link</code></h1>\n');
-		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
+		printPlatforms(type.platforms);
+		printFile(type.file);
 		printDoc(type.doc);
 
 		if (type.constructors.array().length > 0)
@@ -260,8 +321,9 @@ class GeneratorXml
 		}
 
 		buf.add('<h1><code><span class="directive">$kind</span> $link$api</code></h1>\n');
-		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
+		printPlatforms(type.platforms);
+		printFile(type.file);
 
 		// printRelatedTypes(model.getDirectSubclasses(type), "Direct Subclasses");
 		// printRelatedTypes(model.getIndirectSubclasses(type), "Indirect Subclasses");
@@ -279,6 +341,8 @@ class GeneratorXml
 		if (fields.length == 0) return;
 		
 		buf.add('<h2>$title</h2>\n');
+		var fields = fields.array();
+		fields.sort(function(cf1, cf2) return cf1.name == "new" ? -1 : cf2.name == "new" ? 1 : cf1.name < cf2.name ? -1 : 1);
 		for (field in fields) printClassField(field);
 	}
 
@@ -302,8 +366,10 @@ class GeneratorXml
 				var access = readonly ? '<span class="comment"> // readonly</span>' : '';
 				buf.add('<h3><code><span class="keyword">var</span> <a name="$name" href="#$name"><span class="identifier">$name</span></a>:$link;$access</code></h3>\n');
 		}
-		
+		if (field.platforms.length < numPlatforms && field.platforms.length > 0) printPlatforms(field.platforms);
 		printDoc(field.doc);
+		
+		buf.add("<hr/>");
 	}
 
 	static function generateAbstract(type:Abstractdef)
@@ -312,8 +378,9 @@ class GeneratorXml
 		var link = typeParamsLink(type.path, type.params);
 
 		buf.add('<h1><code><span class="directive">$kind</span> $link</code></h1>\n');
-		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
+		printPlatforms(type.platforms);
+		printFile(type.file);
 		printDoc(type.doc);
 
 		if (type.impl != null)
@@ -349,14 +416,24 @@ class GeneratorXml
 	{
 		var platforms = platforms.array();
 
-		if (platforms.length > 1)
+		buf.add('<div><code class="dark"><span class="macro">Available on ');
+		if (platforms.length == numPlatforms)
 		{
-			buf.add('<div><code class="dark"><span class="macro">#if (${platforms.join(" || ")})</span></code></div>\n');
+			buf.add('all platforms');
+		}		
+		else if (platforms.length > 1)
+		{
+			buf.add(platforms.join(", "));
 		}
 		else
 		{
-			buf.add('<div><code class="dark"><span class="macro">#if ${platforms.join("")}</span></code></div>\n');
+			buf.add(platforms.join(""));
 		}
+		buf.add('</span></code></div>\n');
+	}
+	
+	static function printFile(file:String) {
+		buf.add('<div><code class="dark"><span class="macro">Defined in $file</span></code></div>\n');
 	}
 
 	static function printDoc(doc:String)
@@ -380,6 +457,8 @@ class GeneratorXml
 			case CAbstract(path, params):
 				nameParamsLink(path, params);
 			case CTypedef(path, params):
+				nameParamsLink(path, params);
+			case CEnum(path, params):
 				nameParamsLink(path, params);
 			case _:
 				StringTools.htmlEscape(Std.string(type));
@@ -502,6 +581,7 @@ class GeneratorXml
 		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 		<link href="$baseurl/styles.css" rel="stylesheet">
 		<script type="text/javascript">var baseUrl = "$baseurl";</script>
+		<script type="text/javascript" src="$baseurl/nav.js"></script>
 		<script type="text/javascript" src="$baseurl/index.js"></script>
 	</head>
 	<body>
@@ -514,7 +594,7 @@ class GeneratorXml
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="packages">${nav.toString()}</div>
+				<div class="packages" id="nav"></div>
 				<div class="content">${buf.toString()}</div>
 			</div>
 		</div>

@@ -1,4 +1,3 @@
--cmd mkdir -p bin
 -cmd cd gen
 
 --next

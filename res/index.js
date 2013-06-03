@@ -53,6 +53,7 @@ function updateTreeState(){
 }
 
 $(document).ready(function(){
+	$("#nav").html(navContent);
 	var treeState = readCookie("treeState");
 	if (treeState != null)
 	{
