@@ -5,7 +5,7 @@ using Lambda;
 
 class GeneratorXml
 {
-	public static var baseurl = "/dox/pages";
+	public static var baseurl = "/pages";
 
 	static var buf:StringBuf;
 	static var nav:StringBuf;
@@ -16,7 +16,7 @@ class GeneratorXml
 		
 		for (platform in ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php']) // api difference in java?
 		{
-			Sys.println('Parsing $platform');
+			// Sys.println('Parsing $platform');
 			var data = sys.io.File.getContent('bin/$platform.xml');
 			parser.process(Xml.parse(data).firstElement(), platform);
 		}
@@ -33,7 +33,7 @@ class GeneratorXml
 
 	static function process(root:TypeRoot)
 	{
-		Sys.println("Processing types");
+		// Sys.println("Processing types");
 		
 		var rootTypes = [];
 		var rootPack = TPackage('top level', '', rootTypes);
@@ -289,7 +289,8 @@ class GeneratorXml
 		switch (field.type)
 		{
 			case CFunction(args, ret):
-				// if (field.meta.has(":impl")) args.shift();
+				var args = args.array();
+				if (isImpl(field)) args.shift();
 				var argLinks = args.map(argLink).join(", ");
 				var retLink = typeLink(ret);
 				var paramLinks = paramsLink(field.params);
@@ -314,23 +315,28 @@ class GeneratorXml
 		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
 		printDoc(type.doc);
-		
-		// if (type.impl != null)
-		// {
-		// 	var impl = type.impl.get();
-		// 	var fields = [];
-		// 	var statics = [];
-		// 	for (field in impl.statics.get())
-		// 	{
-		// 		if (field.meta.has(":impl")) {
-		// 			if (field.name == "_new") field.name = "new";
-		// 			fields.push(field);
-		// 		}
-		// 		else statics.push(field);
-		// 	}
-		// 	printClassFields(statics, "Class Fields");
-		// 	printClassFields(fields, "Instance Fields");
-		// }
+
+		if (type.impl != null)
+		{
+			var impl = type.impl;
+			var fields = new List();
+			var statics = new List();
+			for (field in impl.statics)
+			{
+				if (isImpl(field)) {
+					if (field.name == "_new") field.name = "new";
+					fields.add(field);
+				}
+				else statics.add(field);
+			}
+			printClassFields(statics, "Class Fields");
+			printClassFields(fields, "Instance Fields");
+		}
+	}
+
+	static function isImpl(field:ClassField)
+	{
+		return field.meta.exists(function(m) { return m.name == ":impl"; });
 	}
 
 	static function printModule(path:String, module:String)
@@ -469,7 +475,7 @@ class GeneratorXml
 			sys.FileSystem.createDirectory(dir);
 		}
 		sys.io.File.saveContent(path, html);
-		Sys.println('Generated $path');
+		// Sys.println('Generated $path');
 	}
 
 	static function baseType(type:TypeTree)
