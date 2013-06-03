@@ -11,6 +11,13 @@ class GeneratorXml
 	static var nav:StringBuf;
 
 	static var numPlatforms:Int;
+	static var numGeneratedTypes(default, set) = 0;
+	static var numGeneratedPackages = 0;
+	
+	static function set_numGeneratedTypes(v) {
+		if (v & 16 == 0) Sys.print(".");
+		return numGeneratedTypes = v;
+	}
 	
 	static function main()
 	{
@@ -20,7 +27,7 @@ class GeneratorXml
 		
 		for (platform in platforms) // api difference in java?
 		{
-			// Sys.println('Parsing $platform');
+			Sys.println('Parsing $platform');
 			var data = sys.io.File.getContent('bin/$platform.xml');
 			parser.process(Xml.parse(data).firstElement(), platform);
 		}
@@ -64,6 +71,9 @@ class GeneratorXml
 		nav.add('</ul>');
 
 		root.iter(printTree);
+		
+		Sys.println('done');
+		Sys.println('Created $numGeneratedTypes types in $numGeneratedPackages packages.');
 	}
 
 	static function process(root:TypeRoot)
@@ -190,21 +200,27 @@ class GeneratorXml
 				write(full == '' ? 'index' : full + '.index');
 
 				subs.iter(printTree);
+				numGeneratedPackages++;
+				
 			case TTypedecl(t):
 				generateType(t);
 				write(t.path);
+				numGeneratedTypes++;
 
 			case TEnumdecl(t):
 				generateEnum(t);
 				write(t.path);
+				numGeneratedTypes++;
 
 			case TClassdecl(t):
 				generateClass(t);
 				write(t.path);
+				numGeneratedTypes++;
 
 			case TAbstractdecl(t):
 				generateAbstract(t);
 				write(t.path);
+				numGeneratedTypes++;
 		}
 	}
 
