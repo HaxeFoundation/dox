@@ -96,6 +96,11 @@ class GeneratorXml
 				t.fields.iter(processClassField);
 				t.statics.iter(processClassField);
 			case TAbstractdecl(t):
+				if (t.impl != null)
+				{
+					t.impl.fields.iter(processClassField);
+					t.impl.statics.iter(processClassField);
+				}
 				t.doc = processDoc(t.doc);
 		}
 	}
