@@ -22,7 +22,38 @@ class GeneratorXml
 		}
 
 		var root = process(parser.root);
-
+		
+		function getName(t:TypeTree) {
+			return switch(t) {
+				case TEnumdecl(t): t.path;
+				case TTypedecl(t): t.path;
+				case TClassdecl(t): t.path;
+				case TAbstractdecl(t): t.path;
+				case TPackage(n,_,_): n;
+			}
+		}
+	
+		function compare(t1,t2) {
+			return switch [t1, t2] {
+				case [TPackage(n1,_,_),TPackage(n2,_,_)]: n1 < n2 ? -1 : 1;
+				case [TPackage(_),_]: -1;
+				case [_,TPackage(_)]: 1;
+				case [t1,t2]:
+					return getName(t1) < getName(t2) ? -1 : 1;
+			}
+		}
+		
+		function sort(t:TypeTree) {
+			switch(t) {
+				case TPackage(_, _, subs):
+					subs.sort(compare);
+					subs.iter(sort);
+				case _:
+			}
+		}
+		root.sort(compare); // we may not want this one
+		root.iter(sort);
+		
 		nav = new StringBuf();
 		nav.add('<ul>');
 		root.iter(printNavigationTree);
@@ -94,7 +125,7 @@ class GeneratorXml
 
 		return Markdown.markdownToHtml(doc);
 	}
-
+	
 	/**
 		Generates the navigation from the type tree, called recursively on each 
 		package and type.
