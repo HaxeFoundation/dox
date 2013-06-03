@@ -348,7 +348,7 @@ class GeneratorXml
 				var access = readonly ? '<span class="comment"> // readonly</span>' : '';
 				buf.add('<h3><code><span class="keyword">var</span> <a name="$name" href="#$name"><span class="identifier">$name</span></a>:$link;$access</code></h3>\n');
 		}
-		
+		if (field.platforms.length < numPlatforms) printPlatforms(field.platforms);
 		printDoc(field.doc);
 		
 		buf.add("<hr/>");
