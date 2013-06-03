@@ -70,6 +70,8 @@ class GeneratorXml
 		root.iter(printNavigationTree);
 		nav.add('</ul>');
 
+		sys.io.File.saveContent("pages/nav.js", "var navContent = '" + nav.toString() + "';");
+		
 		root.iter(printTree);
 		
 		Sys.println('done');
@@ -579,6 +581,7 @@ class GeneratorXml
 		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 		<link href="$baseurl/styles.css" rel="stylesheet">
 		<script type="text/javascript">var baseUrl = "$baseurl";</script>
+		<script type="text/javascript" src="$baseurl/nav.js"></script>
 		<script type="text/javascript" src="$baseurl/index.js"></script>
 	</head>
 	<body>
@@ -591,7 +594,7 @@ class GeneratorXml
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="packages">${nav.toString()}</div>
+				<div class="packages" id="nav"></div>
 				<div class="content">${buf.toString()}</div>
 			</div>
 		</div>
