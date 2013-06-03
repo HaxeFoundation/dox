@@ -1,4 +1,3 @@
--cmd mkdir -p pages
 -cmd cp res/* pages
 
 --next

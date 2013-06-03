@@ -192,8 +192,9 @@ class GeneratorXml
 	{
 		var kind = 'typedef';
 		var link = typeParamsLink(type.path, type.params);
-
-		buf.add('<h1><code><span class="directive">$kind</span> $link</code></h1>\n');
+		var target = typeLink(type.type);
+		
+		buf.add('<h1><code><span class="directive">$kind</span> $link = $target</code></h1>\n');
 		printPlatforms(type.platforms);
 		printModule(type.path, type.module);
 		printDoc(type.doc);
