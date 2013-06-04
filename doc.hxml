@@ -4,5 +4,4 @@
 
 -x dox.Generator
 -lib markdown
--lib hxparse
 -cp src

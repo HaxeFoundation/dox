@@ -424,14 +424,11 @@ class Generator
 		for (field in fields) printClassField(field);
 	}
 
-	/**
-		Print an individual class field.
-	**/
-	static function printClassField(field:ClassField)
+	static function getSignature(field:ClassField)
 	{
 		var name = field.name;
-		
-		switch (field.type)
+	
+		return switch (field.type)
 		{
 			case CFunction(args, ret):
 				var args = args.array();
@@ -439,14 +436,24 @@ class Generator
 				var argLinks = args.map(argLink).join(", ");
 				var retLink = typeLink(ret);
 				var paramLinks = paramsLink(field.params);
-				buf.add('<a name="$name"></a><h3><code><span class="keyword">function</span> <a name="$name" href="#$name"><span class="identifier">$name</span></a>$paramLinks($argLinks):$retLink;</code></h3>\n');
-
+				var sig = '<span class="keyword">function</span> <a href="#$name"><span class="identifier">$name</span></a>$paramLinks($argLinks):$retLink;';
+				// TODO: treat overloads that have their own documentation as separate field
+				if (field.overloads != null) for (field in field.overloads) sig += "<br/>" +getSignature(field);
+				sig;
 			case _:
 				var link = typeLink(field.type);
 				var readonly = field.get == RInline || field.set == RNo;
 				var access = readonly ? '<span class="comment"> // readonly</span>' : '';
-				buf.add('<h3><code><span class="keyword">var</span> <a name="$name" href="#$name"><span class="identifier">$name</span></a>:$link;$access</code></h3>\n');
-		}
+				'<span class="keyword">var</span> <a href="#$name"><span class="identifier">$name</span></a>:$link;$access';
+		}		
+	}
+	
+	/**
+		Print an individual class field.
+	**/
+	static function printClassField(field:ClassField)
+	{
+		buf.add('<a name="${field.name}"></a><h3><code>${getSignature(field)}</code></h3>');
 		if (field.platforms.length < numPlatforms && field.platforms.length > 0) printPlatforms(field.platforms);
 		printDoc(field.doc);
 		
