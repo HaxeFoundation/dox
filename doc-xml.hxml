@@ -1,8 +1,0 @@
--cmd cp res/* pages
-
---next
-
--x dox.GeneratorXml
--lib markdown
--lib hxparse
--cp src

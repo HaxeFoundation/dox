@@ -1,75 +1,57 @@
--cmd mkdir -p bin
+-cmd cd gen
 
 --next
 
--neko api
--cp src
 --no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
+--macro ImportAll.run()
+-D doc-gen
+
+--each
+
+-neko all.n
+-xml ../bin/neko.xml
 
 --next
 
--js api
--cp src
---no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
+-swf all.swf
+-swf-version 8
+-xml ../bin/flash8.xml
+-D flash_lite
 
 --next
 
--swf api
--cp src
---no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
+-js all.js
+-xml ../bin/js.xml
 
 --next
 
--cpp api
--cp src
---no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
+-swf all9.swf
+-xml ../bin/flash9.xml
+-swf-version 11.4
 
 --next
 
--php api
--cp src
---no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
+-php all_php
+-xml ../bin/php.xml
 
 --next
 
--cs api
--cp src
---no-output
--dce no
--D use_rtti_doc
+-cpp all_cpp
+-xml ../bin/cpp.xml
+-D xmldoc
+-D HXCPP_MULTI_THREADED
+
+--next
+-java all_java
+-xml ../bin/java.xml
+-D xmldoc
+
+--next
+-cs all_cs
 -D unsafe
---macro xray.Macro.build()
+-xml ../bin/cs.xml
+-D xmldoc
 
 --next
 
--java api
--cp src
---no-output
--dce no
--D use_rtti_doc
---macro xray.Macro.build()
-
-# --next
-
-# -swf api
-# -swf-version 8
-# -cp src
-# --no-output
-# -dce no
-# -D use_rtti_doc
-# --macro xray.Macro.build()
+-xml ../bin/cross.xml
