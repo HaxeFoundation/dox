@@ -26,7 +26,7 @@
 --next
 
 -swf all9.swf
--xml ../bin/flash9.xml
+-xml ../bin/flash.xml
 -swf-version 11.4
 
 --next
