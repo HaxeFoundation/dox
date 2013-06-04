@@ -30,14 +30,16 @@ class Generator
 	static function main()
 	{
 		var parser = new haxe.rtti.XmlParser();
-		var platforms = ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php', 'java'];
+		var platforms = ['cpp', 'cs', 'flash8', 'flash', 'js', 'neko', 'php', 'java'];
 		numPlatforms = platforms.length;
 		
 		for (platform in platforms)
 		{
 			Sys.println('Parsing $platform');
 			var data = sys.io.File.getContent('bin/$platform.xml');
-			parser.process(Xml.parse(data).firstElement(), platform);
+			var xml = Xml.parse(data).firstElement();
+			if (platform == "flash8") transformPackage(xml, "flash", "flash8");
+			parser.process(xml, platform);
 		}
 
 		var root = process(parser.root);
@@ -85,6 +87,19 @@ class Generator
 		
 		Sys.println('done');
 		Sys.println('Created $numGeneratedTypes types in $numGeneratedPackages packages.');
+	}
+
+	static function transformPackage(x:Xml, p1, p2)
+	{
+		switch( x.nodeType ) {
+		case Xml.Element:
+			var p = x.get("path");
+			if( p != null && p.substr(0,6) == p1 + "." )
+				x.set("path",p2 + "." + p.substr(6));
+			for( x in x.elements() )
+				transformPackage(x,p1,p2);
+		default:
+		}
 	}
 
 	static function process(root:TypeRoot)
@@ -175,6 +190,15 @@ class Generator
 		return markdownToHtml(doc);
 	}
 	
+	static var packageDepth = 0;
+	static var sysPlatform = [
+		"java" => true,
+		"cs" => true,
+		"neko" => true,
+		"php" => true,
+		"cpp" => true
+	];
+
 	/**
 		Generates the navigation from the type tree, called recursively on each 
 		package and type.
@@ -185,9 +209,16 @@ class Generator
 		{
 			case TPackage(name, full, subs):
 				if (name.charAt(0) == '_') return;
+				packageDepth += 1;
+
+				var style = "";
+				if (packageDepth == 1 && name != "top level" && name != "haxe")
+				{
+					style = "platform platform-" + name;
+				}
 
 				var href = full.split('.').join('/') + "/index.html";
-				nav.add('<li class="expando"><div>');
+				nav.add('<li class="expando $style"><div>');
 				nav.add('<a href="#" onclick="toggleCollapsed(this)"><img src="$baseurl/triangle-closed.png"></a>');
 				nav.add('<a href="$baseurl/$href">$name</a>');
 				nav.add('</div>');
@@ -196,6 +227,7 @@ class Generator
 				subs.iter(printNavigationTree);
 				nav.add('</ul>');
 				nav.add('</li>');
+				packageDepth -= 1;
 			case _:
 		}
 
@@ -424,6 +456,12 @@ class Generator
 		for (field in fields) printClassField(field);
 	}
 
+	static function getPlatformClass(platforms:List<String>)
+	{
+		if (platforms.isEmpty()) return "";
+		return "platform " + platforms.map(function(p){ return "platform-"+p; }).join(" ");
+	}
+
 	/**
 		Print an individual class field.
 	**/
@@ -431,6 +469,9 @@ class Generator
 	{
 		var name = field.name;
 		
+		var platformClass = getPlatformClass(field.platforms);
+		buf.add('<span class="$platformClass">\n');
+
 		switch (field.type)
 		{
 			case CFunction(args, ret):
@@ -450,7 +491,7 @@ class Generator
 		if (field.platforms.length < numPlatforms && field.platforms.length > 0) printPlatforms(field.platforms);
 		printDoc(field.doc);
 		
-		buf.add("<hr/>");
+		buf.add("<hr/></span>");
 	}
 
 	static function generateAbstract(type:Abstractdef)
@@ -669,8 +710,34 @@ class Generator
 		<div class="container-fluid">
 			<div class="navbar navbar-inverse navbar-fixed-top">
 				<div class="navbar-inner">
+					<form class="navbar-search pull-left">
+						<input type="text" class="search-query" placeholder="Search">
+					</form>
 					<ul class="nav">
-						<li class="active"><a href="#">API</a></li>
+						<li id="select-version" class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Version<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li data="3_0"><a href="#">3.0</a></li>
+								<li data="3_1"><a href="#">3.1</a></li>
+								<li data="3_2"><a href="#">3.2</a></li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav">
+						<li id="select-platform" class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li data="all"><a href="#">All Platforms</a></li>
+								<li data="sys"><a href="#">System</a></li>
+								<li data="neko"><a href="#">Neko</a></li>
+								<li data="php"><a href="#">PHP</a></li>
+								<li data="java"><a href="#">Java</a></li>
+								<li data="cs"><a href="#">C Sharp</a></li>
+								<li data="flash8"><a href="#">Flash 8</a></li>
+								<li data="flash"><a href="#">Flash 9+</a></li>
+								<li data="js"><a href="#">Javascript</a></li>
+							</ul>
+						</li>
 					</ul>
 				</div>
 			</div>
