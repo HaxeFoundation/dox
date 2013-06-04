@@ -1,11 +1,15 @@
 package dox;
 
+import Markdown;
+import markdown.AST;
+import markdown.InlineParser;
 import haxe.rtti.CType;
 using Lambda;
 
 class GeneratorXml
 {
-	public static var baseurl = "/pages";
+	public static var baseurl = "/dox/pages";
+	// public static var baseurl = "/dox";
 
 	static var buf:StringBuf;
 	static var nav:StringBuf;
@@ -14,6 +18,10 @@ class GeneratorXml
 	static var numGeneratedTypes(default, set) = 0;
 	static var numGeneratedPackages = 0;
 	
+	static var subClasses = new Map<String, Array<String>>();
+	static var implementors = new Map<String, Array<String>>();
+	static var infos = new Map<String, TypeInfos>();
+
 	static function set_numGeneratedTypes(v) {
 		if (v & 16 == 0) Sys.print(".");
 		return numGeneratedTypes = v;
@@ -22,10 +30,10 @@ class GeneratorXml
 	static function main()
 	{
 		var parser = new haxe.rtti.XmlParser();
-		var platforms = ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php'];
+		var platforms = ['cpp', 'cs', 'flash8', 'flash9', 'js', 'neko', 'php', 'java'];
 		numPlatforms = platforms.length;
 		
-		for (platform in platforms) // api difference in java?
+		for (platform in platforms)
 		{
 			Sys.println('Parsing $platform');
 			var data = sys.io.File.getContent('bin/$platform.xml');
@@ -64,6 +72,7 @@ class GeneratorXml
 		}
 		root.sort(compare); // we may not want this one
 		root.iter(sort);
+		root.unshift(root.pop()); // toplevel ends up last
 		
 		nav = new StringBuf();
 		nav.add('<ul>');
@@ -80,7 +89,7 @@ class GeneratorXml
 
 	static function process(root:TypeRoot)
 	{
-		// Sys.println("Processing types");
+		Sys.println("Processing types");
 		
 		var rootTypes = [];
 		var rootPack = TPackage('top level', '', rootTypes);
@@ -102,16 +111,35 @@ class GeneratorXml
 		{
 			case TPackage(_, _, subs):
 				subs.iter(processTree);
+
 			case TEnumdecl(t):
+				infos.set(t.path, t);
 				t.doc = processDoc(t.doc);
 				t.constructors.iter(processEnumField);
+
 			case TTypedecl(t):
+				infos.set(t.path, t);
 				t.doc = processDoc(t.doc);
+
 			case TClassdecl(t):
+				infos.set(t.path, t);
 				t.doc = processDoc(t.doc);
 				t.fields.iter(processClassField);
 				t.statics.iter(processClassField);
+				if (t.isInterface) implementors.set(t.path, []);
+				if (t.superClass != null)
+				{
+					if (!subClasses.exists(t.superClass.path)) subClasses.set(t.superClass.path, [t.path]);
+					else subClasses.get(t.superClass.path).push(t.path);
+				}
+				for (i in t.interfaces)
+				{
+					if (!implementors.exists(i.path)) implementors.set(i.path, [t.path]);
+					else implementors.get(i.path).push(t.path);
+				}
+
 			case TAbstractdecl(t):
+				infos.set(t.path, t);
 				if (t.impl != null)
 				{
 					t.impl.fields.iter(processClassField);
@@ -144,7 +172,7 @@ class GeneratorXml
 		if (doc.charAt(doc.length - 1) == "*") doc = doc.substr(0, doc.length - 1);
 		doc = StringTools.trim(doc);
 
-		return Markdown.markdownToHtml(doc);
+		return markdownToHtml(doc);
 	}
 	
 	/**
@@ -153,8 +181,6 @@ class GeneratorXml
 	**/
 	static function printNavigationTree(tree:TypeTree)
 	{
-		var type:{path:String, isPrivate:Bool} = null;
-
 		switch (tree)
 		{
 			case TPackage(name, full, subs):
@@ -170,13 +196,10 @@ class GeneratorXml
 				subs.iter(printNavigationTree);
 				nav.add('</ul>');
 				nav.add('</li>');
-
-			case TEnumdecl(t): type = t;
-			case TTypedecl(t): type = t;
-			case TClassdecl(t): type = t;
-			case TAbstractdecl(t): type = t;
+			case _:
 		}
 
+		var type = typeInfos(tree);
 		if (type == null || type.isPrivate) return;
 		
 		var parts = type.path.split(".");
@@ -235,11 +258,11 @@ class GeneratorXml
 
 		for (tree in subs)
 		{
-			var base = baseType(tree);
-			if (base == null) continue;
+			var infos = typeInfos(tree);
+			if (infos == null) continue;
 
-			var link = pathLink(base.path);
-			var desc = base.doc.substr(0, base.doc.indexOf('</p>') + 4);
+			var link = pathLink(infos.path);
+			var desc = infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
 			buf.add('<tr><td width="200">$link</td><td>$desc</td></tr>');
 		}
 
@@ -248,11 +271,16 @@ class GeneratorXml
 
 	static function generateType(type:Typedef)
 	{
-		var kind = 'typedef';
 		var link = typeParamsLink(type.path, type.params);
-		var target = typeLink(type.type);
+		var target = '';
+
+		switch (type.type)
+		{
+			case CAnonymous(_):
+			case _: target = ' = ' + typeLink(type.type);
+		}
 		
-		buf.add('<h1><code><span class="directive">$kind</span> $link = $target</code></h1>\n');
+		buf.add('<h1><code><span class="directive">typedef</span> $link$target</code></h1>\n');
 		printModule(type.path, type.module);
 		printPlatforms(type.platforms);
 		printFile(type.file);
@@ -261,17 +289,16 @@ class GeneratorXml
 		switch (type.type)
 		{
 			case CAnonymous(fields):
-				printClassFields(fields, "Instance Fields");
+				printClassFields(fields, 'Instance Fields');
 			case _:
 		}
 	}
 
 	static function generateEnum(type:Enumdef)
 	{
-		var kind = 'enum';
 		var link = typeParamsLink(type.path, type.params);
 
-		buf.add('<h1><code><span class="directive">$kind</span> $link</code></h1>\n');
+		buf.add('<h1><code><span class="directive">enum</span> $link</code></h1>\n');
 		printModule(type.path, type.module);
 		printPlatforms(type.platforms);
 		printFile(type.file);
@@ -302,9 +329,11 @@ class GeneratorXml
 		printDoc(field.doc);
 	}
 
+	/**
+		Generate documentation for a class.
+	**/
 	static function generateClass(type:Classdef)
 	{
-		var kind = type.isInterface ? 'interface' : 'class';
 		var link = typeParamsLink(type.path, type.params);
 		var api = "";
 
@@ -320,14 +349,15 @@ class GeneratorXml
 			api += ' <span class="keyword">implements</span> $link';
 		}
 
+		var kind = type.isInterface ? 'interface' : 'class';
 		buf.add('<h1><code><span class="directive">$kind</span> $link$api</code></h1>\n');
 		printModule(type.path, type.module);
 		printPlatforms(type.platforms);
 		printFile(type.file);
 
-		// printRelatedTypes(model.getDirectSubclasses(type), "Direct Subclasses");
-		// printRelatedTypes(model.getIndirectSubclasses(type), "Indirect Subclasses");
-		// printRelatedTypes(model.getDirectImplementors(type), "Direct Implementors");
+		var subClasses = getSubClasses(type.path);
+		printRelatedTypes(subClasses, "Subclasses");
+		if (type.isInterface) printRelatedTypes(implementors.get(type.path), "Implementors");
 
 		printDoc(type.doc);
 
@@ -335,6 +365,54 @@ class GeneratorXml
 		printClassFields(type.fields, "Instance Fields");
 	}
 
+	/**
+		Returns all paths that subclass (directly or indirectly) a path.
+	**/
+	static function getSubClasses(path:String)
+	{
+		if (!subClasses.exists(path)) return [];
+		var subs = subClasses.get(path);
+		var result = subs.copy();
+		for (path in subs) result = result.concat(getSubClasses(path));
+		result.sort(Reflect.compare);
+		return result;
+	}
+
+	/**
+		Print an expandable table ot related types with a title (used for 
+		implementors and subclasses)
+	**/
+	static function printRelatedTypes(types:Array<String>, title:String)
+	{
+		if (types.length == 0) return;
+		
+		var table = "<table class='table table-condensed'><tbody>";
+		for (path in types)
+		{
+			var link = pathLink(path);
+			var info = infos.get(path);
+			var desc = info.doc.substr(0, info.doc.indexOf('</p>') + 4);
+			table += '<tr><td width="200">$link</td><td>$desc</td></tr>';
+		}
+		table += "</tbody></table>";
+
+		buf.add('<table class="related-types toggle" style="margin-top:16px;"><tbody>');
+		buf.add('<tr><td colspan="2">$title</td></tr>');
+
+		var links = types.map(pathLink).join(", ");
+		buf.add('<tr>');
+		buf.add('<td width="12" style="vertical-align:top;"><a href="#" onclick="toggleInherited(this)"><img style="padding-top:4px;" src="$baseurl/triangle-closed.png"></a></td>');
+		buf.add('<td class="toggle-hide">$links</td>');
+		buf.add('<td class="toggle-show">$table</td>');
+		buf.add('</tr>');
+		
+		buf.add("</tbody></table>");
+	}
+
+	/**
+		Print documentation a group of class fields with a title (eg. statics, 
+		instance fields)
+	**/
 	static function printClassFields(fields:List<ClassField>, title:String)
 	{
 		var fields = fields.filter(function(field){ return field.isPublic; });
@@ -346,6 +424,9 @@ class GeneratorXml
 		for (field in fields) printClassField(field);
 	}
 
+	/**
+		Print an individual class field.
+	**/
 	static function printClassField(field:ClassField)
 	{
 		var name = field.name;
@@ -374,10 +455,9 @@ class GeneratorXml
 
 	static function generateAbstract(type:Abstractdef)
 	{
-		var kind = 'abstract';
 		var link = typeParamsLink(type.path, type.params);
 
-		buf.add('<h1><code><span class="directive">$kind</span> $link</code></h1>\n');
+		buf.add('<h1><code><span class="directive">abstract</span> $link</code></h1>\n');
 		printModule(type.path, type.module);
 		printPlatforms(type.platforms);
 		printFile(type.file);
@@ -432,7 +512,8 @@ class GeneratorXml
 		buf.add('</span></code></div>\n');
 	}
 	
-	static function printFile(file:String) {
+	static function printFile(file:String)
+	{
 		buf.add('<div><code class="dark"><span class="macro">Defined in $file</span></code></div>\n');
 	}
 
@@ -557,18 +638,18 @@ class GeneratorXml
 		// Sys.println('Generated $path');
 	}
 
-	static function baseType(type:TypeTree)
+	static function typeInfos(type:TypeTree)
 	{
-		var base:{doc:String, path:String} = null;
+		var infos:TypeInfos = null;
 		switch (type)
 		{
 			case TPackage(_, _, _):
-			case TTypedecl(t): base = t;
-			case TEnumdecl(t): base = t;
-			case TClassdecl(t): base = t;
-			case TAbstractdecl(t): base = t;
+			case TTypedecl(t): infos = t;
+			case TEnumdecl(t): infos = t;
+			case TClassdecl(t): infos = t;
+			case TAbstractdecl(t): infos = t;
 		}
-		return base;
+		return infos;
 	}
 
 	static function getHtml() return 
@@ -600,4 +681,72 @@ class GeneratorXml
 		</div>
 	</body>
 </html>';
+
+	static function markdownToHtml(markdown:String)
+	{
+		// create document
+		var document = new Document();
+		document.inlineSyntaxes.push(new MagicCodeSyntax());
+
+		// replace windows line endings with unix, and split
+		var lines = ~/\n\r/g.replace(markdown, '\n').split("\n");
+
+		// parse ref links
+		document.parseRefLinks(lines);
+
+		// parse ast
+		var blocks = document.parseLines(lines);
+		return Markdown.renderHtml(blocks);
+	}
+
+	public static function processCode(source:String)
+	{
+		source = StringTools.htmlEscape(source);
+
+		// this.field => #field
+		source = ~/this\.(\w+)/g.map(source, function(e){
+			var field = e.matched(1);
+			return 'this.<a href="#$field">$field</a>';
+		});
+
+		// Type, pack.Type, pack.Type.field => pack/Type.html#field
+		source = ~/\b((\w+\.)*[A-Z]\w+)(\.\w+)*\b/g.map(source, function(e){
+			var text = e.matched(0);
+			var type =  e.matched(1);
+			var field = e.matched(3);
+			var href = resolveTypeLink(type, field);
+			return '<a href="$href">$text</a>';
+		});
+
+		// Type, null => /Null.html
+		source = ~/null/g.map(source, function(e){
+			var href = resolveTypeLink("Null");
+			return '<a href="$href">null</a>';
+		});
+		
+		// Sys.println(source);
+		return source;
+	}
+
+	static function resolveTypeLink(type:String, ?field:String)
+	{
+		if (field == null) return pathHref(type);
+		field = field.substr(1);
+		return pathHref(type) + "#" + field;
+	}
+}
+
+class MagicCodeSyntax extends CodeSyntax
+{
+	public function new()
+	{
+		super('`([^`]*)`');
+	}
+
+	override function onMatch(parser:InlineParser):Bool
+	{
+		var source = pattern.matched(1);
+		parser.addNode(ElementNode.text('code', GeneratorXml.processCode(source)));
+		return true;
+	}
 }
