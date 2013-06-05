@@ -1,7 +1,7 @@
 ::use 'main.mtt'::
 	<h1>
 		<code>
-			<span class="directive">::if class.isInterface::interface::else::class::end::</span>
+			<span class="directive">::if class.isInterface::interface::else::class::end:: </span>
 			::class.path::
 			$$printTypeParams(::class.params::)
 			::if class.superClass != null::
@@ -28,5 +28,5 @@
 		::if field.isPublic::
 			::use "class_field.mtt"::::end::
 		::end::
-	::end::	
+	::end::
 ::end::

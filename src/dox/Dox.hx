@@ -14,15 +14,18 @@ class Dox {
 			var data = sys.io.File.getContent('xml/$platform.xml');
 			var xml = Xml.parse(data).firstElement();
 			if (platform == "flash8") transformPackage(xml, "flash", "flash8");
-			parser.process(xml, platform);			
+			parser.process(xml, platform);
 		}
 		
 		var proc = new Processor(cfg);
 		var root = proc.process(parser.root);
 		Sys.println('Generating to ${cfg.rootPath}');
-		var gen = new Generator(new Api(cfg, proc.infos));
+		
+		var api = new Api(cfg, proc.infos);
+		var gen = new Generator(api);
 		gen.generate(root);
-
+		gen.generateNavigation(root);
+		
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');
 			for (file in sys.FileSystem.readDirectory(dir)) {
@@ -42,5 +45,5 @@ class Dox {
 				transformPackage(x,p1,p2);
 		default:
 		}
-	}	
+	}
 }

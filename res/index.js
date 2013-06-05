@@ -1,5 +1,3 @@
-var base = "/dox/pages/";
-
 function createCookie(name, value, days) {
     if (days) {
         var date = new Date();
@@ -24,9 +22,9 @@ function toggleInherited(el) {
 	var toggle = $(el).closest(".toggle");
 	toggle.toggleClass("toggle-on");
 	if (toggle.hasClass("toggle-on")) {
-		$("img", toggle).attr("src", baseUrl + "/triangle-opened.png");
+		$("img", toggle).attr("src", rootPath + "/triangle-opened.png");
 	} else {
-		$("img", toggle).attr("src", baseUrl + "/triangle-closed.png");
+		$("img", toggle).attr("src", rootPath + "/triangle-closed.png");
 	}
 }
 
@@ -36,9 +34,9 @@ function toggleCollapsed(el) {
 	toggle.toggleClass("expanded");
 
 	if (toggle.hasClass("expanded")) {
-		$("img", toggle).first().attr("src", baseUrl + "/triangle-opened.png");
+		$("img", toggle).first().attr("src", rootPath + "/triangle-opened.png");
 	} else {
-		$("img", toggle).first().attr("src", baseUrl + "/triangle-closed.png");
+		$("img", toggle).first().attr("src", rootPath + "/triangle-closed.png");
 	}
 	updateTreeState();
 }
@@ -120,7 +118,7 @@ $(document).ready(function(){
 		$(".packages .expando").each(function(i, e){
 			if (states[i]) {
 				$(e).addClass("expanded");
-				$("img", e).first().attr("src", baseUrl + "/triangle-opened.png");
+				$("img", e).first().attr("src", rootPath + "/triangle-opened.png");
 			}
 		});
 	}

@@ -7,6 +7,7 @@ class Generator {
 
 	var api:Api;
 	
+	var tplNav:templo.Template;
 	var tplPackage:templo.Template;
 	var tplClass:templo.Template;
 	
@@ -15,12 +16,21 @@ class Generator {
 		templo.Template.fromFile("templates/macros.mtt");
 		templo.Template.fromFile("templates/main.mtt");
 		templo.Template.fromFile("templates/class_field.mtt");
+		tplNav = templo.Template.fromFile("templates/nav.mtt");
 		tplPackage = templo.Template.fromFile("templates/package.mtt");
 		tplClass = templo.Template.fromFile("templates/class.mtt");
 	}
 	
 	public function generate(root:TypeRoot) {
 		root.iter(generateTree);
+	}
+	
+	public function generateNavigation(root:TypeRoot) {
+		var s = tplNav.execute({
+			api: api,
+			root: root
+		});
+		sys.io.File.saveContent(api.config.rootPath + "nav.js", s);
 	}
 	
 	function generateTree(tree:TypeTree) {
@@ -58,5 +68,5 @@ class Generator {
 			sys.FileSystem.createDirectory(dir);
 		}
 		sys.io.File.saveContent(path, content);
-	}	
+	}
 }
