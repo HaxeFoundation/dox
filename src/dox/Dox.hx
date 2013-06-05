@@ -6,6 +6,7 @@ class Dox {
 		cfg.rootPath = Sys.args()[1] == null ? (Sys.getCwd() + "pages/") : Sys.args()[1];
 		cfg.platforms = ["cpp"];
 		cfg.templateDir = "templates";
+		cfg.resourcePaths = ["../res"];
 		
 		var parser = new haxe.rtti.XmlParser();
 		for (platform in cfg.platforms) {
@@ -17,8 +18,18 @@ class Dox {
 		}
 		
 		var proc = new Processor(cfg);
-		var gen = new Generator(cfg);
-		gen.generate(proc.process(parser.root));
+		var root = proc.process(parser.root);
+		Sys.println('Generating to ${cfg.rootPath}');
+		var gen = new Generator(new Api(cfg, proc.infos));
+		gen.generate(root);
+
+		for (dir in cfg.resourcePaths) {
+			Sys.println('Copying resources from $dir');
+			for (file in sys.FileSystem.readDirectory(dir)) {
+				sys.io.File.copy('$dir/$file', cfg.rootPath + file);
+			}
+		}
+		Sys.println("Done");
 	}
 	
 	static function transformPackage(x:Xml, p1, p2) {

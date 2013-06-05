@@ -5,15 +5,13 @@ using Lambda;
 
 class Generator {
 
-	var config:Config;
-
 	var api:Api;
+	
 	var tplPackage:templo.Template;
 	var tplClass:templo.Template;
 	
-	public function new(cfg:Config) {
-		config = cfg;
-		api = new Api(cfg);
+	public function new(api:Api) {
+		this.api = api;
 		templo.Template.fromFile("templates/macros.mtt");
 		templo.Template.fromFile("templates/main.mtt");
 		templo.Template.fromFile("templates/class_field.mtt");
@@ -48,7 +46,7 @@ class Generator {
 	
 	function write(path:String, content:String)
 	{
-		path = config.rootPath + path.split('.').join('/') + '.html';
+		path = api.config.rootPath + path.split('.').join('/') + '.html';
 
 		var parts = path.split("/");
 		var current = [];

@@ -1,5 +1,7 @@
-<macro name="treeLink(treeEntry)">
-	<a href="::null::"><span class="type">::path::</span></a>
+<macro name="printTypeParams(params)">
+	::if params.length > 0::
+	&lt;::params.join(", ")::&gt;
+	::end::	
 </macro>
 
 <macro name="printPlatforms(platforms)">
@@ -16,32 +18,34 @@
 	</div>
 </macro>
 
-<macro name="getTypeParams(params)">
+<macro name="printLinkedPath(path, params)">
+	::if api.isKnownType(path)::
+		<a ::attr href api.pathToUrl(path)::>::api.getPathName(path)::</a>
+	::else::
+		::api.getPathName(path)::
+	::end::
 	::if params.length > 0::
-	&lt;::params.join(", ")::&gt;
+		&lt;
+		::foreach param params::
+			$$printLinkedType(::param::)
+		::end::
+		&gt;
 	::end::
 </macro>
 
-<macro name="getType(type)">
-	raw api.typeLink(type)
-</macro>
-
-<macro name="getArg(arg)">
-	<span class="identifier">::arg.name::</span>:$$getType(::arg.t::)
-</macro>
-
-<macro name="getSignature(field)">
-	::switch field.type::
-		<span class="keyword">var</span> <a href="#::field.name::">::field.name::</a> : $$getType(::field.type::)
-	::case 4::
-		<span class="keyword">function</span> <a href="#::field.name::">::field.name::</a>
-		$$getTypeParams(::field.params::)
-		(
+<macro name="printLinkedType(ctype)">
+	::switch ctype::
+	::case::Unknown
+	::case::$$printLinkedPath(::args[0]::,::args[1]::)
+	::case::$$printLinkedPath(::args[0]::,::args[1]::)
+	::case::$$printLinkedPath(::args[0]::,::args[1]::)
+	::case::
 		::foreach arg args[0]::
-			$$getArg(::arg::)
-			::if !repeat.arg.last::,::end::
+			$$printLinkedType(::arg.t::)-&gt;
 		::end::
-		)
-		: $$getType(::args[1]::)
+		$$printLinkedType(::args[1]::)		
+	::case::anon
+	::case::Dynamic::if args[0] != null::$$printLinkedType(::args[0]::)::end::
+	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::end::
 </macro>

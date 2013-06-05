@@ -6,7 +6,7 @@
 		<tbody>
 			::foreach tree subs::
 			<tr>
-				<td width="200">$$treeLink(::tree::)</td>
+				<td width="200"><a href="::api.getTreeUrl(tree)::">::api.getTreeName(tree)::</a></td>
 				<td></td>
 			</tr>
 			::end::

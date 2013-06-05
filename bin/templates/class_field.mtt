@@ -2,7 +2,19 @@
 	<a ::attr name field.name::></a>
 	<h3>
 		<code>
-			$$getSignature(::field::)
+			::switch field.type::
+				<span class="keyword">var</span> <a href="#::field.name::">::field.name::</a>
+			::case 4::
+				<span class="keyword">function</span> <a href="#::field.name::">::field.name::</a>
+				$$printTypeParams(::field.params::)
+				(
+				::foreach arg args[0]::
+					::arg.name:: : $$printLinkedType(::arg.t::)
+					::if !repeat.arg.last::,::end::
+				::end::
+				)		
+				: $$printLinkedType(::args[1]::)
+			::end::
 		</code>
 	</h3>
 	::if field.doc != null::::raw field.doc::

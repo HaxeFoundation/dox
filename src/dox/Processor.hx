@@ -5,15 +5,12 @@ using Lambda;
 
 class Processor {
 	
-	//public var root(default, null):TypeRoot;
 	var config:Config;
-	
-	static var infos = new Map<String, TypeInfos>();
-	static var subClasses = new Map<String, Array<String>>();
-	static var implementors = new Map<String, Array<String>>();	
+	public var infos:Infos;
 	
 	public function new(cfg:Config) {
 		config = cfg;
+		infos = new Infos();
 	}
 	
 	public function process(root:TypeRoot) {
@@ -47,7 +44,6 @@ class Processor {
 		}
 		root.sort(compare);
 		root.iter(sort);
-		root.unshift(root.pop());
 		
 		return processRoot(root);
 	}
@@ -78,33 +74,33 @@ class Processor {
 				subs.iter(processTree);
 
 			case TEnumdecl(t):
-				infos.set(t.path, t);
+				infos.typeMap.set(t.path, t);
 				t.doc = processDoc(t.doc);
 				t.constructors.iter(processEnumField);
 
 			case TTypedecl(t):
-				infos.set(t.path, t);
+				infos.typeMap.set(t.path, t);
 				t.doc = processDoc(t.doc);
 
 			case TClassdecl(t):
-				infos.set(t.path, t);
+				infos.typeMap.set(t.path, t);
 				t.doc = processDoc(t.doc);
 				t.fields.iter(processClassField);
 				t.statics.iter(processClassField);
-				if (t.isInterface) implementors.set(t.path, []);
+				if (t.isInterface) infos.implementors.set(t.path, []);
 				if (t.superClass != null)
 				{
-					if (!subClasses.exists(t.superClass.path)) subClasses.set(t.superClass.path, [t.path]);
-					else subClasses.get(t.superClass.path).push(t.path);
+					if (!infos.subClasses.exists(t.superClass.path)) infos.subClasses.set(t.superClass.path, [t.path]);
+					else infos.subClasses.get(t.superClass.path).push(t.path);
 				}
 				for (i in t.interfaces)
 				{
-					if (!implementors.exists(i.path)) implementors.set(i.path, [t.path]);
-					else implementors.get(i.path).push(t.path);
+					if (!infos.implementors.exists(i.path)) infos.implementors.set(i.path, [t.path]);
+					else infos.implementors.get(i.path).push(t.path);
 				}
 
 			case TAbstractdecl(t):
-				infos.set(t.path, t);
+				infos.typeMap.set(t.path, t);
 				if (t.impl != null)
 				{
 					t.impl.fields.iter(processClassField);

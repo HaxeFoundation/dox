@@ -3,7 +3,7 @@
 		<code>
 			<span class="directive">::if class.isInterface::interface::else::class::end::</span>
 			::class.path::
-			$$getTypeParams(::class.params::)
+			$$printTypeParams(::class.params::)
 			::if class.superClass != null::
 				<span class="keyword">extends</span>class.superClass
 			::end::
