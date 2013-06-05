@@ -1,7 +1,7 @@
 <macro name="printTypeParams(params)">
 	::if params.length > 0::
 	&lt;::params.join(", ")::&gt;
-	::end::	
+	::end::
 </macro>
 
 <macro name="printPlatforms(platforms)">
@@ -9,9 +9,9 @@
 		<code class="dark">
 			<span class="macro">
 				Available on
-				::if platforms.length == api.config.platforms.length:all platforms
-				::elseif platforms.length > 1::::platforms.join(", ")::
-				::else::::platforms.join("")::
+				::if platforms.length == api.config.platforms.length:: all platforms
+				::elseif platforms.length > 1:: ::platforms.join(", ")::
+				::else:: ::platforms.join("")::
 				::end::
 			</span>
 		</code>
@@ -43,7 +43,7 @@
 		::foreach arg args[0]::
 			$$printLinkedType(::arg.t::)-&gt;
 		::end::
-		$$printLinkedType(::args[1]::)		
+		$$printLinkedType(::args[1]::)
 	::case::anon
 	::case::Dynamic::if args[0] != null::$$printLinkedType(::args[0]::)::end::
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)

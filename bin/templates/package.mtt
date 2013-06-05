@@ -5,10 +5,11 @@
 	<table class="table table-condensed">
 		<tbody>
 			::foreach tree subs::
-			<tr>
-				<td width="200"><a href="::api.getTreeUrl(tree)::">::api.getTreeName(tree)::</a></td>
-				<td></td>
-			</tr>
+				::set name = api.getTreeName(tree)::
+				<tr ::cond name.charAt(0) != "_"::>
+					<td width="200"><a href="::api.getTreeUrl(tree)::">::name::</a></td>
+					<td></td>
+				</tr>
 			::end::
 		</tbody>
 	</table>

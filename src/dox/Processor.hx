@@ -30,7 +30,7 @@ class Processor {
 				case [TPackage(_),_]: -1;
 				case [_,TPackage(_)]: 1;
 				case [t1,t2]:
-					return getName(t1) < getName(t2) ? -1 : 1;
+					getName(t1) < getName(t2) ? -1 : 1;
 			}
 		}
 		

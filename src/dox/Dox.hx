@@ -4,7 +4,7 @@ class Dox {
 	static public function main() {
 		var cfg = new Config();
 		cfg.rootPath = Sys.args()[1] == null ? (Sys.getCwd() + "pages/") : Sys.args()[1];
-		cfg.platforms = ["cpp"];
+		cfg.platforms = ["cpp", "cs", "js", "java", "flash", "flash8", "php", "neko"];
 		cfg.templateDir = "templates";
 		cfg.resourcePaths = ["../res"];
 		
