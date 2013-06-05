@@ -1,6 +1,7 @@
 Thumbs.db
 /pages
-/bin
-/dox.Generator.n
+/bin/pages
+/bin/dox.n
+/bin/xml
 /xml/*.xml
 /*.n

@@ -1,0 +1,47 @@
+<macro name="treeLink(treeEntry)">
+	<a href="::null::"><span class="type">::path::</span></a>
+</macro>
+
+<macro name="printPlatforms(platforms)">
+	<div>
+		<code class="dark">
+			<span class="macro">
+				Available on
+				::if platforms.length == api.config.platforms.length:all platforms
+				::elseif platforms.length > 1::::platforms.join(", ")::
+				::else::::platforms.join("")::
+				::end::
+			</span>
+		</code>
+	</div>
+</macro>
+
+<macro name="getTypeParams(params)">
+	::if params.length > 0::
+	&lt;::params.join(", ")::&gt;
+	::end::
+</macro>
+
+<macro name="getType(type)">
+	raw api.typeLink(type)
+</macro>
+
+<macro name="getArg(arg)">
+	<span class="identifier">::arg.name::</span>:$$getType(::arg.t::)
+</macro>
+
+<macro name="getSignature(field)">
+	::switch field.type::
+		<span class="keyword">var</span> <a href="#::field.name::">::field.name::</a> : $$getType(::field.type::)
+	::case 4::
+		<span class="keyword">function</span> <a href="#::field.name::">::field.name::</a>
+		$$getTypeParams(::field.params::)
+		(
+		::foreach arg args[0]::
+			$$getArg(::arg::)
+			::if !repeat.arg.last::,::end::
+		::end::
+		)
+		: $$getType(::args[1]::)
+	::end::
+</macro>

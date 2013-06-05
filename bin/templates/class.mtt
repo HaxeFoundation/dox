@@ -1,0 +1,32 @@
+::use 'main.mtt'::
+	<h1>
+		<code>
+			<span class="directive">::if class.isInterface::interface::else::class::end::</span>
+			::class.path::
+			$$getTypeParams(::class.params::)
+			::if class.superClass != null::
+				<span class="keyword">extends</span>class.superClass
+			::end::
+			::foreach i class.interfaces::
+				<span class="keyword">implements</span> i
+			::end::
+		</code>
+	</h1>
+	$$printPlatforms(::class.platforms::)
+	
+	<div class="doc" ::cond class.doc != null::>
+		::raw class.doc::
+	</div>
+	
+	::foreach field class.fields::
+		::if field.isPublic::
+			::use "class_field.mtt"::::end::
+		::end::
+	::end::
+	
+	::foreach field class.statics::
+		::if field.isPublic::
+			::use "class_field.mtt"::::end::
+		::end::
+	::end::	
+::end::

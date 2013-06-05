@@ -1,0 +1,15 @@
+::use 'main.mtt'::
+	::if full == ""::<h1>top level</h1>
+	::else::<h1><span class="directive">package</span> ::full::</h1>
+	::end::
+	<table class="table table-condensed">
+		<tbody>
+			::foreach tree subs::
+			<tr>
+				<td width="200">$$treeLink(::tree::)</td>
+				<td></td>
+			</tr>
+			::end::
+		</tbody>
+	</table>
+::end::

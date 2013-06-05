@@ -1,0 +1,9 @@
+<div>
+	<a ::attr name field.name::></a>
+	<h3>
+		<code>
+			$$getSignature(::field::)
+		</code>
+	</h3>
+	::if field.doc != null::::raw field.doc::
+</div>
