@@ -49,19 +49,6 @@ class Api {
 		}
 	}
 	
-	public function getTypeName(ctype:CType) {
-		return switch(ctype) {
-			case CClass(path, params): getPathName(path) + (params.length == 0 ? "" : "<" + params.map(getTypeName).join(", ") + ">");
-			case CEnum(path, params): getPathName(path) + (params.length == 0 ? "" : "<" + params.map(getTypeName).join(", ") + ">"); 
-			case CTypedef(path, params): getPathName(path) + (params.length == 0 ? "" : "<" + params.map(getTypeName).join(", ") + ">"); 
-			case CAbstract(path, params): getPathName(path) + (params.length == 0 ? "" : "<" + params.map(getTypeName).join(", ") + ">");
-			case CUnknown: "Unknown";
-			case CDynamic(t): t == null ? "Dynamic" : "Dynamic<" + getTypeName(t) + ">";
-			case CAnonymous(fields): "{" + fields.map(function(fld) return fld.name + ":" +getTypeName(fld.type)).join(", ") + "}";
-			case CFunction(args, ret): args.map(function(arg) return (arg.opt ? "?" : "") + arg.name + getTypeName(arg.t)).join(" -> ") + " -> " +getTypeName(ret);
-		}
-	}
-	
 	public function getPathName(path:Path) {
 		return path.split(".").pop();
 	}
