@@ -53,8 +53,6 @@ class Processor {
 	
 	function processRoot(root:TypeRoot)
 	{
-		Sys.println("Processing types");
-		
 		var rootTypes = [];
 		var rootPack = TPackage('top level', '', rootTypes);
 		var newRoot = [rootPack];

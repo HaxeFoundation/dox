@@ -48,17 +48,21 @@ class Dox {
 			cfg.platforms.push(name);
 		}
 		
+		Sys.println("Processing types");
 		var proc = new Processor(cfg);
 		var root = proc.process(parser.root);
-		Sys.println('Generating to ${cfg.outputPath}');
 		
 		var api = new Api(cfg, proc.infos);
 		var gen = new Generator(api);
-		
-		haxe.Timer.measure(function() {
-		gen.generate(root);
+
+		Sys.println("Generating navigation");
 		gen.generateNavigation(root);
-		});
+		
+		Sys.println('Generating to ${cfg.outputPath}');
+		gen.generate(root);
+		
+		Sys.println("");
+		Sys.println('Generated ${api.infos.numGeneratedTypes} types in ${api.infos.numGeneratedPackages} packages');
 		
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');

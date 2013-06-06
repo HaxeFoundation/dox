@@ -34,27 +34,27 @@ class Printer {
 				write(full == '' ? 'index' : full + '.index');
 
 				subs.iter(generateTree);
-				//numGeneratedPackages++;
+				api.infos.numGeneratedPackages++;
 
 			case TTypedecl(t):
 				generateType(t);
 				write(t.path);
-				//numGeneratedTypes++;
+				api.infos.numGeneratedTypes++;
 
 			case TEnumdecl(t):
 				generateEnum(t);
 				write(t.path);
-				//numGeneratedTypes++;
+				api.infos.numGeneratedTypes++;
 
 			case TClassdecl(t):
 				generateClass(t);
 				write(t.path);
-				//numGeneratedTypes++;
+				api.infos.numGeneratedTypes++;
 
 			case TAbstractdecl(t):
 				generateAbstract(t);
 				write(t.path);
-				//numGeneratedTypes++;
+				api.infos.numGeneratedTypes++;
 		}
 	}
 	
