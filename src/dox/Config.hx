@@ -3,9 +3,9 @@ package dox;
 class Config{
 	public var rootPath(default, set):String;
 	public var outputPath(default, set):String;
+	public var templatePath(default, set):String;
 	public var xmlPath(default, set):String;
 	public var platforms:Array<String>;
-	public var templateDir:String;
 	public var resourcePaths:Array<String>;
 	
 	function set_rootPath(v) {
@@ -18,6 +18,10 @@ class Config{
 	
 	function set_xmlPath(v) {
 		return xmlPath = haxe.io.Path.addTrailingSlash(v);
+	}
+	
+	function set_templatePath(v) {
+		return templatePath = haxe.io.Path.addTrailingSlash(v);
 	}
 	
 	public function new() {

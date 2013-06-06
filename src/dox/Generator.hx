@@ -18,16 +18,16 @@ class Generator {
 	
 	public function new(api:Api) {
 		this.api = api;
-		templo.Template.fromFile("templates/macros.mtt");
-		templo.Template.fromFile("templates/main.mtt");
-		templo.Template.fromFile("templates/class_field.mtt");
-		templo.Template.fromFile("templates/enum_field.mtt");
-		tplNav = templo.Template.fromFile("templates/nav.mtt");
-		tplPackage = templo.Template.fromFile("templates/package.mtt");
-		tplClass = templo.Template.fromFile("templates/class.mtt");
-		tplEnum = templo.Template.fromFile("templates/enum.mtt");
-		tplTypedef = templo.Template.fromFile("templates/typedef.mtt");
-		tplAbstract = templo.Template.fromFile("templates/abstract.mtt");
+		templo.Template.fromFile(api.config.templatePath + "macros.mtt");
+		templo.Template.fromFile(api.config.templatePath + "main.mtt");
+		templo.Template.fromFile(api.config.templatePath + "class_field.mtt");
+		templo.Template.fromFile(api.config.templatePath + "enum_field.mtt");
+		tplNav = templo.Template.fromFile(api.config.templatePath + "nav.mtt");
+		tplPackage = templo.Template.fromFile(api.config.templatePath + "package.mtt");
+		tplClass = templo.Template.fromFile(api.config.templatePath + "class.mtt");
+		tplEnum = templo.Template.fromFile(api.config.templatePath + "enum.mtt");
+		tplTypedef = templo.Template.fromFile(api.config.templatePath + "typedef.mtt");
+		tplAbstract = templo.Template.fromFile(api.config.templatePath + "abstract.mtt");
 	}
 	
 	public function generate(root:TypeRoot) {
