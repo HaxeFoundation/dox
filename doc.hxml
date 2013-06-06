@@ -1,7 +1,7 @@
 -cp src
--cp ../../../../../GitHub/hxtemplo/src
+-cp ../hxtemplo/src
 -lib hxparse
 -lib markdown
--neko C:/GitHub/dox/bin/dox.n
+-neko bin/dox.n
 -main dox.Dox
 -dce full

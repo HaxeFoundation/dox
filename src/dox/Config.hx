@@ -15,5 +15,8 @@ class Config{
 		return outputPath = haxe.io.Path.addTrailingSlash(v);
 	}
 	
-	public function new() { }
+	public function new() {
+		platforms = [];
+		resourcePaths = [];
+	}
 }

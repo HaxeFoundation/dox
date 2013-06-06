@@ -3,12 +3,37 @@ package dox;
 class Dox {
 	static public function main() {
 		var cfg = new Config();
-		cfg.rootPath = Sys.args()[0] == null ? (Sys.getCwd() + "pages/") : Sys.args()[0];
+
+		cfg.rootPath = Sys.getCwd() + "pages/";
 		cfg.outputPath = "pages";
-		cfg.platforms = ["cpp"];
-		cfg.platforms = ["cpp", "java", "cs", "php", "neko", "flash", "flash8", "js"];
 		cfg.templateDir = "templates";
-		cfg.resourcePaths = ["../res"];
+		
+		var argHandler = Args.generate([
+			@doc("Set the document root path")
+			"-r" => function(path:String) cfg.rootPath = path,
+			@doc("Set the output path for generated pages")
+			"-o" => function(path:String) cfg.outputPath = path,
+			@doc("Add a platform")
+			"-s" => function(name:String, xmlPath:String) cfg.platforms.push(name),
+			@doc("Set the template directory")
+			"-t" => function(path:String) cfg.templateDir = path,
+			@doc("Add a resource directory whose contents are copied to the output directory")
+			"-res" => function(dir:String) cfg.resourcePaths.push(dir)
+		]);
+		
+		var args = Sys.args();
+		if (args.length == 0) {
+			Sys.println("Dox 1.0");
+			Sys.println(argHandler.getDoc());
+			Sys.exit(0);
+		}
+		
+		argHandler.parse(args);
+		
+		if (cfg.platforms.length == 0) {
+			Sys.println("No source specified, use the -s command to add a source");
+			Sys.exit(1);
+		}
 		
 		var parser = new haxe.rtti.XmlParser();
 		for (platform in cfg.platforms) {
