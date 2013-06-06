@@ -8,7 +8,7 @@
 	::case::
 		::set name = args[0]::
 		<li ::cond name.charAt(0) != "_"::
-			::attr class "expando" +if (depth == 0 && name != "top-level" && name != "haxe") " platform platform-" + name else ""::>
+			::attr class "expando" +if (depth == 0 && name != "top level" && name != "haxe") " platform platform-" + name else ""::>
 			<div>
 				<a href="#" onclick="toggleCollapsed(this)">
 					<img src="::api.config.rootPath::/triangle-closed.png"/>

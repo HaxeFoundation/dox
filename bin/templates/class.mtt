@@ -18,15 +18,18 @@
 		::raw type.doc::
 	</div>
 	
+	::foreach field type.statics::
+		::if field.isPublic::
+			<h2 ::cond repeat.field.first::>Class Fields</h2>
+			::use "class_field.mtt"::::end::
+		::end::
+	::end::
+
 	::foreach field type.fields::
 		::if field.isPublic::
+			<h2 ::cond repeat.field.first::>Instance Fields</h2>
 			::use "class_field.mtt"::::end::
 		::end::
 	::end::
 	
-	::foreach field type.statics::
-		::if field.isPublic::
-			::use "class_field.mtt"::::end::
-		::end::
-	::end::
 ::end::
