@@ -61,4 +61,9 @@ using Lambda;
 	public function isAbstractImplementationField(field:ClassField) {
 		return field.meta.exists(function(m) return m.name == ":impl");
 	}
+	
+	public function getPlatformClassString(platforms:List<String>) {
+		if (platforms.isEmpty()) return null;
+		return "platform " + platforms.map(function(p){ return "platform-"+p; }).join(" ");
+	}
 }

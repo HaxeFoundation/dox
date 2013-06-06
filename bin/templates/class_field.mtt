@@ -1,4 +1,4 @@
-<div>
+<div ::attr class api.getPlatformClassString(field.platforms)::>
 	<a ::attr name field.name::></a>
 	<h3>
 		<code>
