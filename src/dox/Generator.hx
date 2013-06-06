@@ -37,7 +37,7 @@ class Generator {
 			api: api,
 			root: root
 		});
-		sys.io.File.saveContent(api.config.outputPath + "nav.js", s);
+		sys.io.File.saveContent(api.config.outputPath + "nav.js", ~/[\r\n\t]/g.replace(s, ""));
 	}
 	
 	function generateTree(tree:TypeTree) {
