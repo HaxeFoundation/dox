@@ -21,8 +21,7 @@
 		</li>
 	::end::
 </macro>
-var navContent='
-<ul>
+var navContent='<ul>
 ::foreach tree root::
 	$$makeTree(::tree::)
 ::end::

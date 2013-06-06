@@ -6,6 +6,7 @@ class Dox {
 		cfg.rootPath = Sys.args()[0] == null ? (Sys.getCwd() + "pages/") : Sys.args()[0];
 		cfg.outputPath = "pages";
 		cfg.platforms = ["cpp"];
+		cfg.platforms = ["cpp", "java", "cs", "php", "neko", "flash", "flash8", "js"];
 		cfg.templateDir = "templates";
 		cfg.resourcePaths = ["../res"];
 		
@@ -24,8 +25,11 @@ class Dox {
 		
 		var api = new Api(cfg, proc.infos);
 		var gen = new Generator(api);
+		
+		haxe.Timer.measure(function() {
 		gen.generate(root);
 		gen.generateNavigation(root);
+		});
 		
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');

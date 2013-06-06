@@ -8,9 +8,12 @@ class Processor {
 	var config:Config;
 	public var infos:Infos;
 	
+	var markdownHandler:MarkdownHandler;
+	
 	public function new(cfg:Config) {
 		config = cfg;
 		infos = new Infos();
+		markdownHandler = new MarkdownHandler(cfg);
 	}
 	
 	public function process(root:TypeRoot) {
@@ -132,8 +135,7 @@ class Processor {
 		if (doc.charAt(doc.length - 1) == "*") doc = doc.substr(0, doc.length - 1);
 		doc = StringTools.trim(doc);
 
-		//return MarkdownHandler.markdownToHtml(doc);
-		return doc;
+		return markdownHandler.markdownToHtml(doc);
 	}
 	
 }
