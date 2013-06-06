@@ -52,6 +52,7 @@ class Generator {
 					subs: subs,
 				});
 				write(full == '' ? 'index' : full + '.index', s);
+				api.infos.numGeneratedPackages++;
 				subs.iter(generateTree);
 			case TClassdecl(c):
 				var s = tplClass.execute({
@@ -59,24 +60,28 @@ class Generator {
 					"type": c,
 				});
 				write(c.path, s);
+				api.infos.numGeneratedTypes++;
 			case TEnumdecl(e):
 				var s = tplEnum.execute({
 					api: api,
 					"type": e,
 				});
 				write(e.path, s);
+				api.infos.numGeneratedTypes++;
 			case TTypedecl(t):
 				var s = tplTypedef.execute({
 					api: api,
 					"type": t,
 				});
 				write(t.path, s);
+				api.infos.numGeneratedTypes++;
 			case TAbstractdecl(a):
 				var s = tplAbstract.execute({
 					api: api,
 					"type": a,
 				});
 				write(a.path, s);
+				api.infos.numGeneratedTypes++;
 		}
 	}
 	
