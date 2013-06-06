@@ -34,13 +34,13 @@ using Lambda;
 	
 	public function getTreeShortDesc(tree:TypeTree) {
 		var infos:TypeInfos = switch(tree) {
-			case TPackage(_, full, _): return "";
+			case TPackage(_, full, _): null;
 			case TClassdecl(t): t;
 			case TEnumdecl(t): t;
 			case TTypedecl(t): t;
 			case TAbstractdecl(t): t;
 		}
-		return infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
+		return infos == null ? "" : infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
 	}
 	
 	public function pathToUrl(path:Path) {

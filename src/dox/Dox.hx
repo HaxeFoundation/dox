@@ -50,6 +50,8 @@ class Dox {
 		}
 		var parser = new haxe.rtti.XmlParser();
 		
+		var tStart = haxe.Timer.stamp();
+		
 		for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
 			if (!StringTools.endsWith(file, ".xml")) continue;
 			var name = new haxe.io.Path(file).file;
@@ -83,7 +85,9 @@ class Dox {
 				sys.io.File.copy('$dir/$file', cfg.outputPath + "/" + file);
 			}
 		}
-		Sys.println("Done");
+		
+		var elapsed = Std.string(haxe.Timer.stamp() - tStart).substr(0, 5);
+		Sys.println('Done (${elapsed}s)');
 	}
 	
 	static function transformPackage(x:Xml, p1, p2) {
