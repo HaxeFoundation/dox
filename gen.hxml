@@ -51,7 +51,3 @@
 -D unsafe
 -xml ../bin/xml/cs.xml
 -D xmldoc
-
---next
-
--xml ../bin/xml/cross.xml
