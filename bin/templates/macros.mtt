@@ -41,10 +41,16 @@
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::
 		::foreach arg args[0]::
-			$$printLinkedType(::arg.t::) -&gt; 
+			$$printLinkedType(::arg.t::) -&gt;
 		::end::
 		$$printLinkedType(::args[1]::)
-	::case::anon
+	::case::
+	{
+		::foreach field args[0]::
+			::field.name:::$$printLinkedType(::field.type::)
+			::if !repeat.field.last::, ::end::
+		::end::
+	}
 	::case::Dynamic::if args[0] != null::$$printLinkedType(::args[0]::)::end::
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::end::
