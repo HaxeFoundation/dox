@@ -37,7 +37,7 @@ class Generator {
 			api: api,
 			root: root
 		});
-		sys.io.File.saveContent(api.config.rootPath + "nav.js", s);
+		sys.io.File.saveContent(api.config.outputPath + "nav.js", s);
 	}
 	
 	function generateTree(tree:TypeTree) {
@@ -80,7 +80,7 @@ class Generator {
 	
 	function write(path:String, content:String)
 	{
-		path = api.config.rootPath + path.split('.').join('/') + '.html';
+		path = api.config.outputPath + path.split('.').join('/') + '.html';
 
 		var parts = path.split("/");
 		var current = [];

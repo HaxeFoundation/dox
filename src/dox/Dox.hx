@@ -3,7 +3,8 @@ package dox;
 class Dox {
 	static public function main() {
 		var cfg = new Config();
-		cfg.rootPath = Sys.args()[1] == null ? (Sys.getCwd() + "pages/") : Sys.args()[1];
+		cfg.rootPath = Sys.args()[0] == null ? (Sys.getCwd() + "pages/") : Sys.args()[0];
+		cfg.outputPath = "pages";
 		cfg.platforms = ["cpp"];
 		cfg.templateDir = "templates";
 		cfg.resourcePaths = ["../res"];
@@ -19,7 +20,7 @@ class Dox {
 		
 		var proc = new Processor(cfg);
 		var root = proc.process(parser.root);
-		Sys.println('Generating to ${cfg.rootPath}');
+		Sys.println('Generating to ${cfg.outputPath}');
 		
 		var api = new Api(cfg, proc.infos);
 		var gen = new Generator(api);
@@ -29,7 +30,7 @@ class Dox {
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');
 			for (file in sys.FileSystem.readDirectory(dir)) {
-				sys.io.File.copy('$dir/$file', cfg.rootPath + file);
+				sys.io.File.copy('$dir/$file', cfg.outputPath + file);
 			}
 		}
 		Sys.println("Done");
