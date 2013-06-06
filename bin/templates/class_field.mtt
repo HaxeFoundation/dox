@@ -17,7 +17,7 @@
 			::end::
 		</code>
 	</h3>
-	::if field.platforms.length < api.config.platforms.length::
+	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
 		$$printPlatforms(::field.platforms::)
 	::end::
 	::if field.doc != null::::raw field.doc::::end::

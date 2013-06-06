@@ -13,23 +13,26 @@
 		::set statics = []::
 		::foreach fld type.impl.statics::
 			::if api.isAbstractImplementationField(fld)::
-				::if fld.name == "_new"::::fld.name = "new"::::end::
-				::fields.push(fld)::
+				::if fld.name == "_new"::::eval fld.name = "new"::::end::
+				::eval fields.push(fld)::
 			::else::
-				::statics.push(fld)::
-			::end::
-		::end::
-		
-		::foreach field fields::
-			::if field.isPublic::
-				::use "class_field.mtt"::::end::
+				::eval statics.push(fld)::
 			::end::
 		::end::
 		
 		::foreach field statics::
 			::if field.isPublic::
+				<h2 ::cond repeat.field.first::>Class Fields</h2>
 				::use "class_field.mtt"::::end::
 			::end::
 		::end::
+		
+		::foreach field fields::
+			::if field.isPublic::
+				<h2 ::cond repeat.field.first::>Instance Fields</h2>
+				::use "class_field.mtt"::::end::
+			::end::
+		::end::
+		
 	::end::
 ::end::

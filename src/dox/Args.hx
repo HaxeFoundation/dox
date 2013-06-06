@@ -15,6 +15,7 @@ class Args {
 		}
 		var docs = [];
 		var cases = [];
+		var maxCmdLength = 0;
 		
 		function addDoc(e, s, args:Array<FunctionArg>) {
 			var e = switch(e.expr) {
@@ -22,7 +23,13 @@ class Args {
 				case _: e;
 			}
 			var argString = args.length == 0 ? "" : " " +args.map(function(arg) return '<${arg.name}>').join(" ");
-			docs.push(e.toString().replace('"', "") + '$argString: $s');
+			var cmdString = e.toString().replace('",', " |").replace('"', "") + argString;
+			if (cmdString.length > maxCmdLength)
+				maxCmdLength = cmdString.length;
+			docs.push({
+				cmd: cmdString,
+				desc: s
+			});
 		}
 		
 		function addCase(cmds, action) {
@@ -89,7 +96,7 @@ class Args {
 
 		return macro {
 			getDoc: function() {
-				return $v{docs.join("\n")};
+				return $v{docs.map(function(doc) return StringTools.rpad(doc.cmd, " ", maxCmdLength + 1) + ": " +doc.desc).join("\n")};
 			},
 			parse: function(__args:Array<String>) {
 				var __index = 0;

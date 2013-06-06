@@ -8,7 +8,7 @@ class Dox {
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
 		#if hxtemplo
-		cfg.templateDir = "templates";
+		cfg.templatePath = "templates";
 		#end
 		
 		var argHandler = Args.generate([
@@ -20,7 +20,7 @@ class Dox {
 			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
 			#if hxtemplo
 			@doc("Set the template directory")
-			["-t", "--template-path"] => function(path:String) cfg.templateDir = path,
+			["-t", "--template-path"] => function(path:String) cfg.templatePath = path,
 			#end
 			@doc("Add a resource directory whose contents are copied to the output directory")
 			["-res", "--resource-path"] => function(dir:String) cfg.resourcePaths.push(dir)
@@ -35,13 +35,28 @@ class Dox {
 		
 		argHandler.parse(args);
 				
+		try {
+			if (!sys.FileSystem.exists(cfg.outputPath))
+				sys.FileSystem.createDirectory(cfg.outputPath);
+		} catch (e:Dynamic) {
+			Sys.println('Could not create output directory ${cfg.outputPath}');
+			Sys.println(Std.string(e));
+			Sys.exit(1);
+		}
+		
+		if (!sys.FileSystem.exists(cfg.xmlPath) || !sys.FileSystem.isDirectory(cfg.xmlPath)) {
+			Sys.println('Could not read input path ${cfg.xmlPath}');
+			Sys.exit(1);
+		}
 		var parser = new haxe.rtti.XmlParser();
+		
+		var tStart = haxe.Timer.stamp();
 		
 		for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
 			if (!StringTools.endsWith(file, ".xml")) continue;
 			var name = new haxe.io.Path(file).file;
-			Sys.println('Parsing $name');
-			var data = sys.io.File.getContent(cfg.xmlPath + file);
+			Sys.println('Parsing $file');
+			var data = sys.io.File.getContent(cfg.xmlPath + "/" +file);
 			var xml = Xml.parse(data).firstElement();
 			if (name == "flash8") transformPackage(xml, "flash", "flash8");
 			parser.process(xml, name);
@@ -54,7 +69,7 @@ class Dox {
 		
 		var api = new Api(cfg, proc.infos);
 		var gen = new Generator(api);
-
+		
 		Sys.println("Generating navigation");
 		gen.generateNavigation(root);
 		
@@ -67,10 +82,12 @@ class Dox {
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');
 			for (file in sys.FileSystem.readDirectory(dir)) {
-				sys.io.File.copy('$dir/$file', cfg.outputPath + file);
+				sys.io.File.copy('$dir/$file', cfg.outputPath + "/" + file);
 			}
 		}
-		Sys.println("Done");
+		
+		var elapsed = Std.string(haxe.Timer.stamp() - tStart).substr(0, 5);
+		Sys.println('Done (${elapsed}s)');
 	}
 	
 	static function transformPackage(x:Xml, p1, p2) {

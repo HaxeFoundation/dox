@@ -24,7 +24,7 @@ using Lambda;
 	
 	public function getTreeUrl(tree:TypeTree) {
 		return switch(tree) {
-			case TPackage(_, full, _): config.rootPath + full.split(".").join("/") + "/index.html";
+			case TPackage(_, full, _): config.rootPath + "/" + full.split(".").join("/") + "/index.html";
 			case TClassdecl(t): pathToUrl(t.path);
 			case TEnumdecl(t): pathToUrl(t.path);
 			case TTypedecl(t): pathToUrl(t.path);
@@ -32,8 +32,19 @@ using Lambda;
 		}
 	}
 	
+	public function getTreeShortDesc(tree:TypeTree) {
+		var infos:TypeInfos = switch(tree) {
+			case TPackage(_, full, _): null;
+			case TClassdecl(t): t;
+			case TEnumdecl(t): t;
+			case TTypedecl(t): t;
+			case TAbstractdecl(t): t;
+		}
+		return infos == null ? "" : infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
+	}
+	
 	public function pathToUrl(path:Path) {
-		return config.rootPath + path.split(".").join("/") + ".html";
+		return config.rootPath + "/" + path.split(".").join("/") + ".html";
 	}
 	
 	public function isKnownType(path:Path) {

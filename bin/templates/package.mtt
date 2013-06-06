@@ -8,7 +8,7 @@
 				::set name = api.getTreeName(tree)::
 				<tr ::cond name.charAt(0) != "_"::>
 					<td width="200"><a href="::api.getTreeUrl(tree)::">::name::</a></td>
-					<td></td>
+					<td>::raw api.getTreeShortDesc(tree)::</td>
 				</tr>
 			::end::
 		</tbody>
