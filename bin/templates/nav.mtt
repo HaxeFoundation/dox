@@ -1,4 +1,4 @@
-<macro name="makeTree(tree)">
+<macro name="makeTree(tree,depth)">
 	::switch tree::
 	<li>
 		<div>
@@ -6,7 +6,9 @@
 		</div>
 	</li>
 	::case::
-		<li ::cond args[0].charAt(0) != "_":: class="expando">
+		::set name = args[0]::
+		<li ::cond name.charAt(0) != "_"::
+			::attr class "expando" +if (depth == 0 && name != "top-level" && name != "haxe") " platform platform-" + name else ""::>
 			<div>
 				<a href="#" onclick="toggleCollapsed(this)">
 					<img src="::api.config.rootPath::triangle-closed.png"/>
@@ -15,7 +17,7 @@
 			</div>
 			<ul>
 				::foreach sub args[2]::
-					$$makeTree(::sub::)
+					$$makeTree(::sub::,::depth + 1::)
 				::end::
 			</ul>
 		</li>
@@ -23,7 +25,7 @@
 </macro>
 var navContent='<ul>
 ::foreach tree root::
-	$$makeTree(::tree::)
+	$$makeTree(::tree::,::0::)
 ::end::
 </ul>
 ';
