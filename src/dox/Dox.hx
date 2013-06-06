@@ -6,23 +6,24 @@ class Dox {
 
 		cfg.rootPath = Sys.getCwd() + "pages/";
 		cfg.outputPath = "pages";
+		cfg.xmlPath = "xml";
 		#if hxtemplo
 		cfg.templateDir = "templates";
 		#end
 		
 		var argHandler = Args.generate([
 			@doc("Set the document root path")
-			"-r" => function(path:String) cfg.rootPath = path,
+			["-r", "--document-root"] => function(path:String) cfg.rootPath = path,
 			@doc("Set the output path for generated pages")
-			"-o" => function(path:String) cfg.outputPath = path,
-			@doc("Add a platform")
-			"-s" => function(name:String, xmlPath:String) cfg.platforms.push(name),
+			["-o", "--output-path"] => function(path:String) cfg.outputPath = path,
+			@doc("Set the xml input path")
+			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
 			#if hxtemplo
 			@doc("Set the template directory")
-			"-t" => function(path:String) cfg.templateDir = path,
+			["-t", "--template-path"] => function(path:String) cfg.templateDir = path,
 			#end
 			@doc("Add a resource directory whose contents are copied to the output directory")
-			"-res" => function(dir:String) cfg.resourcePaths.push(dir)
+			["-res", "--resource-path"] => function(dir:String) cfg.resourcePaths.push(dir)
 		]);
 		
 		var args = Sys.args();
@@ -33,19 +34,18 @@ class Dox {
 		}
 		
 		argHandler.parse(args);
-		
-		if (cfg.platforms.length == 0) {
-			Sys.println("No source specified, use the -s command to add a source");
-			Sys.exit(1);
-		}
-		
+				
 		var parser = new haxe.rtti.XmlParser();
-		for (platform in cfg.platforms) {
-			Sys.println('Parsing $platform');
-			var data = sys.io.File.getContent('xml/$platform.xml');
+		
+		for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
+			if (!StringTools.endsWith(file, ".xml")) continue;
+			var name = new haxe.io.Path(file).file;
+			Sys.println('Parsing $name');
+			var data = sys.io.File.getContent(cfg.xmlPath + file);
 			var xml = Xml.parse(data).firstElement();
-			if (platform == "flash8") transformPackage(xml, "flash", "flash8");
-			parser.process(xml, platform);
+			if (name == "flash8") transformPackage(xml, "flash", "flash8");
+			parser.process(xml, name);
+			cfg.platforms.push(name);
 		}
 		
 		var proc = new Processor(cfg);
