@@ -20,9 +20,9 @@
 
 <macro name="printLinkedPath(path, params)">
 	::if api.isKnownType(path)::
-		<a ::attr href api.pathToUrl(path)::>::api.getPathName(path)::</a>
+		<a class="type" ::attr href api.pathToUrl(path)::>::api.getPathName(path)::</a>
 	::else::
-		::api.getPathName(path)::
+		<span class="type">::api.getPathName(path)::</span>
 	::end::
 	::if params.length > 0::
 		&lt;
@@ -41,7 +41,7 @@
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::
 		::foreach arg args[0]::
-			$$printLinkedType(::arg.t::)-&gt;
+			$$printLinkedType(::arg.t::) -&gt; 
 		::end::
 		$$printLinkedType(::args[1]::)
 	::case::anon

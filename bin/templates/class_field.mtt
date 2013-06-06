@@ -3,7 +3,7 @@
 	<h3>
 		<code>
 			::switch field.type::
-				<span class="keyword">var</span> <a href="#::field.name::">::field.name::</a>
+				<span class="keyword">var</span> <a href="#::field.name::">::field.name::</a>:$$printLinkedType(::field.type::)
 			::case 4::
 				<span class="keyword">function</span> <a href="#::field.name::">::field.name::</a>
 				$$printTypeParams(::field.params::)
@@ -13,7 +13,7 @@
 					::if !repeat.arg.last::, ::end::
 				::end::
 				)
-				: $$printLinkedType(::args[1]::)
+				:$$printLinkedType(::args[1]::)
 			::end::
 		</code>
 	</h3>
