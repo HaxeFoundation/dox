@@ -13,10 +13,10 @@
 		::set statics = []::
 		::foreach fld type.impl.statics::
 			::if api.isAbstractImplementationField(fld)::
-				::if fld.name == "_new"::::fld.name = "new"::::end::
-				::fields.push(fld)::
+				::if fld.name == "_new"::::eval fld.name = "new"::::end::
+				::eval fields.push(fld)::
 			::else::
-				::statics.push(fld)::
+				::eval statics.push(fld)::
 			::end::
 		::end::
 		
