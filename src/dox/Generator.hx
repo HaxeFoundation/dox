@@ -11,6 +11,7 @@ class Generator {
 	var tplPackage:templo.Template;
 	var tplClass:templo.Template;
 	var tplEnum:templo.Template;
+	var tplTypedef:templo.Template;
 	
 	public function new(api:Api) {
 		this.api = api;
@@ -22,6 +23,7 @@ class Generator {
 		tplPackage = templo.Template.fromFile("templates/package.mtt");
 		tplClass = templo.Template.fromFile("templates/class.mtt");
 		tplEnum = templo.Template.fromFile("templates/enum.mtt");
+		tplTypedef = templo.Template.fromFile("templates/typedef.mtt");
 	}
 	
 	public function generate(root:TypeRoot) {
@@ -59,6 +61,12 @@ class Generator {
 					"enum": e,
 				});
 				write(e.path, s);
+			case TTypedecl(t):
+				var s = tplTypedef.execute({
+					api: api,
+					"type": t,
+				});
+				write(t.path, s);
 			case _:
 		}
 	}

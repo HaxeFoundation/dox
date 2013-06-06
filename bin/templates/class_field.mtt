@@ -17,5 +17,5 @@
 			::end::
 		</code>
 	</h3>
-	::if field.doc != null::::raw field.doc::
+	::if field.doc != null::::raw field.doc::::end::
 </div>
