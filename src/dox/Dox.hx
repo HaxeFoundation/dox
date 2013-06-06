@@ -44,7 +44,7 @@ class Dox {
 			Sys.exit(1);
 		}
 		
-		if (!sys.FileSystem.exists(cfg.xmlPath.substr(0, -1)) || !sys.FileSystem.isDirectory(cfg.xmlPath.substr(0, -1))) {
+		if (!sys.FileSystem.exists(cfg.xmlPath) || !sys.FileSystem.isDirectory(cfg.xmlPath)) {
 			Sys.println('Could not read input path ${cfg.xmlPath}');
 			Sys.exit(1);
 		}
@@ -54,7 +54,7 @@ class Dox {
 			if (!StringTools.endsWith(file, ".xml")) continue;
 			var name = new haxe.io.Path(file).file;
 			Sys.println('Parsing $name');
-			var data = sys.io.File.getContent(cfg.xmlPath + file);
+			var data = sys.io.File.getContent(cfg.xmlPath + "/" +file);
 			var xml = Xml.parse(data).firstElement();
 			if (name == "flash8") transformPackage(xml, "flash", "flash8");
 			parser.process(xml, name);
@@ -80,7 +80,7 @@ class Dox {
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');
 			for (file in sys.FileSystem.readDirectory(dir)) {
-				sys.io.File.copy('$dir/$file', cfg.outputPath + file);
+				sys.io.File.copy('$dir/$file', cfg.outputPath + "/" + file);
 			}
 		}
 		Sys.println("Done");

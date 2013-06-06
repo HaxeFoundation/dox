@@ -18,16 +18,16 @@ class Generator {
 	
 	public function new(api:Api) {
 		this.api = api;
-		templo.Template.fromFile(api.config.templatePath + "macros.mtt");
-		templo.Template.fromFile(api.config.templatePath + "main.mtt");
-		templo.Template.fromFile(api.config.templatePath + "class_field.mtt");
-		templo.Template.fromFile(api.config.templatePath + "enum_field.mtt");
-		tplNav = templo.Template.fromFile(api.config.templatePath + "nav.mtt");
-		tplPackage = templo.Template.fromFile(api.config.templatePath + "package.mtt");
-		tplClass = templo.Template.fromFile(api.config.templatePath + "class.mtt");
-		tplEnum = templo.Template.fromFile(api.config.templatePath + "enum.mtt");
-		tplTypedef = templo.Template.fromFile(api.config.templatePath + "typedef.mtt");
-		tplAbstract = templo.Template.fromFile(api.config.templatePath + "abstract.mtt");
+		templo.Template.fromFile(api.config.templatePath + "/macros.mtt");
+		templo.Template.fromFile(api.config.templatePath + "/main.mtt");
+		templo.Template.fromFile(api.config.templatePath + "/class_field.mtt");
+		templo.Template.fromFile(api.config.templatePath + "/enum_field.mtt");
+		tplNav = templo.Template.fromFile(api.config.templatePath + "/nav.mtt");
+		tplPackage = templo.Template.fromFile(api.config.templatePath + "/package.mtt");
+		tplClass = templo.Template.fromFile(api.config.templatePath + "/class.mtt");
+		tplEnum = templo.Template.fromFile(api.config.templatePath + "/enum.mtt");
+		tplTypedef = templo.Template.fromFile(api.config.templatePath + "/typedef.mtt");
+		tplAbstract = templo.Template.fromFile(api.config.templatePath + "/abstract.mtt");
 	}
 	
 	public function generate(root:TypeRoot) {
@@ -39,7 +39,7 @@ class Generator {
 			api: api,
 			root: root
 		});
-		sys.io.File.saveContent(api.config.outputPath + "nav.js", ~/[\r\n\t]/g.replace(s, ""));
+		sys.io.File.saveContent(api.config.outputPath + "/nav.js", ~/[\r\n\t]/g.replace(s, ""));
 	}
 	
 	function generateTree(tree:TypeTree) {
@@ -87,7 +87,7 @@ class Generator {
 	
 	function write(path:String, content:String)
 	{
-		path = api.config.outputPath + path.split('.').join('/') + '.html';
+		path = api.config.outputPath + "/" + path.split('.').join('/') + '.html';
 
 		var parts = path.split("/");
 		var current = [];

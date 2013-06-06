@@ -57,7 +57,7 @@ class MarkdownHandler {
 	}
 	
 	public function pathHref(path:String) {
-		return config.rootPath + path.split(".").join("/") + ".html";
+		return config.rootPath + "/" + path.split(".").join("/") + ".html";
 	}
 	
 	public function resolveTypeLink(type:String, ?field:String) {

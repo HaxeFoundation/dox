@@ -60,7 +60,7 @@ class Printer {
 	
 	public function generateNavigation(tree:TypeRoot) {
 		tree.iter(printNavigationTree);
-		sys.io.File.saveContent(api.config.outputPath + "nav.js", 'var navContent =\'${nav.toString()}\';');
+		sys.io.File.saveContent(api.config.outputPath + "/nav.js", 'var navContent =\'${nav.toString()}\';');
 	}
 	
 	function printNavigationTree(tree:TypeTree)
@@ -79,8 +79,8 @@ class Printer {
 
 				var href = full.split('.').join('/') + "/index.html";
 				nav.add('<li class="expando $style"><div>');
-				nav.add('<a href="#" onclick="toggleCollapsed(this)"><img src="${api.config.rootPath}triangle-closed.png"></a>');
-				nav.add('<a href="${api.config.rootPath}$href">$name</a>');
+				nav.add('<a href="#" onclick="toggleCollapsed(this)"><img src="${api.config.rootPath}/triangle-closed.png"></a>');
+				nav.add('<a href="${api.config.rootPath}/$href">$name</a>');
 				nav.add('</div>');
 
 				nav.add('<ul>');
@@ -97,12 +97,12 @@ class Printer {
 		var parts = type.path.split(".");
 		var href = parts.join('/') + ".html";
 		var name = parts.pop();
-		nav.add('<li><div><a href="${api.config.rootPath}$href">$name</a></div></li>');
+		nav.add('<li><div><a href="${api.config.rootPath}/$href">$name</a></div></li>');
 	}
 	
 	function write(path:String)
 	{
-		path = 'pages/' + path.split('.').join('/') + '.html';
+		path = api.config.rootPath + "/" + path.split('.').join('/') + '.html';
 
 		var html = getHtml();
 		var parts = path.split("/");
@@ -187,7 +187,7 @@ class Printer {
 			case CFunction(args, ret):
 				args.map(argType).concat([ret]).map(typeLink).join(" -> ");
 			case CDynamic(_):
-				'<a href="${api.config.rootPath}Dynamic.html"><span class="type">Dynamic</span></a>';
+				'<a href="${api.config.rootPath}/Dynamic.html"><span class="type">Dynamic</span></a>';
 			case CAnonymous(fields):
 				"{ "+fields.map(fieldLink).join(", ")+" }";
 			case CClass(path, params):
@@ -252,7 +252,7 @@ class Printer {
 	**/
 	function pathHref(path:String)
 	{
-		return api.config.rootPath + path.split(".").join("/") + ".html";
+		return api.config.rootPath + "/" + path.split(".").join("/") + ".html";
 	}
 	
 	function generateType(type:Typedef)
@@ -359,10 +359,10 @@ class Printer {
 		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
 		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-		<link href="${api.config.rootPath}styles.css" rel="stylesheet">
+		<link href="${api.config.rootPath}/styles.css" rel="stylesheet">
 		<script type="text/javascript">var rootPath = "${api.config.rootPath}";</script>
-		<script type="text/javascript" src="${api.config.rootPath}nav.js"></script>
-		<script type="text/javascript" src="${api.config.rootPath}index.js"></script>
+		<script type="text/javascript" src="${api.config.rootPath}/nav.js"></script>
+		<script type="text/javascript" src="${api.config.rootPath}/index.js"></script>
 	</head>
 	<body>
 		<div class="container-fluid">
@@ -443,7 +443,7 @@ class Printer {
 
 		var links = types.map(pathLink).join(", ");
 		buf.add('<tr>');
-		buf.add('<td width="12" style="vertical-align:top;"><a href="#" onclick="toggleInherited(this)"><img style="padding-top:4px;" src="${api.config.rootPath}triangle-closed.png"></a></td>');
+		buf.add('<td width="12" style="vertical-align:top;"><a href="#" onclick="toggleInherited(this)"><img style="padding-top:4px;" src="${api.config.rootPath}/triangle-closed.png"></a></td>');
 		buf.add('<td class="toggle-hide">$links</td>');
 		buf.add('<td class="toggle-show">$table</td>');
 		buf.add('</tr>');

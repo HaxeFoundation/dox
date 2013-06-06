@@ -11,7 +11,7 @@
 			::attr class "expando" +if (depth == 0 && name != "top-level" && name != "haxe") " platform platform-" + name else ""::>
 			<div>
 				<a href="#" onclick="toggleCollapsed(this)">
-					<img src="::api.config.rootPath::triangle-closed.png"/>
+					<img src="::api.config.rootPath::/triangle-closed.png"/>
 				</a>
 				<a href="::api.getTreeUrl(tree)::">::api.getTreeName(tree)::</a>
 			</div>
