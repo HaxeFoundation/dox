@@ -44,6 +44,10 @@ class Dox {
 			Sys.exit(1);
 		}
 		
+		if (!sys.FileSystem.exists(cfg.xmlPath.substr(0, -1)) || !sys.FileSystem.isDirectory(cfg.xmlPath.substr(0, -1))) {
+			Sys.println('Could not read input path ${cfg.xmlPath}');
+			Sys.exit(1);
+		}
 		var parser = new haxe.rtti.XmlParser();
 		
 		for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
