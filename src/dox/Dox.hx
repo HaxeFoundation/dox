@@ -35,6 +35,15 @@ class Dox {
 		
 		argHandler.parse(args);
 				
+		try {
+			if (!sys.FileSystem.exists(cfg.outputPath))
+				sys.FileSystem.createDirectory(cfg.outputPath);
+		} catch (e:Dynamic) {
+			Sys.println('Could not create output directory ${cfg.outputPath}');
+			Sys.println(Std.string(e));
+			Sys.exit(1);
+		}
+		
 		var parser = new haxe.rtti.XmlParser();
 		
 		for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
@@ -54,7 +63,7 @@ class Dox {
 		
 		var api = new Api(cfg, proc.infos);
 		var gen = new Generator(api);
-
+		
 		Sys.println("Generating navigation");
 		gen.generateNavigation(root);
 		
