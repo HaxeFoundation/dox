@@ -53,7 +53,7 @@ class Dox {
 		for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
 			if (!StringTools.endsWith(file, ".xml")) continue;
 			var name = new haxe.io.Path(file).file;
-			Sys.println('Parsing $name');
+			Sys.println('Parsing $file');
 			var data = sys.io.File.getContent(cfg.xmlPath + "/" +file);
 			var xml = Xml.parse(data).firstElement();
 			if (name == "flash8") transformPackage(xml, "flash", "flash8");

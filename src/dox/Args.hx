@@ -23,7 +23,7 @@ class Args {
 				case _: e;
 			}
 			var argString = args.length == 0 ? "" : " " +args.map(function(arg) return '<${arg.name}>').join(" ");
-			var cmdString = e.toString().replace('"', "") + argString;
+			var cmdString = e.toString().replace('",', " |").replace('"', "") + argString;
 			if (cmdString.length > maxCmdLength)
 				maxCmdLength = cmdString.length;
 			docs.push({
