@@ -1,6 +1,7 @@
 package dox;
 
 import haxe.rtti.CType;
+using Lambda;
 
 @:keep class Api {
 	public var config:Config;
@@ -55,5 +56,9 @@ import haxe.rtti.CType;
 	
 	public function debug(e:Dynamic) {
 		trace(Std.string(e));
+	}
+	
+	public function isAbstractImplementationField(field:ClassField) {
+		return field.meta.exists(function(m) return m.name == ":impl");
 	}
 }

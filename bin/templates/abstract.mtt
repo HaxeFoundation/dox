@@ -1,0 +1,35 @@
+::use 'main.mtt'::
+	<h1>
+		<code>
+			<span class="directive">abstract</span> ::type.path::
+			$$printTypeParams(::type.params::)
+		</code>
+	</h1>
+	<div class="doc" ::cond type.doc != null::>
+		::raw type.doc::
+	</div>
+	::if type.impl != null::
+		::set fields = []::
+		::set statics = []::
+		::foreach fld type.impl.statics::
+			::if api.isAbstractImplementationField(fld)::
+				::if fld.name == "_new"::::fld.name = "new"::::end::
+				::fields.push(fld)::
+			::else::
+				::statics.push(fld)::
+			::end::
+		::end::
+		
+		::foreach field fields::
+			::if field.isPublic::
+				::use "class_field.mtt"::::end::
+			::end::
+		::end::
+		
+		::foreach field statics::
+			::if field.isPublic::
+				::use "class_field.mtt"::::end::
+			::end::
+		::end::
+	::end::
+::end::

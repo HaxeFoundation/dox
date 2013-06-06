@@ -1,0 +1,20 @@
+::use 'main.mtt'::
+	<h1>
+		<code>
+			<span class="directive">typedef</span> ::type.path::
+			$$printTypeParams(::type.params::)
+			::switch type.type:: = $$printLinkedType(::type.type::)
+			::case 5::
+			::end::
+		</code>
+	</h1>
+	<div class="doc" ::cond type.doc != null::>
+		::raw type.doc::
+	</div>
+	::switch type.type::
+	::case 5::
+		::foreach field args[0]::
+			::use "class_field.mtt"::::end::
+		::end::
+	::end::
+::end::
