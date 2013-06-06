@@ -6,7 +6,9 @@ class Dox {
 
 		cfg.rootPath = Sys.getCwd() + "pages/";
 		cfg.outputPath = "pages";
+		#if hxtemplo
 		cfg.templateDir = "templates";
+		#end
 		
 		var argHandler = Args.generate([
 			@doc("Set the document root path")
@@ -15,8 +17,10 @@ class Dox {
 			"-o" => function(path:String) cfg.outputPath = path,
 			@doc("Add a platform")
 			"-s" => function(name:String, xmlPath:String) cfg.platforms.push(name),
+			#if hxtemplo
 			@doc("Set the template directory")
 			"-t" => function(path:String) cfg.templateDir = path,
+			#end
 			@doc("Add a resource directory whose contents are copied to the output directory")
 			"-res" => function(dir:String) cfg.resourcePaths.push(dir)
 		]);

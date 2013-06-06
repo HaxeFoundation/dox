@@ -3,6 +3,8 @@ package dox;
 import haxe.rtti.CType;
 using Lambda;
 
+#if hxtemplo
+
 class Generator {
 
 	var api:Api;
@@ -94,3 +96,7 @@ class Generator {
 		sys.io.File.saveContent(path, content);
 	}
 }
+
+#else
+typedef Generator = dox.Printer;
+#end
