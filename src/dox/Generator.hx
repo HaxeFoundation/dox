@@ -10,15 +10,18 @@ class Generator {
 	var tplNav:templo.Template;
 	var tplPackage:templo.Template;
 	var tplClass:templo.Template;
+	var tplEnum:templo.Template;
 	
 	public function new(api:Api) {
 		this.api = api;
 		templo.Template.fromFile("templates/macros.mtt");
 		templo.Template.fromFile("templates/main.mtt");
 		templo.Template.fromFile("templates/class_field.mtt");
+		templo.Template.fromFile("templates/enum_field.mtt");
 		tplNav = templo.Template.fromFile("templates/nav.mtt");
 		tplPackage = templo.Template.fromFile("templates/package.mtt");
 		tplClass = templo.Template.fromFile("templates/class.mtt");
+		tplEnum = templo.Template.fromFile("templates/enum.mtt");
 	}
 	
 	public function generate(root:TypeRoot) {
@@ -50,6 +53,12 @@ class Generator {
 					"class": c,
 				});
 				write(c.path, s);
+			case TEnumdecl(e):
+				var s = tplEnum.execute({
+					api: api,
+					"enum": e,
+				});
+				write(e.path, s);
 			case _:
 		}
 	}

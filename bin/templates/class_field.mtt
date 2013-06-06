@@ -9,10 +9,10 @@
 				$$printTypeParams(::field.params::)
 				(
 				::foreach arg args[0]::
-					::arg.name:: : $$printLinkedType(::arg.t::)
-					::if !repeat.arg.last::,::end::
+					::arg.name:::$$printLinkedType(::arg.t::)
+					::if !repeat.arg.last::, ::end::
 				::end::
-				)		
+				)
 				: $$printLinkedType(::args[1]::)
 			::end::
 		</code>

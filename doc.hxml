@@ -1,7 +1,7 @@
--cmd cp res/* pages
-
---next
-
--x dox.Generator
--lib markdown
 -cp src
+-cp ../../../../../GitHub/hxtemplo/src
+-lib hxparse
+-lib markdown
+-neko C:/GitHub/dox/bin/dox.n
+-main dox.Dox
+-dce full

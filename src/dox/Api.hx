@@ -2,7 +2,7 @@ package dox;
 
 import haxe.rtti.CType;
 
-class Api {
+@:keep class Api {
 	public var config:Config;
 	public var infos:Infos;
 	
