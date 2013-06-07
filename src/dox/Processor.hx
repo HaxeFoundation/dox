@@ -70,7 +70,7 @@ class Processor {
 				case [_, _]:
 					cf1.name < cf2.name ? -1 : 1;
 			}
-			
+
 		function sortFields(fields:List<ClassField>) {
 			var a = fields.array();
 			a.sort(compareFields);
