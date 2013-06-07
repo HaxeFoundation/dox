@@ -1,0 +1,35 @@
+::use 'main.mtt'::
+	<h1>
+		<code>
+			<span class="directive">::if type.isInterface::interface::else::class::end:: </span>
+			::type.path::
+			$$printTypeParams(::type.params::)
+			::if type.superClass != null::
+				<span class="keyword"> extends</span> $$printLinkedPath(::type.superClass.path::,::type.superClass.params::)
+			::end::
+			::foreach i type.interfaces::
+				<span class="keyword"> implements</span> $$printLinkedPath(::i.path::,::i.params::)
+			::end::
+		</code>
+	</h1>
+	$$printPlatforms(::type.platforms::)
+	
+	<div class="doc" ::cond type.doc != null::>
+		::raw type.doc::
+	</div>
+	
+	::foreach field type.statics::
+		::if field.isPublic::
+			<h2 ::cond repeat.field.first::>Class Fields</h2>
+			::use "class_field.mtt"::::end::
+		::end::
+	::end::
+
+	::foreach field type.fields::
+		::if field.isPublic::
+			<h2 ::cond repeat.field.first::>Instance Fields</h2>
+			::use "class_field.mtt"::::end::
+		::end::
+	::end::
+	
+::end::

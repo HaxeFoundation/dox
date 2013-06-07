@@ -1,8 +1,7 @@
--cmd cp res/* pages
-
---next
-
--x dox.Generator
--lib markdown
--lib hxparse
 -cp src
+-cp ../hxtemplo/src
+-lib hxparse
+-lib markdown
+-neko bin/dox.n
+-main dox.Dox
+-dce full

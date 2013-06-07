@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet" />
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+	<link href="::api.config.rootPath::/styles.css" rel="stylesheet" />
+	<script type="text/javascript">var rootPath = "::api.config.rootPath::";</script>
+	<script type="text/javascript" src="::api.config.rootPath::/nav.js"></script>
+	<script type="text/javascript" src="::api.config.rootPath::/index.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<form class="navbar-search pull-left">
+					<input type="text" class="search-query" placeholder="Search" />
+				</form>
+				<ul class="nav">
+					<li id="select-version" class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Version<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li data="3_0"><a href="#">3.0</a></li>
+							<li data="3_1"><a href="#">3.1</a></li>
+							<li data="3_2"><a href="#">3.2</a></li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav">
+					<li id="select-platform" class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li data="all"><a href="#">All Platforms</a></li>
+							::foreach i api.config.platforms::
+								<li data="::i::"><a href="#">::i::</a></li>
+							::end::
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="packages" id="nav"></div>
+			<div class="content">::raw __content__::</div>
+		</div>
+	</div>
+</body>
+</html>
