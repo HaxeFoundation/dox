@@ -61,11 +61,30 @@ class Processor {
 			}
 		}
 		
+		function compareFields(cf1, cf2)
+			return switch [cf1.type, cf2.type] {
+				case [CFunction(_), CFunction(_)]:
+					cf1.name == "new" ? -1 : cf2.name == "new" ? 1 : cf1.name < cf2.name ? -1 : 1;
+				case [CFunction(_), _]: 1;
+				case [_, CFunction(_)]: -1;
+				case [_, _]:
+					cf1.name < cf2.name ? -1 : 1;
+			}
+			
+		function sortFields(fields:List<ClassField>) {
+			var a = fields.array();
+			a.sort(compareFields);
+			return a.list();
+		}
+		
 		function sort(t:TypeTree) {
 			switch(t) {
 				case TPackage(_, _, subs):
 					subs.sort(compare);
 					subs.iter(sort);
+				case TClassdecl(c) | TAbstractdecl({impl: c}) if (c != null):
+					c.fields = sortFields(c.fields);
+					c.statics = sortFields(c.statics);
 				case _:
 			}
 		}
