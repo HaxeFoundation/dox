@@ -1,0 +1,17 @@
+::use 'main.mtt'::
+	<h1>
+		<code>
+			<span class="directive">enum</span> ::type.path::
+			$$printTypeParams(::type.params::)
+		</code>
+	</h1>
+	<div class="doc" ::cond type.doc != null::>
+		::raw type.doc::
+	</div>
+	::if type.constructors.length > 0::
+		<h2>Constructors</h2>
+		::foreach ctor type.constructors::
+			::use "enum_field.mtt"::::end::
+		::end::
+	::end::
+::end::
