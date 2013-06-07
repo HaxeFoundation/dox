@@ -8,7 +8,8 @@ class Dox {
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
 		#if hxtemplo
-		cfg.templatePath = "templates";
+		cfg.addTemplatePath(Sys.executablePath() + "/" + "templates");
+		cfg.addTemplatePath("templates");
 		#end
 		
 		var argHandler = Args.generate([
@@ -22,8 +23,8 @@ class Dox {
 			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
 			
 			#if hxtemplo
-			@doc("Set the template directory")
-			["-t", "--template-path"] => function(path:String) cfg.templatePath = path,
+			@doc("Add template directory")
+			["-t", "--template-path"] => function(path:String) cfg.addTemplatePath(path),
 			#end
 			
 			@doc("Add a resource directory whose contents are copied to the output directory")
