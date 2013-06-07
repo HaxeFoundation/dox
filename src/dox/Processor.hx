@@ -17,6 +17,30 @@ class Processor {
 	}
 	
 	public function process(root:TypeRoot) {
+		root = filter(root);
+		sort(root);
+		return processRoot(root);
+	}
+	
+	function filter(root:TypeRoot) {
+		var newRoot = [];
+		function filter(root, tree) {
+			return switch(tree) {
+				case TPackage(name, full, subs):
+					var acc = [];
+					subs.iter(filter.bind(acc));
+					if (!isFiltered(full)) root.push(TPackage(name, full, acc));
+				case TClassdecl(t): if (!isFiltered(t.path)) root.push(tree);
+				case TEnumdecl(t): if (!isFiltered(t.path)) root.push(tree);
+				case TTypedecl(t): if (!isFiltered(t.path)) root.push(tree);
+				case TAbstractdecl(t): if (!isFiltered(t.path)) root.push(tree);
+			}
+		}
+		root.iter(filter.bind(newRoot));
+		return newRoot;
+	}
+	
+	function sort(root:TypeRoot) {
 		function getName(t:TypeTree) {
 			return switch(t) {
 				case TEnumdecl(t): t.path;
@@ -47,8 +71,6 @@ class Processor {
 		}
 		root.sort(compare);
 		root.iter(sort);
-		
-		return processRoot(root);
 	}
 	
 	function processRoot(root:TypeRoot)
@@ -71,7 +93,7 @@ class Processor {
 	{
 		switch (tree)
 		{
-			case TPackage(_, _, subs):
+			case TPackage(_, full, subs):
 				subs.iter(processTree);
 
 			case TEnumdecl(t):
@@ -136,4 +158,10 @@ class Processor {
 		return markdownHandler.markdownToHtml(doc);
 	}
 	
+	function isFiltered(path:Path) {
+		for (filter in config.pathFilters) {
+			if (filter.r.match(path)) return !filter.isIncludeFilter;
+		}
+		return !config.pathFilters.isEmpty();
+	}
 }

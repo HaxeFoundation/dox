@@ -14,16 +14,26 @@ class Dox {
 		var argHandler = Args.generate([
 			@doc("Set the document root path")
 			["-r", "--document-root"] => function(path:String) cfg.rootPath = path,
+			
 			@doc("Set the output path for generated pages")
 			["-o", "--output-path"] => function(path:String) cfg.outputPath = path,
+			
 			@doc("Set the xml input path")
 			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
+			
 			#if hxtemplo
 			@doc("Set the template directory")
 			["-t", "--template-path"] => function(path:String) cfg.templatePath = path,
 			#end
+			
 			@doc("Add a resource directory whose contents are copied to the output directory")
-			["-res", "--resource-path"] => function(dir:String) cfg.resourcePaths.push(dir)
+			["-res", "--resource-path"] => function(dir:String) cfg.resourcePaths.push(dir),
+			
+			@doc("Add a path include filter")
+			["-in", "--include"] => function(regex:String) cfg.addFilter(regex, true),
+			
+			@doc("Add a path exclude filter")
+			["-ex", "--exclude"] => function(regex:String) cfg.addFilter(regex, false)
 		]);
 		
 		var args = Sys.args();
