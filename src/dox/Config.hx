@@ -1,5 +1,6 @@
 package dox;
 
+@:keep
 class Config{
 	public var rootPath(default, set):String;
 	public var outputPath(default, set):String;
