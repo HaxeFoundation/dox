@@ -16,6 +16,7 @@
 	};</script>
 	<script type="text/javascript" src="::api.config.rootPath::/nav.js"></script>
 	<script type="text/javascript" src="::api.config.rootPath::/index.js"></script>
+	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
 </head>
 <body>
 	<div class="container-fluid">

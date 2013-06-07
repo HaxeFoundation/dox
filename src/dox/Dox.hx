@@ -36,6 +36,9 @@ class Dox {
 			@doc("Add a path exclude filter")
 			["-ex", "--exclude"] => function(regex:String) cfg.addFilter(regex, false),
 			
+			@doc("Set the page main title")
+			["--title"] => function(name:String) cfg.pageTitle = name,
+			
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
 		

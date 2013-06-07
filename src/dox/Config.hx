@@ -11,6 +11,8 @@ class Config{
 	public var resourcePaths:Array<String>;
 	public var templatePaths(default, null):haxe.ds.GenericStack<String>;
 	
+	public var pageTitle:String;
+	
 	function set_rootPath(v) {
 		return rootPath = haxe.io.Path.removeTrailingSlash(StringTools.replace(v, "\\", "/"));
 	}

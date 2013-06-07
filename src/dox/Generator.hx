@@ -52,6 +52,7 @@ class Generator {
 	function generateTree(tree:TypeTree) {
 		switch(tree) {
 			case TPackage(name, full, subs):
+				api.currentPageName = "package " + name;
 				var s = tplPackage.execute({
 					api: api,
 					name: name,
@@ -62,6 +63,7 @@ class Generator {
 				api.infos.numGeneratedPackages++;
 				subs.iter(generateTree);
 			case TClassdecl(c):
+				api.currentPageName = api.getPathName(c.path);
 				var s = tplClass.execute({
 					api: api,
 					"type": c,
@@ -69,6 +71,7 @@ class Generator {
 				write(c.path, s);
 				api.infos.numGeneratedTypes++;
 			case TEnumdecl(e):
+				api.currentPageName = api.getPathName(e.path);
 				var s = tplEnum.execute({
 					api: api,
 					"type": e,
@@ -76,6 +79,7 @@ class Generator {
 				write(e.path, s);
 				api.infos.numGeneratedTypes++;
 			case TTypedecl(t):
+				api.currentPageName = api.getPathName(t.path);
 				var s = tplTypedef.execute({
 					api: api,
 					"type": t,
@@ -83,6 +87,7 @@ class Generator {
 				write(t.path, s);
 				api.infos.numGeneratedTypes++;
 			case TAbstractdecl(a):
+				api.currentPageName = api.getPathName(a.path);
 				var s = tplAbstract.execute({
 					api: api,
 					"type": a,
