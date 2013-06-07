@@ -33,7 +33,9 @@ class Dox {
 			["-in", "--include"] => function(regex:String) cfg.addFilter(regex, true),
 			
 			@doc("Add a path exclude filter")
-			["-ex", "--exclude"] => function(regex:String) cfg.addFilter(regex, false)
+			["-ex", "--exclude"] => function(regex:String) cfg.addFilter(regex, false),
+			
+			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
 		
 		var args = Sys.args();

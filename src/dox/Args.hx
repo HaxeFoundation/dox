@@ -13,6 +13,9 @@ class Args {
 			case EArrayDecl(el): el;
 			case _: Context.error("Command mapping expected", p);
 		}
+		
+		var unknownArgCallback = macro throw "Unknown command: " +arg;
+		
 		var docs = [];
 		var cases = [];
 		var maxCmdLength = 0;
@@ -57,6 +60,9 @@ class Args {
 						}
 					}
 					el;
+				case EConst(CIdent("_")):
+					unknownArgCallback = macro $action(arg);
+					return;
 				case EConst(CString(_)): [cmds];
 				case _: Context.error("[commands] or command expected", cmds.pos);
 			}
@@ -84,9 +90,9 @@ class Args {
 		}
 		
 		cases.push({
-			values: [macro c],
+			values: [macro arg],
 			guard: null,
-			expr: macro throw "Unknown command: " +c
+			expr: unknownArgCallback
 		});
 		
 		var eswitch = {
