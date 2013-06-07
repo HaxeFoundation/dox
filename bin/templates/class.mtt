@@ -5,10 +5,10 @@
 			::type.path::
 			$$printTypeParams(::type.params::)
 			::if type.superClass != null::
-				<span class="keyword">extends</span>type.superClass
+				<span class="keyword"> extends</span> $$printLinkedPath(::type.superClass.path::,::type.superClass.params::)
 			::end::
 			::foreach i type.interfaces::
-				<span class="keyword">implements</span> i
+				<span class="keyword"> implements</span> $$printLinkedPath(::i.path::,::i.params::)
 			::end::
 		</code>
 	</h1>
