@@ -31,14 +31,9 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li data="all"><a href="#">All Platforms</a></li>
-							<li data="sys"><a href="#">System</a></li>
-							<li data="neko"><a href="#">Neko</a></li>
-							<li data="php"><a href="#">PHP</a></li>
-							<li data="java"><a href="#">Java</a></li>
-							<li data="cs"><a href="#">C Sharp</a></li>
-							<li data="flash8"><a href="#">Flash 8</a></li>
-							<li data="flash"><a href="#">Flash 9+</a></li>
-							<li data="js"><a href="#">Javascript</a></li>
+							::foreach i api.config.platforms::
+								<li data="::i::"><a href="#">::i::</a></li>
+							::end::
 						</ul>
 					</li>
 				</ul>
