@@ -38,8 +38,22 @@ class Processor {
 				case TTypedecl(t): if (!isFiltered(t.path)) root.push(tree);
 				case TAbstractdecl(t):
 					if (t.impl != null) {
-						t.impl.fields = filterFields(t.impl.fields);
-						t.impl.statics = filterFields(t.impl.statics);
+						var fields = new List();
+						var statics = new List();
+						t.impl.statics.iter(function(cf) {
+							if (cf.meta.exists(function(m) return m.name == ":impl")) {
+								if (cf.name == "_new") cf.name = "new";
+								switch(cf.type) {
+									case CFunction(args,_): args.pop();
+									case _:
+								}
+								fields.push(cf);
+							} else {
+								statics.push(cf);
+							}
+						});
+						t.impl.fields = fields;
+						t.impl.statics = statics;
 					}
 					if (!isFiltered(t.path)) root.push(tree);
 			}

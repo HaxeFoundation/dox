@@ -9,28 +9,18 @@
 		::raw type.doc::
 	</div>
 	::if type.impl != null::
-		::set fields = []::
-		::set statics = []::
-		::foreach fld type.impl.statics::
-			::if api.isAbstractImplementationField(fld)::
-				::if fld.name == "_new"::::eval fld.name = "new"::::end::
-				::eval fields.push(fld)::
-			::else::
-				::eval statics.push(fld)::
-			::end::
-		::end::
+	
+		<h2 ::cond field.statics.length > 0::>Class Fields</h2>
 		
-		<h2 ::cond statics.length > 0::>Class Fields</h2>
-		
-		::foreach field statics::
+		::foreach field type.impl.statics::
 			::if field.isPublic::
 				::use "class_field.mtt"::::end::
 			::end::
 		::end::
 		
-		<h2 ::cond fields.length > 0::>Instance Fields</h2>
+		<h2 ::cond field.fields.length > 0::>Instance Fields</h2>
 		
-		::foreach field fields::
+		::foreach field type.impl.fields::
 			::if field.isPublic::
 				::use "class_field.mtt"::::end::
 			::end::
