@@ -30,14 +30,28 @@ class Processor {
 					var acc = [];
 					subs.iter(filter.bind(acc));
 					if (!isFiltered(full)) root.push(TPackage(name, full, acc));
-				case TClassdecl(t): if (!isFiltered(t.path)) root.push(tree);
+				case TClassdecl(t):
+					t.fields = filterFields(t.fields);
+					t.statics = filterFields(t.statics);
+					if (!isFiltered(t.path)) root.push(tree);
 				case TEnumdecl(t): if (!isFiltered(t.path)) root.push(tree);
 				case TTypedecl(t): if (!isFiltered(t.path)) root.push(tree);
-				case TAbstractdecl(t): if (!isFiltered(t.path)) root.push(tree);
+				case TAbstractdecl(t):
+					if (t.impl != null) {
+						t.impl.fields = filterFields(t.impl.fields);
+						t.impl.statics = filterFields(t.impl.statics);
+					}
+					if (!isFiltered(t.path)) root.push(tree);
 			}
 		}
 		root.iter(filter.bind(newRoot));
 		return newRoot;
+	}
+	
+	function filterFields(fields:List<ClassField>) {
+		return fields.filter(function(cf) {
+			return cf.isPublic || cf.meta.exists(function(m) return m.name == ":doc");
+		});
 	}
 	
 	function sort(root:TypeRoot) {

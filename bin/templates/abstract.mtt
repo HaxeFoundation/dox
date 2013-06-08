@@ -20,16 +20,18 @@
 			::end::
 		::end::
 		
+		<h2 ::cond statics.length > 0::>Class Fields</h2>
+		
 		::foreach field statics::
 			::if field.isPublic::
-				<h2 ::cond repeat.field.first::>Class Fields</h2>
 				::use "class_field.mtt"::::end::
 			::end::
 		::end::
 		
+		<h2 ::cond fields.length > 0::>Instance Fields</h2>
+		
 		::foreach field fields::
 			::if field.isPublic::
-				<h2 ::cond repeat.field.first::>Instance Fields</h2>
 				::use "class_field.mtt"::::end::
 			::end::
 		::end::
