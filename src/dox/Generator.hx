@@ -18,16 +18,23 @@ class Generator {
 	
 	public function new(api:Api) {
 		this.api = api;
-		templo.Template.fromFile(api.config.templatePath + "/macros.mtt");
-		templo.Template.fromFile(api.config.templatePath + "/main.mtt");
-		templo.Template.fromFile(api.config.templatePath + "/class_field.mtt");
-		templo.Template.fromFile(api.config.templatePath + "/enum_field.mtt");
-		tplNav = templo.Template.fromFile(api.config.templatePath + "/nav.mtt");
-		tplPackage = templo.Template.fromFile(api.config.templatePath + "/package.mtt");
-		tplClass = templo.Template.fromFile(api.config.templatePath + "/class.mtt");
-		tplEnum = templo.Template.fromFile(api.config.templatePath + "/enum.mtt");
-		tplTypedef = templo.Template.fromFile(api.config.templatePath + "/typedef.mtt");
-		tplAbstract = templo.Template.fromFile(api.config.templatePath + "/abstract.mtt");
+		loadTemplate("macros.mtt");
+		loadTemplate("main.mtt");
+		loadTemplate("class_field.mtt");
+		loadTemplate("enum_field.mtt");
+		tplNav = loadTemplate("nav.mtt");
+		tplPackage = loadTemplate("package.mtt");
+		tplClass = loadTemplate("class.mtt");
+		tplEnum = loadTemplate("enum.mtt");
+		tplTypedef = loadTemplate("typedef.mtt");
+		tplAbstract = loadTemplate("abstract.mtt");
+	}
+	
+	function loadTemplate(name:String) {
+		for (tp in api.config.templatePaths) {
+			if (sys.FileSystem.exists(tp + "/" +name)) return templo.Template.fromFile(tp + "/" + name);
+		}
+		throw "Could not resolve template: " +name;
 	}
 	
 	public function generate(root:TypeRoot) {
@@ -45,6 +52,7 @@ class Generator {
 	function generateTree(tree:TypeTree) {
 		switch(tree) {
 			case TPackage(name, full, subs):
+				api.currentPageName = "package " + name;
 				var s = tplPackage.execute({
 					api: api,
 					name: name,
@@ -55,6 +63,7 @@ class Generator {
 				api.infos.numGeneratedPackages++;
 				subs.iter(generateTree);
 			case TClassdecl(c):
+				api.currentPageName = api.getPathName(c.path);
 				var s = tplClass.execute({
 					api: api,
 					"type": c,
@@ -62,6 +71,7 @@ class Generator {
 				write(c.path, s);
 				api.infos.numGeneratedTypes++;
 			case TEnumdecl(e):
+				api.currentPageName = api.getPathName(e.path);
 				var s = tplEnum.execute({
 					api: api,
 					"type": e,
@@ -69,6 +79,7 @@ class Generator {
 				write(e.path, s);
 				api.infos.numGeneratedTypes++;
 			case TTypedecl(t):
+				api.currentPageName = api.getPathName(t.path);
 				var s = tplTypedef.execute({
 					api: api,
 					"type": t,
@@ -76,6 +87,7 @@ class Generator {
 				write(t.path, s);
 				api.infos.numGeneratedTypes++;
 			case TAbstractdecl(a):
+				api.currentPageName = api.getPathName(a.path);
 				var s = tplAbstract.execute({
 					api: api,
 					"type": a,

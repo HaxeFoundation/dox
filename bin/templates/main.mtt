@@ -5,9 +5,18 @@
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 	<link href="::api.config.rootPath::/styles.css" rel="stylesheet" />
-	<script type="text/javascript">var rootPath = "::api.config.rootPath::";</script>
+	<script type="text/javascript">var dox = {
+		rootPath: "::api.config.rootPath::",
+		platforms: [
+			::foreach pf api.config.platforms::
+				"::pf::"
+				::if !repeat.pf.last::,::end::
+			::end::
+		]
+	};</script>
 	<script type="text/javascript" src="::api.config.rootPath::/nav.js"></script>
 	<script type="text/javascript" src="::api.config.rootPath::/index.js"></script>
+	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
 </head>
 <body>
 	<div class="container-fluid">

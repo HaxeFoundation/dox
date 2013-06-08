@@ -28,6 +28,7 @@
 		&lt;
 		::foreach param params::
 			$$printLinkedType(::param::)
+			::if !repeat.param.last::, ::end::
 		::end::
 		&gt;
 	::end::
