@@ -86,6 +86,7 @@ class Dox {
 		var api = new Api(cfg, proc.infos);
 		var gen = new Generator(api);
 		
+		Sys.println("");
 		Sys.println("Generating navigation");
 		gen.generateNavigation(root);
 		
