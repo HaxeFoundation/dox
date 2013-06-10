@@ -128,4 +128,8 @@ $(document).ready(function(){
 
 	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
 	setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
+
+	$("search").on("keypress", function(e){
+		console.log(e.target.value);
+	});
 });
