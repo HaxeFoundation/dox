@@ -1,12 +1,15 @@
 A Haxe documentation generator.
 
+> Note: Dox currently requires the development branch of Haxe due to some 
+minor changes in abstract rtti xml generation.
+
 Install dependencies:
 
 	haxelib install hxtemplo
 	haxelib install markdown
 
 To generate std documentation:
-	
+
 	haxe doc.hxml
 	haxe gen.hxml
 	haxe std.hxml
