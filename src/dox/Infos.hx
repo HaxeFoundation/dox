@@ -9,6 +9,8 @@ class Infos {
 	public var numGeneratedTypes(default, set):Int;
 	public var numGeneratedPackages:Int;
 	
+	var numProcessedTypes:Int;
+	
 	function set_numGeneratedTypes(v) {
 		if (v & 16 == 0) Sys.print(".");
 		return numGeneratedTypes = v;
@@ -19,7 +21,13 @@ class Infos {
 		subClasses = new Map();
 		implementors = new Map();
 		numGeneratedPackages = 0;
+		numProcessedTypes = 0;
 		Reflect.setField(this, "numGeneratedTypes", 0);
 	}
 	
+	public function addType(path:String, typeInfos:TypeInfos) {
+		typeMap.set(path, typeInfos);
+		numProcessedTypes++;
+		if (numProcessedTypes & 16 == 0) Sys.print(".");
+	}
 }

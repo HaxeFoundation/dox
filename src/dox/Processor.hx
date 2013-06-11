@@ -30,14 +30,42 @@ class Processor {
 					var acc = [];
 					subs.iter(filter.bind(acc));
 					if (!isFiltered(full)) root.push(TPackage(name, full, acc));
-				case TClassdecl(t): if (!isFiltered(t.path)) root.push(tree);
+				case TClassdecl(t):
+					t.fields = filterFields(t.fields);
+					t.statics = filterFields(t.statics);
+					if (!isFiltered(t.path)) root.push(tree);
 				case TEnumdecl(t): if (!isFiltered(t.path)) root.push(tree);
 				case TTypedecl(t): if (!isFiltered(t.path)) root.push(tree);
-				case TAbstractdecl(t): if (!isFiltered(t.path)) root.push(tree);
+				case TAbstractdecl(t):
+					if (t.impl != null) {
+						var fields = new List();
+						var statics = new List();
+						t.impl.statics.iter(function(cf) {
+							if (cf.meta.exists(function(m) return m.name == ":impl")) {
+								if (cf.name == "_new") cf.name = "new";
+								switch(cf.type) {
+									case CFunction(args,_): args.pop();
+									case _:
+								}
+								fields.push(cf);
+							} else {
+								statics.push(cf);
+							}
+						});
+						t.impl.fields = fields;
+						t.impl.statics = statics;
+					}
+					if (!isFiltered(t.path)) root.push(tree);
 			}
 		}
 		root.iter(filter.bind(newRoot));
 		return newRoot;
+	}
+	
+	function filterFields(fields:List<ClassField>) {
+		return fields.filter(function(cf) {
+			return cf.isPublic || cf.meta.exists(function(m) return m.name == ":doc");
+		});
 	}
 	
 	function sort(root:TypeRoot) {
@@ -116,16 +144,16 @@ class Processor {
 				subs.iter(processTree);
 
 			case TEnumdecl(t):
-				infos.typeMap.set(t.path, t);
+				infos.addType(t.path, t);
 				t.doc = processDoc(t.doc);
 				t.constructors.iter(processEnumField);
 
 			case TTypedecl(t):
-				infos.typeMap.set(t.path, t);
+				infos.addType(t.path, t);
 				t.doc = processDoc(t.doc);
 
 			case TClassdecl(t):
-				infos.typeMap.set(t.path, t);
+				infos.addType(t.path, t);
 				t.doc = processDoc(t.doc);
 				t.fields.iter(processClassField);
 				t.statics.iter(processClassField);
@@ -142,7 +170,7 @@ class Processor {
 				}
 
 			case TAbstractdecl(t):
-				infos.typeMap.set(t.path, t);
+				infos.addType(t.path, t);
 				if (t.impl != null)
 				{
 					t.impl.fields.iter(processClassField);

@@ -54,6 +54,7 @@ class Generator {
 			case TPackage(name, full, subs):
 				if (name.charAt(0) == "_") return;
 				api.currentPageName = "package " + name;
+				api.currentFullName = "package " + full;
 				var s = tplPackage.execute({
 					api: api,
 					name: name,
@@ -65,6 +66,7 @@ class Generator {
 				subs.iter(generateTree);
 			case TClassdecl(c):
 				api.currentPageName = api.getPathName(c.path);
+				api.currentFullName = c.path;
 				var s = tplClass.execute({
 					api: api,
 					"type": c,
@@ -73,6 +75,7 @@ class Generator {
 				api.infos.numGeneratedTypes++;
 			case TEnumdecl(e):
 				api.currentPageName = api.getPathName(e.path);
+				api.currentFullName = e.path;
 				var s = tplEnum.execute({
 					api: api,
 					"type": e,
@@ -81,6 +84,7 @@ class Generator {
 				api.infos.numGeneratedTypes++;
 			case TTypedecl(t):
 				api.currentPageName = api.getPathName(t.path);
+				api.currentFullName = t.path;
 				var s = tplTypedef.execute({
 					api: api,
 					"type": t,
@@ -89,6 +93,7 @@ class Generator {
 				api.infos.numGeneratedTypes++;
 			case TAbstractdecl(a):
 				api.currentPageName = api.getPathName(a.path);
+				api.currentFullName = a.path;
 				var s = tplAbstract.execute({
 					api: api,
 					"type": a,
