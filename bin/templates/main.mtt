@@ -26,6 +26,7 @@
 				<form class="navbar-search pull-left">
 					<input id="search" type="text" class="search-query" placeholder="Search" autocomplete="off"/>
 				</form>
+				<!--
 				<ul class="nav">
 					<li id="select-version" class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Version<b class="caret"></b></a>
@@ -36,6 +37,7 @@
 						</ul>
 					</li>
 				</ul>
+				-->
 				<ul class="nav">
 					<li id="select-platform" class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a>
