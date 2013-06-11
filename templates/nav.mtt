@@ -1,15 +1,17 @@
 <macro name="makeTree(tree,depth)">
 	::switch tree::
-	<li>
+	<li ::attr data_path api.getTreePath(tree)::>
 		<div>
-			<a href="::api.getTreeUrl(tree)::">::api.getTreeName(tree)::</a>
+			<a href="::api.getTreeUrl(tree)::">
+				<span class="pack">:: api.getTreePack(tree) ::</span>
+				::api.getTreeName(tree)::
+			</a>
 		</div>
 	</li>
 	::case::
 		::set name = args[0]::
 		<li ::cond name.charAt(0) != "_"::
-			::attr class "expando" +if (depth == 0 && name != "top level" && name != "haxe") " platform platform-" + name else ""::
-			::attr id "pack_" +args[1].split(".").join("_"):: >
+			::attr class "expando" +if (depth == 0 && name != "top level" && name != "haxe") " platform platform-" + name else ""::>
 			<div>
 				<a href="#" onclick="toggleCollapsed(this)">
 					<img src="::api.config.rootPath::/triangle-closed.png"/>

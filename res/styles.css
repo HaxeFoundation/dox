@@ -13,15 +13,12 @@
 #nav ul { margin-left:13px; }
 #nav li { margin-left:0px; }
 #nav img { padding-right:4px; }
+#nav .pack { display:none; }
 
 #nav.searching .expando > ul { display:block; }
 #nav.searching .expando > div { display:none; }
 #nav.searching ul { margin-left:0px; }
-
-#nav.searching.filtering li { display: none; }
-#nav.searching.filtering .searchPackage { display: block; }
-#nav.searching.filtering .searchPackage li { display: inline; }
-#nav.searching.filtering .searchPath { display: block; }
+#nav.searching .pack { display:inline; }
 
 h1 code { padding:4px; font-size:15px; border:none; }
 h1 code a:hover { color:white; text-decoration:none; }

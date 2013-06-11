@@ -24,6 +24,26 @@ using Lambda;
 			case TAbstractdecl(t): getPathName(t.path);
 		}
 	}
+
+	public function getTreePath(tree:TypeTree) {
+		return switch(tree) {
+			case TPackage(_,path,_): path;
+			case TClassdecl(t): t.path;
+			case TEnumdecl(t): t.path;
+			case TTypedecl(t): t.path;
+			case TAbstractdecl(t): t.path;
+		}
+	}
+
+	public function getTreePack(tree:TypeTree) {
+		return switch(tree) {
+			case TPackage(_,pack,_): pack;
+			case TClassdecl(t): getPathPack(t.path);
+			case TEnumdecl(t): getPathPack(t.path);
+			case TTypedecl(t): getPathPack(t.path);
+			case TAbstractdecl(t): getPathPack(t.path);
+		}
+	}
 	
 	public function getTreeUrl(tree:TypeTree) {
 		return switch(tree) {
@@ -66,6 +86,12 @@ using Lambda;
 	
 	public function getPathName(path:Path) {
 		return path.split(".").pop();
+	}
+
+	public function getPathPack(path:Path) {
+		var parts = path.split(".");
+		parts.pop();
+		return parts.length == 0 ? "" : parts.join(".") + ".";
 	}
 	
 	public function debug(e:Dynamic) {

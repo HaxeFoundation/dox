@@ -141,37 +141,18 @@ function searchQuery(query) {
 		$("#nav").removeClass("searching");
 		$("#nav li").each(function(index, element){
 			var e = $(element);
-			if (e.hasClass("expando")) {
-				e.removeClass("searchPackage");
-				e.removeClass("searchPath");
-			}
 			e.css("display", "");
 		});
 		return;
 	}
 	
-	var queryParts = query.split(".");
-	query = queryParts.pop();
-	var packageFilter = null;
-	if (queryParts.length > 0) {
-		packageFilter = "pack_" +queryParts.join("_");
-		$("#nav").addClass("filtering");
-	}
 	console.log("Searching: "+query);
 
 	$("#nav").addClass("searching");
 	$("#nav li").each(function(index, element){
 		var e = $(element);
-		if (e.hasClass("expando")) {
-			var id = e.attr("id");
-			e.removeClass("searchPath");
-			e.removeClass("searchPackage");
-			if (id == null || packageFilter == null) return;
-			if (id == packageFilter) e.addClass("searchPackage");
-			else if (packageFilter.substr(0, id.length) == id) e.addClass("searchPath");
-			return;
-		} else {
-			var content = e.text().toLowerCase();
+		if (!e.hasClass("expando")) {
+			var content = e.attr("data_path").toLowerCase();
 			var match = searchMatch(content, query);
 			e.css("display", match ? "" : "none");
 		}
