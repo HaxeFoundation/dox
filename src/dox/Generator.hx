@@ -52,6 +52,7 @@ class Generator {
 	function generateTree(tree:TypeTree) {
 		switch(tree) {
 			case TPackage(name, full, subs):
+				if (name.charAt(0) == "_") return;
 				api.currentPageName = "package " + name;
 				var s = tplPackage.execute({
 					api: api,

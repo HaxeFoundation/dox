@@ -1,7 +1,11 @@
 -cp src
--cp ../hxtemplo/src
+-lib hxtemplo
 -lib hxparse
 -lib markdown
 -neko bin/dox.n
 -main dox.Dox
 -dce full
+
+--next
+
+-cmd haxe std.hxml

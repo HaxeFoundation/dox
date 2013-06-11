@@ -16,6 +16,7 @@
 	};</script>
 	<script type="text/javascript" src="::api.config.rootPath::/nav.js"></script>
 	<script type="text/javascript" src="::api.config.rootPath::/index.js"></script>
+	<link rel="icon" href="favicon.ico" type="image/x-icon"></link>
 	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
 </head>
 <body>
@@ -23,7 +24,7 @@
 		<div class="navbar navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">
 				<form class="navbar-search pull-left">
-					<input type="text" class="search-query" placeholder="Search" />
+					<input id="search" type="text" class="search-query" placeholder="Search" autocomplete="off"/>
 				</form>
 				<ul class="nav">
 					<li id="select-version" class="dropdown">
@@ -49,8 +50,8 @@
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="packages" id="nav"></div>
-			<div class="content">::raw __content__::</div>
+			<div id="nav"></div>
+			<div id="content">::raw __content__::</div>
 		</div>
 	</div>
 </body>

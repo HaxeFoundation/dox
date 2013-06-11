@@ -1,6 +1,6 @@
-.packages { position:fixed; top:40px; left:0px; bottom:0px; width:220px !important; overflow-y:scroll; padding:12px;}
-.packages li { list-style-type: none; }
-.content { position:fixed; top:40px; left:240px; right:0px; bottom:0px; overflow-y:scroll; padding:12px;}
+#nav { position:fixed; top:40px; left:0px; bottom:0px; width:220px !important; overflow-y:scroll; padding:12px;}
+#nav li { list-style-type: none; }
+#content { position:fixed; top:40px; left:240px; right:0px; bottom:0px; overflow-y:scroll; padding:12px;}
 .doc { margin-top:16px; }
 .toggle-hide { display:block; }
 .toggle-show { display:none; }
@@ -8,11 +8,15 @@
 .toggle-on .toggle-show { display:block !important; }
 .related-types .toggle-hide { padding-top:4px; }
 
-.packages .expando > ul { display:none; }
-.packages .expando.expanded > ul { display:block; }
-.packages ul { margin-left:13px; }
-.packages li { margin-left:0px; }
-.packages img { padding-right:4px; }
+#nav .expando > ul { display:none; }
+#nav .expando.expanded > ul { display:block; }
+#nav ul { margin-left:13px; }
+#nav li { margin-left:0px; }
+#nav img { padding-right:4px; }
+
+#nav.searching .expando > ul { display:block; }
+#nav.searching .expando > div { display:none; }
+#nav.searching ul { margin-left:0px; }
 
 h1 code { padding:4px; font-size:15px; border:none; }
 h1 code a:hover { color:white; text-decoration:none; }
