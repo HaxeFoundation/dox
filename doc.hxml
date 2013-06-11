@@ -5,7 +5,3 @@
 -neko bin/dox.n
 -main dox.Dox
 -dce full
-
---next
-
--cmd haxe std.hxml

@@ -1,1 +1,1 @@
--cmd neko bin/dox.n -r /dox -o bin/pages -i bin/xml -t templates -res res
+-cmd neko bin/dox.n -r /dox/bin/pages -o bin/pages -i bin/xml -t templates -res res
