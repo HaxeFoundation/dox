@@ -8,6 +8,7 @@ using Lambda;
 	public var infos:Infos;
 	
 	public var currentPageName:String;
+	public var currentFullName:String;
 	
 	public function new(cfg:Config, infos:Infos) {
 		this.config = cfg;

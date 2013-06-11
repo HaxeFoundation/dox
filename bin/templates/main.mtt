@@ -47,6 +47,9 @@
 						</ul>
 					</li>
 				</ul>
+				<ul class="nav pull-right">
+					<li><a href="#">::api.currentFullName::</a></li>
+				</ul>
 			</div>
 		</div>
 		<div class="row-fluid">
