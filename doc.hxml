@@ -8,4 +8,4 @@
 
 --next
 
--cmd std.hxml
+-cmd haxe std.hxml
