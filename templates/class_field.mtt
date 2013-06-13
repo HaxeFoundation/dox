@@ -3,9 +3,9 @@
 	<h3>
 		<code>
 			::switch field.type::
-				<span class="keyword">var</span> <a href="#::field.name::">::field.name::</a>:$$printLinkedType(::field.type::)
+				<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)
 			::case 4::
-				<span class="keyword">function</span> <a href="#::field.name::">::field.name::</a>
+				<span class="keyword">function</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>
 				$$printTypeParams(::field.params::)
 				(
 				::foreach arg args[0]::
