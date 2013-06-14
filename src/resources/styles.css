@@ -3,8 +3,8 @@ body, html { height:100%; padding:0px !important; overflow:hidden; }
 #container { height:95%; }
 #nav { overflow-y:scroll; height:100%; float:left; width:250px; }
 #content { overflow-y:scroll; height:100%; padding:0px 12px; }
-#content .header { position:absolute; background:rgba(255,255,255,0.9); left:250px; right:15px; padding:0px 12px; border-bottom:1px solid #EEE;}
-#content .body { padding-top:80px;}
+/*#content .header { position:absolute; background:rgba(255,255,255,0.9); left:250px; right:15px; padding:0px 12px; border-bottom:1px solid #EEE;}*/
+/*#content .body { padding-top:80px;}*/
 
 .doc { margin-top:16px; }
 .toggle-hide { display:block; }
