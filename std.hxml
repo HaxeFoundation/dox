@@ -1,1 +1,1 @@
--cmd haxelib run dox -r /dox -o bin/pages -i bin/xml
+-cmd haxelib run dox -r /dox/bin/pages -o bin/pages -i bin/xml
