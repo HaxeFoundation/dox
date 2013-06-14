@@ -16,48 +16,31 @@
 	};</script>
 	<script type="text/javascript" src="::api.config.rootPath::/nav.js"></script>
 	<script type="text/javascript" src="::api.config.rootPath::/index.js"></script>
-	<link rel="icon" href="favicon.ico" type="image/x-icon"></link>
+	<link rel="icon" href="::api.config.rootPath::/favicon.ico" type="image/x-icon"></link>
 	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="navbar-inner">
-				<form class="navbar-search pull-left">
-					<input id="search" type="text" class="search-query" placeholder="Search" autocomplete="off"/>
-				</form>
-				<!--
-				<ul class="nav">
-					<li id="select-version" class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Version<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li data="3_0"><a href="#">3.0</a></li>
-							<li data="3_1"><a href="#">3.1</a></li>
-							<li data="3_2"><a href="#">3.2</a></li>
-						</ul>
-					</li>
-				</ul>
-				-->
-				<ul class="nav">
-					<li id="select-platform" class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li data="all"><a href="#">All Platforms</a></li>
-							::foreach i api.config.platforms::
-								<li data="::i::"><a href="#">::i::</a></li>
-							::end::
-						</ul>
-					</li>
-				</ul>
-				<ul class="nav pull-right">
-					<li><a href="#">::api.currentFullName::</a></li>
-				</ul>
-			</div>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<form class="navbar-search pull-left">
+				<input id="search" type="text" class="search-query" placeholder="Search" autocomplete="off"/>
+			</form>
+			<ul class="nav">
+				<li id="select-platform" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Platform<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li data="all"><a href="#">All Platforms</a></li>
+						::foreach i api.config.platforms::
+							<li data="::i::"><a href="#">::i::</a></li>
+						::end::
+					</ul>
+				</li>
+			</ul>
 		</div>
-		<div class="row-fluid">
-			<div id="nav"></div>
-			<div id="content">::raw __content__::</div>
-		</div>
+	</div>
+	<div id="container">
+		<div id="nav"></div>
+		<div id="content">::raw __content__::</div>
 	</div>
 </body>
 </html>

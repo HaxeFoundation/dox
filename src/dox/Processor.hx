@@ -13,7 +13,7 @@ class Processor {
 	public function new(cfg:Config) {
 		config = cfg;
 		infos = new Infos();
-		markdownHandler = new MarkdownHandler(cfg);
+		markdownHandler = new MarkdownHandler(cfg, infos);
 	}
 	
 	public function process(root:TypeRoot) {
@@ -33,9 +33,23 @@ class Processor {
 				case TClassdecl(t):
 					t.fields = filterFields(t.fields);
 					t.statics = filterFields(t.statics);
-					if (!isFiltered(t.path)) root.push(tree);
-				case TEnumdecl(t): if (!isFiltered(t.path)) root.push(tree);
-				case TTypedecl(t): if (!isFiltered(t.path)) root.push(tree);
+					if (!isFiltered(t.path))
+					{
+						root.push(tree);
+						infos.addType(t.path, t);
+					}
+				case TEnumdecl(t):
+					if (!isFiltered(t.path))
+					{
+						root.push(tree);
+						infos.addType(t.path, t);
+					}
+				case TTypedecl(t):
+					if (!isFiltered(t.path))
+					{
+						root.push(tree);
+						infos.addType(t.path, t);
+					}
 				case TAbstractdecl(t):
 					if (t.impl != null) {
 						var fields = new List();
@@ -55,7 +69,11 @@ class Processor {
 						t.impl.fields = fields;
 						t.impl.statics = statics;
 					}
-					if (!isFiltered(t.path)) root.push(tree);
+					if (!isFiltered(t.path))
+					{
+						root.push(tree);
+						infos.addType(t.path, t);
+					}
 			}
 		}
 		root.iter(filter.bind(newRoot));
@@ -144,16 +162,13 @@ class Processor {
 				subs.iter(processTree);
 
 			case TEnumdecl(t):
-				infos.addType(t.path, t);
 				t.doc = processDoc(t.doc);
 				t.constructors.iter(processEnumField);
 
 			case TTypedecl(t):
-				infos.addType(t.path, t);
 				t.doc = processDoc(t.doc);
 
 			case TClassdecl(t):
-				infos.addType(t.path, t);
 				t.doc = processDoc(t.doc);
 				t.fields.iter(processClassField);
 				t.statics.iter(processClassField);
@@ -170,7 +185,6 @@ class Processor {
 				}
 
 			case TAbstractdecl(t):
-				infos.addType(t.path, t);
 				if (t.impl != null)
 				{
 					t.impl.fields.iter(processClassField);

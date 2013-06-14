@@ -7,9 +7,11 @@ import markdown.InlineParser;
 class MarkdownHandler {
 
 	var config:Config;
+	var infos:Infos;
 	
-	public function new(cfg:Config) {
+	public function new(cfg:Config, inf:Infos) {
 		config = cfg;
+		infos = inf;
 	}
 	
 	public function markdownToHtml(markdown:String) {
@@ -41,6 +43,7 @@ class MarkdownHandler {
 		source = ~/\b((\w+\.)*[A-Z]\w+)(\.\w+)*\b/g.map(source, function(e){
 			var text = e.matched(0);
 			var type =  e.matched(1);
+			if (!infos.typeMap.exists(type)) return text;
 			var field = e.matched(3);
 			var href = resolveTypeLink(type, field);
 			return '<a href="$href">$text</a>';
@@ -52,7 +55,6 @@ class MarkdownHandler {
 			return '<a href="$href">null</a>';
 		});
 		
-		// Sys.println(source);
 		return source;
 	}
 	

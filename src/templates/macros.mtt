@@ -1,21 +1,21 @@
 <macro name="printTypeParams(params)">
 	::if params.length > 0::
-	&lt;::params.join(", ")::&gt;
+		&lt;
+		::foreach param params::
+			<span class="type">::param::</span>
+			::if !repeat.param.last::, ::end::
+		::end::
+		&gt;
 	::end::
 </macro>
 
 <macro name="printPlatforms(platforms)">
-	<div>
-		<code class="dark">
-			<span class="macro">
-				Available on
-				::if platforms.length == api.config.platforms.length:: all platforms
-				::elseif platforms.length > 1:: ::platforms.join(", ")::
-				::else:: ::platforms.join("")::
-				::end::
-			</span>
-		</code>
-	</div>
+	<p class="availability">
+		::if platforms.length == api.config.platforms.length:: all platforms
+		::elseif platforms.length > 1:: ::platforms.join(", ")::
+		::else:: ::platforms.join("")::
+		::end::
+	</p>
 </macro>
 
 <macro name="printLinkedPath(path, params)">
@@ -42,7 +42,7 @@
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::
 		::foreach arg args[0]::
-			$$printLinkedType(::arg.t::) -&gt;
+			$$printLinkedType(::arg.t::) -&gt; 
 		::end::
 		$$printLinkedType(::args[1]::)
 	::case::
@@ -52,7 +52,7 @@
 			::if !repeat.field.last::, ::end::
 		::end::
 	}
-	::case::Dynamic::if args[0] != null::$$printLinkedType(::args[0]::)::end::
+	::case::$$printLinkedPath(::"Dynamic"::,::null::)::if args[0] != null::$$printLinkedType(::args[0]::)::end::
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::end::
 </macro>

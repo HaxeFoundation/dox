@@ -2,6 +2,9 @@
 	<a ::attr name field.name::></a>
 	<h3>
 		<code>
+			::if isStatic::
+				<span class="keyword">static</span> 
+			::end::
 			::switch field.type::
 				<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)
 			::case 4::
@@ -20,5 +23,7 @@
 	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
 		$$printPlatforms(::field.platforms::)
 	::end::
-	::if field.doc != null::::raw field.doc::::end::
+	::if field.doc != null::
+		<div class="doc">::raw field.doc::</div>
+	::end::
 </div>

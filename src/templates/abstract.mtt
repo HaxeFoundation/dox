@@ -1,30 +1,36 @@
 ::use 'main.mtt'::
-	<h1>
-		<code>
-			<span class="directive">abstract</span> ::type.path::
-			$$printTypeParams(::type.params::)
-		</code>
-	</h1>
-	<div class="doc" ::cond type.doc != null::>
-		::raw type.doc::
+	<div class="header">
+		<h1>
+			<code>
+				<span class="directive">abstract </span>
+				<span class="type">::type.path::</span>
+				$$printTypeParams(::type.params::)
+			</code>
+		</h1>
 	</div>
-	::if type.impl != null::
-	
-		<h2 ::cond field.statics.length > 0::>Class Fields</h2>
+	<div class="body">
+		$$printPlatforms(::type.platforms::)
+		<div class="doc" ::cond type.doc != null::>
+			::raw type.doc::
+		</div>
+		::if type.impl != null::
 		
-		::foreach field type.impl.statics::
-			::if field.isPublic::
-				::use "class_field.mtt"::::end::
+			<h2 ::cond field.statics.length > 0::>Class Fields</h2>
+			
+			::foreach field type.impl.statics::
+				::if field.isPublic::
+					::use "class_field.mtt"::::end::
+				::end::
 			::end::
-		::end::
-		
-		<h2 ::cond field.fields.length > 0::>Instance Fields</h2>
-		
-		::foreach field type.impl.fields::
-			::if field.isPublic::
-				::use "class_field.mtt"::::end::
+			
+			<h2 ::cond field.fields.length > 0::>Instance Fields</h2>
+			
+			::foreach field type.impl.fields::
+				::if field.isPublic::
+					::use "class_field.mtt"::::end::
+				::end::
 			::end::
+			
 		::end::
-		
-	::end::
+	</div>
 ::end::
