@@ -2,6 +2,6 @@
 -lib hxtemplo
 -lib hxparse
 -lib markdown
--neko bin/dox.n
+-neko src/run.n
 -main dox.Dox
 -dce full

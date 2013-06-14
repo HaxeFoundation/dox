@@ -1,3 +1,5 @@
+package dox;
+
 import haxe.macro.Context;
 
 // stolen from haxe/doc/ImportAll.hx
@@ -29,10 +31,7 @@ class ImportAll {
 			if( !Context.defined("java") ) return;
 		case "cs":
 			if( !Context.defined("cs") ) return;
-		case "tools":
-			return;
-		case "build-tool":
-			return;
+		case "tools", "dox", "build-tool": return;
 		}
 		for( p in Context.getClassPath() ) {
 			if( p == "/" )

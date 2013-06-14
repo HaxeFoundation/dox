@@ -2,13 +2,26 @@ package dox;
 
 class Dox {
 	static public function main() {
+		// check if we're running from haxelib (last arg is original working dir)
+		var owd = Sys.getCwd();
+		var args = Sys.args();
+		var last = new haxe.io.Path(args[args.length-1]).toString();
+		var slash = last.substr(-1);
+		if (slash == "/"|| slash == "\\") 
+			last = last.substr(0,last.length-1);
+		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)) {
+			args.pop();
+			Sys.setCwd(last);
+		}
+
 		var cfg = new Config();
 
+		cfg.resourcePaths.push(owd + "resources");
 		cfg.rootPath = Sys.getCwd() + "pages/";
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
 		#if hxtemplo
-		cfg.addTemplatePath(Sys.executablePath() + "/" + "templates");
+		cfg.addTemplatePath(owd + "templates");
 		cfg.addTemplatePath("templates");
 		#end
 		
@@ -42,7 +55,7 @@ class Dox {
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
 		
-		var args = Sys.args();
+		// var args = Sys.args();
 		if (args.length == 0) {
 			Sys.println("Dox 1.0");
 			Sys.println(argHandler.getDoc());
