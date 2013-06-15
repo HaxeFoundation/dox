@@ -63,6 +63,10 @@ using Lambda;
 			case TTypedecl(t): t;
 			case TAbstractdecl(t): t;
 		}
+		return getShortDesc(infos);
+	}
+	
+	public function getShortDesc(infos:TypeInfos) {
 		return infos == null ? "" : infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
 	}
 	

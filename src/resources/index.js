@@ -136,7 +136,7 @@ $(document).ready(function(){
 
 function searchQuery(query) {
 	query = query.toLowerCase();
-	$("#nav").removeClass("filtering");
+	$("#searchForm").removeAttr("action");
 	if (query == "") {
 		$("#nav").removeClass("searching");
 		$("#nav li").each(function(index, element){
@@ -148,12 +148,19 @@ function searchQuery(query) {
 	
 	console.log("Searching: "+query);
 
+	var searchSet = false;
+	
 	$("#nav").addClass("searching");
 	$("#nav li").each(function(index, element){
 		var e = $(element);
 		if (!e.hasClass("expando")) {
 			var content = e.attr("data_path").toLowerCase();
 			var match = searchMatch(content, query);
+			if (match && !searchSet) {
+				var url = dox.rootPath + "/" + e.attr("data_path").split(".").join("/") + ".html";
+				$("#searchForm").attr("action", url);
+				searchSet = true;
+			}
 			e.css("display", match ? "" : "none");
 		}
 	});
