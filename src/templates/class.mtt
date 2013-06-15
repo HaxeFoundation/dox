@@ -16,8 +16,21 @@
 	</div>
 	<div class="body">
 		$$printPlatforms(::type.platforms::)
+
 		<div class="doc" ::cond type.doc != null::>
 			::raw type.doc::
+		</div>
+
+		<div ::cond subClasses !=null::>
+			<h2>Sub classes:</h2>
+			::set infos = subClasses::
+			::use "related_types.mtt"::::end::
+		</div>
+		
+		<div ::cond implementors !=null::>
+			<h2>Implementors:</h2>
+			::set infos = implementors::
+			::use "related_types.mtt"::::end::
 		</div>
 		
 		<h2 ::cond type.statics.length > 0::>Class Fields</h2>

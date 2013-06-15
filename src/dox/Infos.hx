@@ -4,8 +4,8 @@ import haxe.rtti.CType;
 class Infos {
 	
 	public var typeMap:Map<String, TypeInfos>;
-	public var subClasses:Map<String, Array<String>>;
-	public var implementors:Map<String, Array<String>>;
+	public var subClasses:Map<String, Array<TypeInfos>>;
+	public var implementors:Map<String, Array<TypeInfos>>;
 	public var numGeneratedTypes(default, set):Int;
 	public var numGeneratedPackages:Int;
 	

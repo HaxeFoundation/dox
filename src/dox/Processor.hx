@@ -172,18 +172,14 @@ class Processor {
 				t.doc = processDoc(t.doc);
 				t.fields.iter(processClassField);
 				t.statics.iter(processClassField);
-				if (t.isInterface) infos.implementors.set(t.path, []);
-				if (t.superClass != null)
-				{
-					if (!infos.subClasses.exists(t.superClass.path)) infos.subClasses.set(t.superClass.path, [t.path]);
-					else infos.subClasses.get(t.superClass.path).push(t.path);
+				if (t.superClass != null) {
+					if (!infos.subClasses.exists(t.superClass.path)) infos.subClasses.set(t.superClass.path, [t]);
+					else infos.subClasses.get(t.superClass.path).push(t);
 				}
-				for (i in t.interfaces)
-				{
-					if (!infos.implementors.exists(i.path)) infos.implementors.set(i.path, [t.path]);
-					else infos.implementors.get(i.path).push(t.path);
+				for (i in t.interfaces) {
+					if (!infos.implementors.exists(i.path)) infos.implementors.set(i.path, [t]);
+					else infos.implementors.get(i.path).push(t);
 				}
-
 			case TAbstractdecl(t):
 				if (t.impl != null)
 				{
