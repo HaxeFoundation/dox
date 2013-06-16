@@ -1,0 +1,14 @@
+<table class="table table-condensed">
+	<tbody>
+		::foreach info infos::
+			<tr>
+				<td width="200">
+					<a href ="::api.pathToUrl(info.path)::">::api.getPathName(info.path)::</a>
+				</td>
+				<td>
+					::raw api.getShortDesc(info)::
+				</td>
+			</tr>
+		::end::
+	</tbody>
+</table>

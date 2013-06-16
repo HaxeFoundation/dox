@@ -22,7 +22,7 @@
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="navbar-inner">
-			<form class="navbar-search pull-left">
+			<form class="navbar-search pull-left" id="searchForm">
 				<input id="search" type="text" class="search-query" placeholder="Search" autocomplete="off"/>
 			</form>
 			<ul class="nav">

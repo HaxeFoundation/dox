@@ -22,6 +22,7 @@ class Generator {
 		loadTemplate("main.mtt");
 		loadTemplate("class_field.mtt");
 		loadTemplate("enum_field.mtt");
+		loadTemplate("related_types.mtt");
 		tplNav = loadTemplate("nav.mtt");
 		tplPackage = loadTemplate("package.mtt");
 		tplClass = loadTemplate("class.mtt");
@@ -70,6 +71,8 @@ class Generator {
 				var s = tplClass.execute({
 					api: api,
 					"type": c,
+					"subClasses": api.infos.subClasses.get(c.path),
+					"implementors": api.infos.implementors.get(c.path)
 				});
 				write(c.path, s);
 				api.infos.numGeneratedTypes++;

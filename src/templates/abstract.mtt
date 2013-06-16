@@ -5,6 +5,17 @@
 				<span class="directive">abstract </span>
 				<span class="type">::type.path::</span>
 				$$printTypeParams(::type.params::)
+				($$printLinkedType(::type.athis::))
+				::foreach t type.from::
+					::if t.field == null::
+						 from $$printLinkedType(::t.t::)
+					::end::
+				::end::
+				::foreach t type.to::
+					::if t.field == null::
+						 to $$printLinkedType(::t.t::)
+					::end::
+				::end::
 			</code>
 		</h1>
 	</div>
