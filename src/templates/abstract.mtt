@@ -26,7 +26,7 @@
 		</div>
 		::if type.impl != null::
 		
-			<h2 ::cond field.statics.length > 0::>Class Fields</h2>
+			<h2 ::cond type.impl.statics.length > 0::>Class Fields</h2>
 			
 			::foreach field type.impl.statics::
 				::if field.isPublic::
@@ -34,7 +34,7 @@
 				::end::
 			::end::
 			
-			<h2 ::cond field.fields.length > 0::>Instance Fields</h2>
+			<h2 ::cond type.impl.fields.length > 0::>Instance Fields</h2>
 			
 			::foreach field type.impl.fields::
 				::if field.isPublic::
