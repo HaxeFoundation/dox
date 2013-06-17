@@ -57,7 +57,7 @@ class Processor {
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
 								if (cf.name == "_new") cf.name = "new";
-								switch(cf.type) {
+								else switch(cf.type) {
 									case CFunction(args,_): args.pop();
 									case _:
 								}

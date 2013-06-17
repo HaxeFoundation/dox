@@ -7,7 +7,7 @@ class Dox {
 		var args = Sys.args();
 		var last = new haxe.io.Path(args[args.length-1]).toString();
 		var slash = last.substr(-1);
-		if (slash == "/"|| slash == "\\") 
+		if (slash == "/"|| slash == "\\")
 			last = last.substr(0,last.length-1);
 		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)) {
 			args.pop();
@@ -20,12 +20,10 @@ class Dox {
 		cfg.rootPath = Sys.getCwd() + "pages/";
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
-		#if hxtemplo
 		cfg.addTemplatePath(owd + "templates");
 		cfg.addTemplatePath("templates");
-		#end
 		
-		var argHandler = Args.generate([
+		var argHandler = hxargs.Args.generate([
 			@doc("Set the document root path")
 			["-r", "--document-root"] => function(path:String) cfg.rootPath = path,
 			
@@ -35,10 +33,8 @@ class Dox {
 			@doc("Set the xml input path")
 			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
 			
-			#if hxtemplo
 			@doc("Add template directory")
 			["-t", "--template-path"] => function(path:String) cfg.addTemplatePath(path),
-			#end
 			
 			@doc("Add a resource directory whose contents are copied to the output directory")
 			["-res", "--resource-path"] => function(dir:String) cfg.resourcePaths.push(dir),
