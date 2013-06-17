@@ -23,7 +23,7 @@ class Dox {
 		cfg.addTemplatePath(owd + "templates");
 		cfg.addTemplatePath("templates");
 		
-		var argHandler = Args.generate([
+		var argHandler = hxargs.Args.generate([
 			@doc("Set the document root path")
 			["-r", "--document-root"] => function(path:String) cfg.rootPath = path,
 			

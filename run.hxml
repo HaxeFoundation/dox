@@ -2,6 +2,7 @@
 -lib hxtemplo
 -lib hxparse
 -lib markdown
+-lib hxargs
 -neko src/run.n
 -main dox.Dox
 -dce full
