@@ -11,7 +11,7 @@
 
 <macro name="printPlatforms(platforms)">
 	<p class="availability">
-		Available on 
+		Available on
 		::if platforms.length == api.config.platforms.length:: all platforms
 		::elseif platforms.length > 1:: ::platforms.join(", ")::
 		::else:: ::platforms.join("")::
@@ -43,7 +43,7 @@
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::
 		::foreach arg args[0]::
-			$$printLinkedType(::arg.t::) -&gt; 
+			$$printLinkedType(::arg.t::) -&gt;
 		::end::
 		$$printLinkedType(::args[1]::)
 	::case::
@@ -56,4 +56,12 @@
 	::case::$$printLinkedPath(::"Dynamic"::,::null::)::if args[0] != null::$$printLinkedType(::args[0]::)::end::
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::end::
+</macro>
+
+<macro name="printModule(module)">
+	<div ::cond module != null && module != "StdTypes"::>
+		<code class="dark">
+			<span class="directive">import</span> <span class="type">::module::</span>;
+		</code>
+	</div>
 </macro>

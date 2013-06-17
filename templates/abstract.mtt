@@ -20,6 +20,7 @@
 		</h1>
 	</div>
 	<div class="body">
+		$$printModule(::type.module::)
 		$$printPlatforms(::type.platforms::)
 		<div class="doc" ::cond type.doc != null::>
 			::raw type.doc::
