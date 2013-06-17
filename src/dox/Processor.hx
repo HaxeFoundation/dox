@@ -202,14 +202,15 @@ class Processor {
 	
 	function processDoc(doc:String) {
 		if (doc == null || doc == '') return '<p></p>';
+		if (doc.charAt(0) == "*") doc = doc.substr(1);
+		if (doc.charAt(doc.length - 1) == "*") doc = doc.substr(0, doc.length - 1);
 		
-		var ereg = ~/^([\t ]+).+/m;
+		var ereg = ~/^([\t ]+\*? ?).+/m;
 		while (ereg.match(doc))
 		{
-			var tabs = new EReg("^" + ereg.matched(1), "gm");
+			var tabs = new EReg("^" + ereg.matched(1).split("*").join("\\*"), "gm");
 			doc = tabs.replace(doc, "");
 		}
-		if (doc.charAt(doc.length - 1) == "*") doc = doc.substr(0, doc.length - 1);
 		doc = StringTools.trim(doc);
 
 		return markdownHandler.markdownToHtml(doc);

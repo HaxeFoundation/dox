@@ -6,6 +6,7 @@ minor changes in abstract rtti xml generation.
 Install dependencies:
 
 	haxelib install hxtemplo
+	haxelib install hxargs
 	haxelib install markdown
 
 To generate std documentation:

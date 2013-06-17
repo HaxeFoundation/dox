@@ -1,0 +1,1 @@
+-cmd zip haxelib.zip -r src templates resources haxelib.json run.hxml run.n README.md

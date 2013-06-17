@@ -1,8 +1,4 @@
--cp src
--lib hxtemplo
--lib hxparse
--lib markdown
--lib hxargs
--neko src/run.n
+-lib dox
+-neko run.n
 -main dox.Dox
 -dce full

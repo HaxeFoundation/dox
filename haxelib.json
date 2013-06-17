@@ -1,0 +1,18 @@
+{
+	"name": "dox",
+	"url" : "https://github.com/dpeek/dox",
+	"license": "MIT",
+	"tags": ["documentation"],
+	"description": "Haxe documentation generator.",
+	"version": "1.0.0-rc.1",
+	"releasenote": "First release.",
+	"contributors": ["dpeek", "Simn"],
+	"classPath": "src",
+	"dependencies":
+	{
+		"hxparse":"",
+		"hxtemplo":"",
+		"hxargs":"",
+		"markdown":""
+	}
+}

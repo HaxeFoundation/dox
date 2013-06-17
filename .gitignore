@@ -1,7 +1,3 @@
 Thumbs.db
-/pages
-/bin/pages
-/bin/dox.n
-/bin/xml
-/xml/*.xml
-/*.n
+/bin
+/bin
