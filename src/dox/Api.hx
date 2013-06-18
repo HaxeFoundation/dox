@@ -15,6 +15,11 @@ using Lambda;
 		this.infos = infos;
 	}
 	
+	public function isPlatform(name:String)
+	{
+		return config.platforms.has(name);
+	}
+
 	public function getTreeName(tree:TypeTree) {
 		return switch(tree) {
 			case TPackage(name,_,_): name;

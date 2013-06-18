@@ -59,9 +59,9 @@
 </macro>
 
 <macro name="printModule(module)">
-	<div ::cond module != null && module != "StdTypes"::>
+	<p ::cond module != null && module != "StdTypes"::>
 		<code class="dark">
 			<span class="directive">import</span> <span class="type">::module::</span>;
 		</code>
-	</div>
+	</p>
 </macro>
