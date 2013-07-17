@@ -220,6 +220,6 @@ class Processor {
 		for (filter in config.pathFilters) {
 			if (filter.r.match(path)) return !filter.isIncludeFilter;
 		}
-		return !config.pathFilters.isEmpty();
+		return !config.pathFilters.exists(function (f) return f.isIncludeFilter);
 	}
 }
