@@ -82,7 +82,10 @@ class Dox {
 			var name = new haxe.io.Path(file).file;
 			Sys.println('Parsing $file');
 			var data = sys.io.File.getContent(cfg.xmlPath + "/" +file);
-			var xml = Xml.parse(data).firstElement();
+			var xml = try Xml.parse(data).firstElement() catch(err:Dynamic) {
+				trace('Error while parsing $file');
+				throw err;
+			};
 			if (name == "flash8") transformPackage(xml, "flash", "flash8");
 			parser.process(xml, name);
 			cfg.platforms.push(name);

@@ -52,8 +52,8 @@ class Processor {
 					}
 				case TAbstractdecl(t):
 					if (t.impl != null) {
-						var fields = new List();
-						var statics = new List();
+						var fields = new List<ClassField>();
+						var statics = new List<ClassField>();
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
 								if (cf.name == "_new") cf.name = "new";
