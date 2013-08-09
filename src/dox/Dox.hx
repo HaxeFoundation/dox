@@ -17,7 +17,6 @@ class Dox {
 		var cfg = new Config();
 
 		cfg.resourcePaths.push(owd + "resources");
-		cfg.rootPath = Sys.getCwd() + "pages/";
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
 		cfg.addTemplatePath(owd + "templates");
@@ -50,6 +49,10 @@ class Dox {
 			
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
+		
+		if (cfg.rootPath == null && cfg.outputPath != null) {
+			cfg.rootPath = cfg.outputPath;
+		}
 		
 		// var args = Sys.args();
 		if (args.length == 0) {
