@@ -217,9 +217,11 @@ class Processor {
 	}
 	
 	function isFiltered(path:Path) {
+		var hasInclusionFilter = false;
 		for (filter in config.pathFilters) {
+			if (filter.isIncludeFilter) hasInclusionFilter = true;
 			if (filter.r.match(path)) return !filter.isIncludeFilter;
 		}
-		return !config.pathFilters.exists(function (f) return f.isIncludeFilter);
+		return hasInclusionFilter;
 	}
 }
