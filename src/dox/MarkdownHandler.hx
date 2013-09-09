@@ -25,6 +25,11 @@ class MarkdownHandler {
 		// parse ref links
 		document.parseRefLinks(lines);
 
+		// trim out leading asterisks
+		for (ii in 0...lines.length) {
+			lines[ii] = ~/^\s*\*\s*/.replace(lines[ii], "");
+		}
+
 		// parse ast
 		var blocks = document.parseLines(lines);
 		return Markdown.renderHtml(blocks);
