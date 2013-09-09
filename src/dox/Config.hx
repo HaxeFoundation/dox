@@ -39,6 +39,13 @@ class Config{
 	public function addTemplatePath(path:String) {
 		templatePaths.add(haxe.io.Path.removeTrailingSlash(path));
 	}
+
+	public function loadTemplate(name:String) {
+		for (tp in templatePaths) {
+			if (sys.FileSystem.exists(tp + "/" +name)) return templo.Template.fromFile(tp + "/" + name);
+		}
+		throw "Could not resolve template: " +name;
+	}
 }
 
 private class Filter {

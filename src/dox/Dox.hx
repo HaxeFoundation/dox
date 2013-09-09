@@ -99,7 +99,7 @@ class Dox {
 		var root = proc.process(parser.root);
 		
 		var api = new Api(cfg, proc.infos);
-		var gen = new Generator(api);
+		var gen = new Generator(api, cfg);
 		
 		Sys.println("");
 		Sys.println("Generating navigation");

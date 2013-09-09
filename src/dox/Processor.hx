@@ -5,15 +5,19 @@ using Lambda;
 
 class Processor {
 	
-	var config:Config;
 	public var infos:Infos;
 	
+	var tplDoc:templo.Template;
+	var config:Config;
 	var markdownHandler:MarkdownHandler;
-	
+	var javadocHandler:JavadocHandler;
+
 	public function new(cfg:Config) {
 		config = cfg;
 		infos = new Infos();
+		tplDoc = config.loadTemplate("doc.mtt");
 		markdownHandler = new MarkdownHandler(cfg, infos);
+		javadocHandler = new JavadocHandler(cfg, infos, markdownHandler);
 	}
 	
 	public function process(root:TypeRoot) {
@@ -213,7 +217,10 @@ class Processor {
 		}
 		doc = StringTools.trim(doc);
 
-		return markdownHandler.markdownToHtml(doc);
+		var info = javadocHandler.parse(doc);
+		return tplDoc.execute({ info:info });
+
+		// return markdownHandler.markdownToHtml(doc);
 	}
 	
 	function isFiltered(path:Path) {
