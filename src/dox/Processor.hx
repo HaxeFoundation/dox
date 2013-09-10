@@ -204,23 +204,52 @@ class Processor {
 		field.doc = processDoc(field.doc);
 	}
 	
-	function processDoc(doc:String) {
-		if (doc == null || doc == '') return '<p></p>';
-		if (doc.charAt(0) == "*") doc = doc.substr(1);
-		if (doc.charAt(doc.length - 1) == "*") doc = doc.substr(0, doc.length - 1);
+	function trimDoc(doc:String)
+	{
+		if (doc == null) return '';
 		
-		var ereg = ~/^([\t ]+\*? ?).+/m;
-		while (ereg.match(doc))
-		{
-			var tabs = new EReg("^" + ereg.matched(1).split("*").join("\\*"), "gm");
-			doc = tabs.replace(doc, "");
-		}
-		doc = StringTools.trim(doc);
+		// trim leading asterixes
+		while (doc.charAt(0) == '*') doc = doc.substr(1);
 
+		// trim trailing asterixes
+		while (doc.charAt(doc.length - 1) == '*') doc = doc.substr(0, doc.length - 1);
+		
+		// detect doc comment tyle/indent
+		var ereg = ~/^( \* |\t\* |\t \* |\t\t)/m;
+		var matched = ereg.match(doc);
+
+		// special case for single tab indent because my regex isn't clever enough
+		if (!matched)
+		{
+			ereg = ~/^(\t)/m;
+			matched = ereg.match(doc);
+		}
+
+		if (matched)
+		{
+			var string = ereg.matched(1);
+
+			// escape asterixes
+			string = string.split('*').join('\\*');
+
+			// make trailing space optional
+			if (string.charAt(string.length - 1) == ' ')
+				string = string.substr(0, string.length - 1) + ' ?';
+			if (doc.indexOf("Previous line") > -1) trace(">"+string+"<");
+			var indent = new EReg("^" + string, "gm");
+			doc = indent.replace(doc, "");
+		}
+
+		// trim additional whitespace
+		return StringTools.trim(doc);
+	}
+
+	function processDoc(doc:String)
+	{
+		doc = trimDoc(doc);
+		if (doc == '') return '<p></p>';
 		var info = javadocHandler.parse(doc);
 		return tplDoc.execute({ info:info });
-
-		// return markdownHandler.markdownToHtml(doc);
 	}
 	
 	function isFiltered(path:Path) {
