@@ -46,4 +46,14 @@ class ClassTest
 	{
 
 	}
+
+    /**
+     * Adds a child to this entity.
+     * @param append Whether to add the entity to the end or beginning of the child list.
+     * @returns This instance, for chaining.
+     */
+    public static function java_doc_style_spaces()
+	{
+
+	}
 }
