@@ -1,24 +1,12 @@
 <div ::attr class api.getPlatformClassString(field.platforms)::>
 	<a ::attr name field.name::></a>
 	<h3>
-		<code>
-			::if isStatic::
-				<span class="keyword">static</span> 
+		<p><code>$$printFieldSignature(::field::,::isStatic::)</code></p>
+		::if field.overloads != null::
+			::foreach field field.overloads::
+				<p><code>$$printFieldSignature(::field::,::isStatic::)</code></p>
 			::end::
-			::switch field.type::
-				<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)
-			::case 4::
-				<span class="keyword">function</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>
-				$$printTypeParams(::field.params::)
-				(
-				::foreach arg args[0]::
-					::arg.name:::$$printLinkedType(::arg.t::)
-					::if !repeat.arg.last::, ::end::
-				::end::
-				)
-				:$$printLinkedType(::args[1]::)
-			::end::
-		</code>
+		::end::
 	</h3>
 	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
 		$$printPlatforms(::field.platforms::)
