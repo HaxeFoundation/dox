@@ -49,12 +49,7 @@ class Dox {
 			
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
-		
-		if (cfg.rootPath == null && cfg.outputPath != null) {
-			cfg.rootPath = cfg.outputPath;
-		}
-		
-		// var args = Sys.args();
+				
 		if (args.length == 0) {
 			Sys.println("Dox 1.0");
 			Sys.println(argHandler.getDoc());
@@ -62,7 +57,11 @@ class Dox {
 		}
 		
 		argHandler.parse(args);
-				
+			
+		if (cfg.rootPath == null && cfg.outputPath != null) {
+			cfg.rootPath = cfg.outputPath;
+		}
+		
 		try {
 			if (!sys.FileSystem.exists(cfg.outputPath))
 				sys.FileSystem.createDirectory(cfg.outputPath);
