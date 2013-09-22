@@ -15,7 +15,7 @@ class JavadocHandler {
 	public function parse(doc:String):DocInfos
 	{
 		var tags = [];
-		var ereg = ~/@(\w+) (.+)/g;
+		var ereg = ~/@(\w+) ([^@]+)/gs;
 
 		doc = ereg.map(doc, function(e){
 			var name = e.matched(1);
@@ -32,6 +32,7 @@ class JavadocHandler {
 					}
 				default:
 			}
+			doc = trimDoc(doc);
 			tags.push({name:name, doc:markdown.markdownToHtml(doc), value:value});
 			return '';
 		});
@@ -47,6 +48,17 @@ class JavadocHandler {
 			default:
 		}
 		return infos;
+	}
+
+	function trimDoc(doc:String)
+	{
+		var ereg = ~/^\s+/m;
+		if (ereg.match(doc))
+		{
+			var space = new EReg('^' + ereg.matched(0), 'mg');
+			doc = space.replace(doc, '');
+		}
+		return doc;
 	}
 }
 

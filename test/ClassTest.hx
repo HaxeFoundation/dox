@@ -22,6 +22,12 @@ class ClassTest
 		Tests things.
 
 		@param foo Uh, the foo to test?
+			Also some newlines.
+
+			Even a paragraph.
+
+				trace("Even a freaking code sample")
+
 		@return The result of the `foo` test.
 	**/
 	public static function test(foo:String):String
