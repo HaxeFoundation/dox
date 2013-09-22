@@ -1,0 +1,16 @@
+::raw info.doc::
+
+<table class="table table-condensed" ::cond info.params.length > 0::>
+	<tbody>
+		::foreach param info.params::
+			<tr>
+				<td>::raw param.value::</td>
+				<td>::raw param.doc::</td>
+			</tr>
+			<tr ::cond info.returns != null::>
+				<td>returns</td>
+				<td>::raw info.returns.doc::</td>
+			</tr>
+		::end::
+	</tbody>
+</table>

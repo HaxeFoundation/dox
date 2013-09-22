@@ -14,26 +14,19 @@ class Generator {
 	var tplTypedef:templo.Template;
 	var tplAbstract:templo.Template;
 	
-	public function new(api:Api) {
+	public function new(api:Api, config:Config) {
 		this.api = api;
-		loadTemplate("macros.mtt");
-		loadTemplate("main.mtt");
-		loadTemplate("class_field.mtt");
-		loadTemplate("enum_field.mtt");
-		loadTemplate("related_types.mtt");
-		tplNav = loadTemplate("nav.mtt");
-		tplPackage = loadTemplate("package.mtt");
-		tplClass = loadTemplate("class.mtt");
-		tplEnum = loadTemplate("enum.mtt");
-		tplTypedef = loadTemplate("typedef.mtt");
-		tplAbstract = loadTemplate("abstract.mtt");
-	}
-	
-	function loadTemplate(name:String) {
-		for (tp in api.config.templatePaths) {
-			if (sys.FileSystem.exists(tp + "/" +name)) return templo.Template.fromFile(tp + "/" + name);
-		}
-		throw "Could not resolve template: " +name;
+		config.loadTemplate("macros.mtt");
+		config.loadTemplate("main.mtt");
+		config.loadTemplate("class_field.mtt");
+		config.loadTemplate("enum_field.mtt");
+		config.loadTemplate("related_types.mtt");
+		tplNav = config.loadTemplate("nav.mtt");
+		tplPackage = config.loadTemplate("package.mtt");
+		tplClass = config.loadTemplate("class.mtt");
+		tplEnum = config.loadTemplate("enum.mtt");
+		tplTypedef = config.loadTemplate("typedef.mtt");
+		tplAbstract = config.loadTemplate("abstract.mtt");
 	}
 	
 	public function generate(root:TypeRoot) {

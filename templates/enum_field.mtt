@@ -13,3 +13,6 @@
 		</a>
 	</code>
 </h3>
+<div class="doc" ::cond ctor.doc != null::>
+	::raw ctor.doc::
+</div>
