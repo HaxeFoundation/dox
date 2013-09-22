@@ -65,3 +65,22 @@
 		</code>
 	</p>
 </macro>
+
+<macro name="printFieldSignature(field, isStatic)">
+	::if isStatic::
+		<span class="keyword">static </span>
+	::end::
+	::switch field.type::
+		<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)
+	::case 4::
+		<span class="keyword">function</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>
+		$$printTypeParams(::field.params::)
+		(
+		::foreach arg args[0]::
+			::arg.name:::$$printLinkedType(::arg.t::)
+			::if !repeat.arg.last::, ::end::
+		::end::
+		)
+		:$$printLinkedType(::args[1]::)
+	::end::
+</macro>
