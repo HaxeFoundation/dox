@@ -62,4 +62,13 @@ class ClassTest
 	{
 
 	}
+	
+	/**
+		Tests @returns without @param
+		
+		@return A random String.
+	**/
+	public static function java_doc_return_without_param() {
+		
+	}
 }
