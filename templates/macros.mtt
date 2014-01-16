@@ -77,6 +77,7 @@
 		$$printTypeParams(::field.params::)
 		(
 		::foreach arg args[0]::
+			::if arg.opt::?::end::
 			::arg.name:::$$printLinkedType(::arg.t::)
 			::if !repeat.arg.last::, ::end::
 		::end::
