@@ -83,6 +83,10 @@ using Lambda;
 		return infos.typeMap.exists(path);
 	}
 	
+	public function resolveType(path:Path) {
+		return infos.typeMap.get(path);
+	}
+	
 	public function getTypePath(ctype:CType) {
 		return switch (ctype) {
 			case CClass(path,_): path;
