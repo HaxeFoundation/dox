@@ -5,6 +5,7 @@ minor changes in abstract rtti xml generation. You'll also need an up to date
 haxelib (requires support for `classPath` in haxelib.json)
 
 Install dependencies:
+
 	haxelib git hxparse https://github.com/Simn/hxparse development src
 	haxelib git hxtemplo https://github.com/Simn/hxtemplo master src
 	haxelib install hxargs
