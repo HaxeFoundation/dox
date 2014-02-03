@@ -28,8 +28,8 @@ class Config{
 	public function new() {
 		platforms = [];
 		resourcePaths = [];
-		pathFilters = new haxe.ds.GenericStack();
-		templatePaths = new haxe.ds.GenericStack();
+		pathFilters = new haxe.ds.GenericStack<Filter>();
+		templatePaths = new haxe.ds.GenericStack<String>();
 	}
 	
 	public function addFilter(pattern:String, isIncludeFilter:Bool) {
