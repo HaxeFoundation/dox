@@ -16,10 +16,10 @@ class Dox {
 
 		var cfg = new Config();
 
-		cfg.resourcePaths.push(owd + "resources");
+		cfg.resourcePaths.push(owd + "themes/default/resources");
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
-		cfg.addTemplatePath(owd + "templates");
+		cfg.addTemplatePath(owd + "themes/default/templates");
 		cfg.addTemplatePath("templates");
 		
 		var argHandler = hxargs.Args.generate([

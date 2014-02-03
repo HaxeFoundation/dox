@@ -2,6 +2,7 @@ package dox;
 
 @:keep
 class Config{
+	public var themeName:String = "default";
 	public var rootPath(default, set):String;
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
