@@ -46,10 +46,18 @@ class Dox {
 			
 			@doc("Set the theme name")
 			["-theme"] => function(name:String) {
-				var themeConfig = sys.io.File.getContent('${owd}themes/$name/config.json');
-				cfg.theme = haxe.Json.parse(themeConfig);
-				cfg.resourcePaths.push(owd + 'themes/$name/resources');
-				cfg.addTemplatePath(owd + 'themes/$name/templates');
+				function setTheme(name:String) {
+					var themeConfig = sys.io.File.getContent('${owd}themes/$name/config.json');
+					var theme:Theme = haxe.Json.parse(themeConfig);
+					if (theme.parentTheme != null) {
+						setTheme(theme.parentTheme);
+					}
+					cfg.resourcePaths.push(owd + 'themes/$name/resources');
+					cfg.addTemplatePath(owd + 'themes/$name/templates');
+					loadTemplates(cfg, owd + 'themes/$name/templates');
+					return theme;
+				}
+				cfg.theme = setTheme(name);
 				cfg.addTemplatePath("templates");
 			},
 			_ => function(arg:String) throw "Unknown command: " +arg
@@ -157,6 +165,18 @@ class Dox {
 			for( x in x.elements() )
 				transformPackage(x,p1,p2);
 		default:
+		}
+	}
+	
+	static function loadTemplates(cfg:Config, path:String) {
+		if (!sys.FileSystem.exists(path)) {
+			return;
+		}
+		for (file in sys.FileSystem.readDirectory(path)) {
+			var path = new haxe.io.Path(file);
+			if (path.ext == "mtt") {
+				cfg.loadTemplate(file);
+			}
 		}
 	}
 }
