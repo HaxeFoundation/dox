@@ -16,11 +16,8 @@ class Dox {
 
 		var cfg = new Config();
 
-		cfg.resourcePaths.push(owd + "themes/default/resources");
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
-		cfg.addTemplatePath(owd + "themes/default/templates");
-		cfg.addTemplatePath("templates");
 		
 		var argHandler = hxargs.Args.generate([
 			@doc("Set the document root path")
@@ -47,6 +44,14 @@ class Dox {
 			@doc("Set the page main title")
 			["--title"] => function(name:String) cfg.pageTitle = name,
 			
+			@doc("Set the theme name")
+			["-theme"] => function(name:String) {
+				var themeConfig = sys.io.File.getContent('${owd}themes/$name/config.json');
+				cfg.theme = haxe.Json.parse(themeConfig);
+				cfg.resourcePaths.push(owd + 'themes/$name/resources');
+				cfg.addTemplatePath(owd + 'themes/$name/templates');
+				cfg.addTemplatePath("templates");
+			},
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
 				
@@ -56,7 +61,29 @@ class Dox {
 			Sys.exit(0);
 		}
 		
-		argHandler.parse(args);
+		function sortArgs(args:Array<String>) {
+			var i = 0;
+			var args2 = [];
+			var hasThemeArgument = false;
+			while (i < args.length) {
+				if (args[i] == "-theme") {
+					hasThemeArgument = true;
+					args2.unshift(args[i + 1]);
+					args2.unshift(args[i]);
+					i += 2;
+				} else {
+					args2.push(args[i++]);
+				}
+			}
+			
+			if (!hasThemeArgument) {
+				args2.unshift("default");
+				args2.unshift("-theme");
+			}
+			return args2;
+		}
+		
+		argHandler.parse(sortArgs(args));
 			
 		if (cfg.rootPath == null && cfg.outputPath != null) {
 			cfg.rootPath = cfg.outputPath;
