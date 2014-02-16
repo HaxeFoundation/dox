@@ -2,6 +2,7 @@ package dox;
 
 @:keep
 class Config{
+	public var theme:Theme;
 	public var rootPath(default, set):String;
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
@@ -45,6 +46,21 @@ class Config{
 			if (sys.FileSystem.exists(tp + "/" +name)) return templo.Template.fromFile(tp + "/" + name);
 		}
 		throw "Could not resolve template: " +name;
+	}
+	
+	public function getHeaderIncludes() {
+		var buf = new StringBuf();
+		for (inc in theme.headerIncludes) {
+			var path = new haxe.io.Path(inc);
+			var s = switch(path.ext) {
+				case 'css': '<link href="$rootPath/${path.file}.css" rel="stylesheet" />';
+				case 'js': '<script type="text/javascript" src="$rootPath/${path.file}.js"></script>';
+				case 'ico': '<link rel="icon" href="$rootPath/${path.file}.ico" type="image/x-icon"></link>';
+				case s: throw 'Unknown header include extension: $s';
+			}
+			buf.add(s);
+		}
+		return buf.toString();
 	}
 }
 
