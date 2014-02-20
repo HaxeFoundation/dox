@@ -71,7 +71,7 @@ class Dox {
 			Sys.exit(1);
 		}
 		
-		if (!sys.FileSystem.exists(cfg.xmlPath) || !sys.FileSystem.isDirectory(cfg.xmlPath)) {
+		if (!sys.FileSystem.exists(cfg.xmlPath)) {
 			Sys.println('Could not read input path ${cfg.xmlPath}');
 			Sys.exit(1);
 		}
@@ -79,18 +79,26 @@ class Dox {
 		
 		var tStart = haxe.Timer.stamp();
 		
-		for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
-			if (!StringTools.endsWith(file, ".xml")) continue;
-			var name = new haxe.io.Path(file).file;
-			Sys.println('Parsing $file');
-			var data = sys.io.File.getContent(cfg.xmlPath + "/" +file);
+		function parseFile(path) {
+			var name = new haxe.io.Path(path).file;
+			Sys.println('Parsing $path');
+			var data = sys.io.File.getContent(path);
 			var xml = try Xml.parse(data).firstElement() catch(err:Dynamic) {
-				trace('Error while parsing $file');
+				trace('Error while parsing $path');
 				throw err;
 			};
 			if (name == "flash8") transformPackage(xml, "flash", "flash8");
 			parser.process(xml, name);
 			cfg.platforms.push(name);
+		}
+		
+		if (sys.FileSystem.isDirectory(cfg.xmlPath)) {
+			for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
+				if (!StringTools.endsWith(file, ".xml")) continue;
+				parseFile(cfg.xmlPath + "/" +file);
+			}
+		} else {
+			parseFile(cfg.xmlPath);
 		}
 		
 		Sys.println("Processing types");
