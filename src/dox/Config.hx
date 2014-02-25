@@ -2,7 +2,6 @@ package dox;
 
 @:keep
 class Config{
-	public var rootPath(default, default):String;
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
 	public var pathFilters(default, null):haxe.ds.GenericStack<Filter>;
@@ -14,7 +13,9 @@ class Config{
 	public var relativePaths:Bool;
 	
 	public var pageTitle:String;
-	
+
+	public var rootPath:String;
+
 	function set_outputPath(v) {
 		return outputPath = haxe.io.Path.removeTrailingSlashes(v);
 	}
@@ -46,12 +47,10 @@ class Config{
 	}
 	
 	public function setRootPath(path:String) {
-		if (relativePaths) {
-			var depth = path.split(".").length - 1;
-			rootPath = "";
-			for (i in 0...depth) {
-				rootPath += "../";
-			}
+		var depth = path.split(".").length - 1;
+		rootPath = "";
+		for (i in 0...depth) {
+			rootPath += "../";
 		}
 	}
 }

@@ -35,9 +35,7 @@ class Generator {
 	}
 	
 	public function generateNavigation(root:TypeRoot) {
-		if (api.config.relativePaths) {
-			api.config.rootPath = "::rootPath::";
-		}
+		api.config.rootPath = "::rootPath::";
 		var s = tplNav.execute({
 			api: api,
 			root: root
