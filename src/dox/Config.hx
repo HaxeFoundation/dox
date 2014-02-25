@@ -48,7 +48,10 @@ class Config{
 	public function setRootPath(path:String) {
 		if (relativePaths) {
 			var depth = path.split(".").length - 1;
-			rootPath = StringTools.repeat("../", depth);
+			rootPath = "";
+			for (i in 0...depth) {
+				rootPath += "../";
+			}
 		}
 	}
 }
