@@ -23,8 +23,7 @@ class Dox {
 		cfg.addTemplatePath("templates");
 		
 		var argHandler = hxargs.Args.generate([
-			@doc("Set the document root path")
-			["-r", "--document-root"] => function(path:String) cfg.rootPath = path,
+			["-r", "--document-root"] => function(path:String) throw 'The -r command is obsolete and can be omitted',
 			
 			@doc("Set the output path for generated pages")
 			["-o", "--output-path"] => function(path:String) cfg.outputPath = path,
@@ -57,10 +56,6 @@ class Dox {
 		}
 		
 		argHandler.parse(args);
-			
-		if (cfg.rootPath == null && cfg.outputPath != null) {
-			cfg.rootPath = cfg.outputPath;
-		}
 		
 		try {
 			if (!sys.FileSystem.exists(cfg.outputPath))

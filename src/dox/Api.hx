@@ -52,7 +52,7 @@ using Lambda;
 	
 	public function getTreeUrl(tree:TypeTree) {
 		return switch(tree) {
-			case TPackage(_, full, _): config.rootPath + "/" + full.split(".").join("/") + "/index.html";
+			case TPackage(_, full, _): config.rootPath + full.split(".").join("/") + "/index.html";
 			case TClassdecl(t): pathToUrl(t.path);
 			case TEnumdecl(t): pathToUrl(t.path);
 			case TTypedecl(t): pathToUrl(t.path);
@@ -76,7 +76,7 @@ using Lambda;
 	}
 	
 	public function pathToUrl(path:Path) {
-		return config.rootPath + "/" + path.split(".").join("/") + ".html";
+		return config.rootPath + path.split(".").join("/") + ".html";
 	}
 	
 	public function isKnownType(path:Path) {

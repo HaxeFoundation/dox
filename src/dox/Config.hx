@@ -2,7 +2,6 @@ package dox;
 
 @:keep
 class Config{
-	public var rootPath(default, set):String;
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
 	public var pathFilters(default, null):haxe.ds.GenericStack<Filter>;
@@ -11,12 +10,12 @@ class Config{
 	public var resourcePaths:Array<String>;
 	public var templatePaths(default, null):haxe.ds.GenericStack<String>;
 	
+	public var relativePaths:Bool;
+	
 	public var pageTitle:String;
-	
-	function set_rootPath(v) {
-		return rootPath = haxe.io.Path.removeTrailingSlashes(StringTools.replace(v, "\\", "/"));
-	}
-	
+
+	public var rootPath:String;
+
 	function set_outputPath(v) {
 		return outputPath = haxe.io.Path.removeTrailingSlashes(v);
 	}
@@ -45,6 +44,14 @@ class Config{
 			if (sys.FileSystem.exists(tp + "/" +name)) return templo.Template.fromFile(tp + "/" + name);
 		}
 		throw "Could not resolve template: " +name;
+	}
+	
+	public function setRootPath(path:String) {
+		var depth = path.split(".").length - 1;
+		rootPath = "";
+		for (i in 0...depth) {
+			rootPath += "../";
+		}
 	}
 }
 
