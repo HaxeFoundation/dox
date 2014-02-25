@@ -51,7 +51,7 @@ class Generator {
 				if (name.charAt(0) == "_") return;
 				api.currentPageName = "package " + name;
 				api.currentFullName = "package " + full;
-				api.config.setRootPath(full + ".pack");
+				api.config.setRootPath(full == '' ? full : full + ".pack");
 				var s = tplPackage.execute({
 					api: api,
 					name: name,
