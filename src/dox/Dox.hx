@@ -58,8 +58,8 @@ class Dox {
 		
 		argHandler.parse(args);
 			
-		if (cfg.rootPath == null && cfg.outputPath != null) {
-			cfg.rootPath = cfg.outputPath;
+		if (cfg.rootPath == null) {
+			cfg.relativePaths = true;
 		}
 		
 		try {

@@ -6,7 +6,7 @@
 		<tr>
 			<td width="12" style="vertical-align:top;">
 				<a href="#" onclick="toggleInherited(this)">
-					<img style="padding-top:4px;" src="::api.config.rootPath::/triangle-closed.png"></img>
+					<img style="padding-top:4px;" src="::api.config.rootPath::triangle-closed.png"></img>
 				</a>
 			</td>
 			<td class="toggle-hide">

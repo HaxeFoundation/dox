@@ -22,9 +22,9 @@ function toggleInherited(el) {
 	var toggle = $(el).closest(".toggle");
 	toggle.toggleClass("toggle-on");
 	if (toggle.hasClass("toggle-on")) {
-		$("img", toggle).attr("src", dox.rootPath + "/triangle-opened.png");
+		$("img", toggle).attr("src", dox.rootPath + "triangle-opened.png");
 	} else {
-		$("img", toggle).attr("src", dox.rootPath + "/triangle-closed.png");
+		$("img", toggle).attr("src", dox.rootPath + "triangle-closed.png");
 	}
 }
 
@@ -34,9 +34,9 @@ function toggleCollapsed(el) {
 	toggle.toggleClass("expanded");
 
 	if (toggle.hasClass("expanded")) {
-		$("img", toggle).first().attr("src", dox.rootPath + "/triangle-opened.png");
+		$("img", toggle).first().attr("src", dox.rootPath + "triangle-opened.png");
 	} else {
-		$("img", toggle).first().attr("src", dox.rootPath + "/triangle-closed.png");
+		$("img", toggle).first().attr("src", dox.rootPath + "triangle-closed.png");
 	}
 	updateTreeState();
 }
@@ -112,13 +112,22 @@ function selectItem(filter, value)
 $(document).ready(function(){
 	$("#nav").html(navContent);
 	var treeState = readCookie("treeState");
+	
+	$("#nav .expando").each(function(i, e){
+		$("img", e).first().attr("src", dox.rootPath + "triangle-closed.png");
+	});
+	
+	$(".treeLink").each(function() {
+		this.href = this.href.replace("::rootPath::", dox.rootPath);
+	});
+		
 	if (treeState != null)
 	{
 		var states = JSON.parse(treeState);
 		$("#nav .expando").each(function(i, e){
 			if (states[i]) {
 				$(e).addClass("expanded");
-				$("img", e).first().attr("src", dox.rootPath + "/triangle-opened.png");
+				$("img", e).first().attr("src", dox.rootPath + "triangle-opened.png");
 			}
 		});
 	}
