@@ -14,15 +14,15 @@ class Config{
 	public var pageTitle:String;
 	
 	function set_rootPath(v) {
-		return rootPath = haxe.io.Path.removeTrailingSlash(StringTools.replace(v, "\\", "/"));
+		return rootPath = haxe.io.Path.removeTrailingSlashes(StringTools.replace(v, "\\", "/"));
 	}
 	
 	function set_outputPath(v) {
-		return outputPath = haxe.io.Path.removeTrailingSlash(v);
+		return outputPath = haxe.io.Path.removeTrailingSlashes(v);
 	}
 	
 	function set_xmlPath(v) {
-		return xmlPath = haxe.io.Path.removeTrailingSlash(v);
+		return xmlPath = haxe.io.Path.removeTrailingSlashes(v);
 	}
 	
 	public function new() {
@@ -37,7 +37,7 @@ class Config{
 	}
 	
 	public function addTemplatePath(path:String) {
-		templatePaths.add(haxe.io.Path.removeTrailingSlash(path));
+		templatePaths.add(haxe.io.Path.removeTrailingSlashes(path));
 	}
 
 	public function loadTemplate(name:String) {
