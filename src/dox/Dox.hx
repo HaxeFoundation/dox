@@ -6,10 +6,9 @@ class Dox {
 		var owd = Sys.getCwd();
 		var args = Sys.args();
 		var last = new haxe.io.Path(args[args.length-1]).toString();
-		var slash = last.substr(-1);
-		if (slash == "/"|| slash == "\\")
-			last = last.substr(0,last.length-1);
-		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)) {
+		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)
+		    && (args.length < 2 || args[args.length - 2].charCodeAt(0) != "-".code))
+		{
 			args.pop();
 			Sys.setCwd(last);
 		}
