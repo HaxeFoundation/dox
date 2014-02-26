@@ -14,10 +14,10 @@ class MarkdownHandler {
 		infos = inf;
 	}
 	
-	public function markdownToHtml(markdown:String) {
+	public function markdownToHtml(path:String, markdown:String) {
 		// create document
 		var document = new Document();
-		document.inlineSyntaxes.push(new MagicCodeSyntax(processCode));
+		document.inlineSyntaxes.push(new MagicCodeSyntax(processCode.bind(path)));
 
 		// replace windows line endings with unix, and split
 		var lines = ~/\n\r/g.replace(markdown, '\n').split("\n");
@@ -30,7 +30,7 @@ class MarkdownHandler {
 		return Markdown.renderHtml(blocks);
 	}
 
-	function processCode(source:String) {
+	function processCode(path:String, source:String) {
 		source = StringTools.htmlEscape(source);
 
 		// this.field => #field
@@ -43,10 +43,16 @@ class MarkdownHandler {
 		source = ~/\b((\w+\.)*[A-Z]\w+)(\.\w+)*\b/g.map(source, function(e){
 			var text = e.matched(0);
 			var type =  e.matched(1);
-			if (!infos.typeMap.exists(type)) return text;
-			var field = e.matched(3);
-			var href = resolveTypeLink(type, field);
-			return '<a href="$href">$text</a>';
+
+			type = infos.resolveType(path, type);
+			if (type != null)
+			{
+				var field = e.matched(3);
+				var href = resolveTypeLink(type, field);
+				return '<a href="$href">$text</a>';
+			}
+
+			return text;
 		});
 
 		// Type, null => /Null.html
@@ -54,6 +60,8 @@ class MarkdownHandler {
 			var href = resolveTypeLink("Null");
 			return '<a href="$href">null</a>';
 		});
+
+
 		
 		return source;
 	}
