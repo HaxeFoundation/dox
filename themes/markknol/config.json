@@ -1,0 +1,6 @@
+{
+	"name": "Some other theme",
+	"author": "markknol",
+	"parentTheme": "default",
+	"headerIncludes": ["styles.css", "favicon.ico", "nav.js", "index.js"]
+}
