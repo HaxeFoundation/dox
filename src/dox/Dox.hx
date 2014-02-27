@@ -6,10 +6,9 @@ class Dox {
 		var owd = Sys.getCwd();
 		var args = Sys.args();
 		var last = new haxe.io.Path(args[args.length-1]).toString();
-		var slash = last.substr(-1);
-		if (slash == "/"|| slash == "\\")
-			last = last.substr(0,last.length-1);
-		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)) {
+		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)
+		    && (args.length < 2 || args[args.length - 2].charCodeAt(0) != "-".code))
+		{
 			args.pop();
 			Sys.setCwd(last);
 		}
@@ -20,8 +19,7 @@ class Dox {
 		cfg.xmlPath = "xml";
 		
 		var argHandler = hxargs.Args.generate([
-			@doc("Set the document root path")
-			["-r", "--document-root"] => function(path:String) cfg.rootPath = path,
+			["-r", "--document-root"] => function(path:String) throw 'The -r command is obsolete and can be omitted',
 			
 			@doc("Set the output path for generated pages")
 			["-o", "--output-path"] => function(path:String) cfg.outputPath = path,
@@ -106,7 +104,7 @@ class Dox {
 			Sys.exit(1);
 		}
 		
-		if (!sys.FileSystem.exists(cfg.xmlPath) || !sys.FileSystem.isDirectory(cfg.xmlPath)) {
+		if (!sys.FileSystem.exists(cfg.xmlPath)) {
 			Sys.println('Could not read input path ${cfg.xmlPath}');
 			Sys.exit(1);
 		}
@@ -114,18 +112,26 @@ class Dox {
 		
 		var tStart = haxe.Timer.stamp();
 		
-		for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
-			if (!StringTools.endsWith(file, ".xml")) continue;
-			var name = new haxe.io.Path(file).file;
-			Sys.println('Parsing $file');
-			var data = sys.io.File.getContent(cfg.xmlPath + "/" +file);
+		function parseFile(path) {
+			var name = new haxe.io.Path(path).file;
+			Sys.println('Parsing $path');
+			var data = sys.io.File.getContent(path);
 			var xml = try Xml.parse(data).firstElement() catch(err:Dynamic) {
-				trace('Error while parsing $file');
+				trace('Error while parsing $path');
 				throw err;
 			};
 			if (name == "flash8") transformPackage(xml, "flash", "flash8");
 			parser.process(xml, name);
 			cfg.platforms.push(name);
+		}
+		
+		if (sys.FileSystem.isDirectory(cfg.xmlPath)) {
+			for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
+				if (!StringTools.endsWith(file, ".xml")) continue;
+				parseFile(cfg.xmlPath + "/" +file);
+			}
+		} else {
+			parseFile(cfg.xmlPath);
 		}
 		
 		Sys.println("Processing types");

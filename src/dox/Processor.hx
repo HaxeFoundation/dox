@@ -163,16 +163,20 @@ class Processor {
 		switch (tree)
 		{
 			case TPackage(_, full, subs):
+				config.setRootPath(full + ".pack");
 				subs.iter(processTree);
 
 			case TEnumdecl(t):
+				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
 				t.constructors.iter(processEnumField.bind(t.path));
 
 			case TTypedecl(t):
+				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
 
 			case TClassdecl(t):
+				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
 				t.fields.iter(processClassField.bind(t.path));
 				t.statics.iter(processClassField.bind(t.path));
@@ -185,6 +189,7 @@ class Processor {
 					else infos.implementors.get(i.path).push(t);
 				}
 			case TAbstractdecl(t):
+				config.setRootPath(t.path);
 				if (t.impl != null)
 				{
 					t.impl.fields.iter(processClassField.bind(t.path));

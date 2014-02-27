@@ -2,6 +2,7 @@ package dox;
 
 import haxe.rtti.CType;
 using Lambda;
+using StringTools;
 
 class Generator {
 
@@ -16,7 +17,7 @@ class Generator {
 	
 	public function new(api:Api, config:Config) {
 		this.api = api;
-		tplNav = config.loadTemplate("nav.mtt");
+		tplNav = config.loadTemplate("nav.mtt")	;
 		tplPackage = config.loadTemplate("package.mtt");
 		tplClass = config.loadTemplate("class.mtt");
 		tplEnum = config.loadTemplate("enum.mtt");
@@ -29,6 +30,7 @@ class Generator {
 	}
 	
 	public function generateNavigation(root:TypeRoot) {
+		api.config.rootPath = "::rootPath::";
 		var s = tplNav.execute({
 			api: api,
 			root: root
@@ -42,6 +44,7 @@ class Generator {
 				if (name.charAt(0) == "_") return;
 				api.currentPageName = "package " + name;
 				api.currentFullName = "package " + full;
+				api.config.setRootPath(full == '' ? full : full + ".pack");
 				var s = tplPackage.execute({
 					api: api,
 					name: name,
@@ -54,6 +57,7 @@ class Generator {
 			case TClassdecl(c):
 				api.currentPageName = api.getPathName(c.path);
 				api.currentFullName = c.path;
+				api.config.setRootPath(c.path);
 				var s = tplClass.execute({
 					api: api,
 					"type": c,
@@ -65,6 +69,7 @@ class Generator {
 			case TEnumdecl(e):
 				api.currentPageName = api.getPathName(e.path);
 				api.currentFullName = e.path;
+				api.config.setRootPath(e.path);
 				var s = tplEnum.execute({
 					api: api,
 					"type": e,
@@ -74,6 +79,7 @@ class Generator {
 			case TTypedecl(t):
 				api.currentPageName = api.getPathName(t.path);
 				api.currentFullName = t.path;
+				api.config.setRootPath(t.path);
 				var s = tplTypedef.execute({
 					api: api,
 					"type": t,
@@ -83,6 +89,7 @@ class Generator {
 			case TAbstractdecl(a):
 				api.currentPageName = api.getPathName(a.path);
 				api.currentFullName = a.path;
+				api.config.setRootPath(a.path);
 				var s = tplAbstract.execute({
 					api: api,
 					"type": a,

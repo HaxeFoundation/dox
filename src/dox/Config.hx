@@ -1,9 +1,10 @@
 package dox;
 
 @:keep
-class Config{
+class Config {
 	public var theme:Theme;
-	public var rootPath(default, set):String;
+	public var rootPath:String;
+
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
 	public var pathFilters(default, null):haxe.ds.GenericStack<Filter>;
@@ -12,18 +13,16 @@ class Config{
 	public var resourcePaths:Array<String>;
 	public var templatePaths(default, null):haxe.ds.GenericStack<String>;
 	
+	public var relativePaths:Bool;
+	
 	public var pageTitle:String;
-	
-	function set_rootPath(v) {
-		return rootPath = haxe.io.Path.removeTrailingSlash(StringTools.replace(v, "\\", "/"));
-	}
-	
+
 	function set_outputPath(v) {
-		return outputPath = haxe.io.Path.removeTrailingSlash(v);
+		return outputPath = haxe.io.Path.removeTrailingSlashes(v);
 	}
 	
 	function set_xmlPath(v) {
-		return xmlPath = haxe.io.Path.removeTrailingSlash(v);
+		return xmlPath = haxe.io.Path.removeTrailingSlashes(v);
 	}
 	
 	public function new() {
@@ -38,7 +37,7 @@ class Config{
 	}
 	
 	public function addTemplatePath(path:String) {
-		templatePaths.add(haxe.io.Path.removeTrailingSlash(path));
+		templatePaths.add(haxe.io.Path.removeTrailingSlashes(path));
 	}
 
 	public function loadTemplate(name:String) {
@@ -47,15 +46,24 @@ class Config{
 		}
 		throw "Could not resolve template: " +name;
 	}
-	
+
+	public function setRootPath(path:String) {
+		var depth = path.split(".").length - 1;
+		rootPath = "";
+		for (i in 0...depth) {
+			rootPath += "../";
+		}
+		if (rootPath == "") rootPath = "./";
+	}
+
 	public function getHeaderIncludes() {
 		var buf = new StringBuf();
 		for (inc in theme.headerIncludes) {
 			var path = new haxe.io.Path(inc);
 			var s = switch(path.ext) {
-				case 'css': '<link href="$rootPath/${path.file}.css" rel="stylesheet" />';
-				case 'js': '<script type="text/javascript" src="$rootPath/${path.file}.js"></script>';
-				case 'ico': '<link rel="icon" href="$rootPath/${path.file}.ico" type="image/x-icon"></link>';
+				case 'css': '<link href="$rootPath${path.file}.css" rel="stylesheet" />';
+				case 'js': '<script type="text/javascript" src="$rootPath${path.file}.js"></script>';
+				case 'ico': '<link rel="icon" href="$rootPath${path.file}.ico" type="image/x-icon"></link>';
 				case s: throw 'Unknown header include extension: $s';
 			}
 			buf.add(s);
