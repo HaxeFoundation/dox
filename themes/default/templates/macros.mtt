@@ -42,8 +42,12 @@
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::
-		::foreach arg args[0]::
-			$$printLinkedType(::arg.t::) -&gt;
+		::if args[0].length == 0::
+			$$printLinkedPath(::"Void"::,::[]::) -&gt;
+		::else::
+			::foreach arg args[0]::
+				$$printLinkedType(::arg.t::) -&gt;
+			::end::
 		::end::
 		$$printLinkedType(::args[1]::)
 	::case::
