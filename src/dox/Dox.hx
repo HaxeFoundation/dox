@@ -28,7 +28,7 @@ class Dox {
 			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
 			
 			@doc("Add template directory")
-			["-t", "--template-path"] => function(path:String) cfg.addTemplatePath(path),
+			["-t", "--template-path"] => function(path:String) loadTemplates(cfg, path),
 			
 			@doc("Add a resource directory whose contents are copied to the output directory")
 			["-res", "--resource-path"] => function(dir:String) cfg.resourcePaths.push(dir),
@@ -51,7 +51,6 @@ class Dox {
 						setTheme(theme.parentTheme);
 					}
 					cfg.resourcePaths.push(owd + 'themes/$name/resources');
-					cfg.addTemplatePath(owd + 'themes/$name/templates');
 					loadTemplates(cfg, owd + 'themes/$name/templates');
 					return theme;
 				}
@@ -175,6 +174,7 @@ class Dox {
 	}
 	
 	static function loadTemplates(cfg:Config, path:String) {
+		cfg.addTemplatePath(path);
 		if (!sys.FileSystem.exists(path)) {
 			return;
 		}
