@@ -2,6 +2,7 @@ package dox;
 
 import haxe.rtti.CType;
 using Lambda;
+using StringTools;
 
 @:keep class Api {
 	public var config:Config;
@@ -73,6 +74,16 @@ using Lambda;
 	
 	public function getShortDesc(infos:TypeInfos) {
 		return infos == null ? "" : infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
+	}
+
+	/** Gets the first sentence of a doc. */
+	public function getSentenceDesc(infos:TypeInfos) {
+		if (infos == null) {
+			return "";
+		}
+		var stripped = ~/<.+?>/.replace(infos.doc, "").replace("\n", " ");
+		var sentence = ~/^(.*?[.?!]+)/;
+		return sentence.match(stripped) ? sentence.matched(1) : "";
 	}
 	
 	public function pathToUrl(path:Path) {
