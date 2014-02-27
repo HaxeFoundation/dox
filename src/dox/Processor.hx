@@ -168,18 +168,18 @@ class Processor {
 
 			case TEnumdecl(t):
 				config.setRootPath(t.path);
-				t.doc = processDoc(t.doc);
-				t.constructors.iter(processEnumField);
+				t.doc = processDoc(t.path, t.doc);
+				t.constructors.iter(processEnumField.bind(t.path));
 
 			case TTypedecl(t):
 				config.setRootPath(t.path);
-				t.doc = processDoc(t.doc);
+				t.doc = processDoc(t.path, t.doc);
 
 			case TClassdecl(t):
 				config.setRootPath(t.path);
-				t.doc = processDoc(t.doc);
-				t.fields.iter(processClassField);
-				t.statics.iter(processClassField);
+				t.doc = processDoc(t.path, t.doc);
+				t.fields.iter(processClassField.bind(t.path));
+				t.statics.iter(processClassField.bind(t.path));
 				if (t.superClass != null) {
 					if (!infos.subClasses.exists(t.superClass.path)) infos.subClasses.set(t.superClass.path, [t]);
 					else infos.subClasses.get(t.superClass.path).push(t);
@@ -192,21 +192,21 @@ class Processor {
 				config.setRootPath(t.path);
 				if (t.impl != null)
 				{
-					t.impl.fields.iter(processClassField);
-					t.impl.statics.iter(processClassField);
+					t.impl.fields.iter(processClassField.bind(t.path));
+					t.impl.statics.iter(processClassField.bind(t.path));
 				}
-				t.doc = processDoc(t.doc);
+				t.doc = processDoc(t.path, t.doc);
 		}
 	}
 
-	function processClassField(field:ClassField)
+	function processClassField(path:String, field:ClassField)
 	{
-		field.doc = processDoc(field.doc);
+		field.doc = processDoc(path, field.doc);
 	}
 
-	function processEnumField(field:EnumField)
+	function processEnumField(path:String, field:EnumField)
 	{
-		field.doc = processDoc(field.doc);
+		field.doc = processDoc(path, field.doc);
 	}
 	
 	function trimDoc(doc:String)
@@ -240,7 +240,7 @@ class Processor {
 			// make trailing space optional
 			if (string.charAt(string.length - 1) == ' ')
 				string = string.substr(0, string.length - 1) + ' ?';
-			if (doc.indexOf("Previous line") > -1) trace(">"+string+"<");
+			
 			var indent = new EReg("^" + string, "gm");
 			doc = indent.replace(doc, "");
 		}
@@ -249,11 +249,11 @@ class Processor {
 		return StringTools.trim(doc);
 	}
 
-	function processDoc(doc:String)
+	function processDoc(path:String, doc:String)
 	{
 		doc = trimDoc(doc);
 		if (doc == '') return '<p></p>';
-		var info = javadocHandler.parse(doc);
+		var info = javadocHandler.parse(path, doc);
 		return tplDoc.execute({ info:info });
 	}
 	

@@ -12,10 +12,11 @@ class JavadocHandler {
 		markdown = mdown;
 	}
 
-	public function parse(doc:String):DocInfos
+	public function parse(path:String, doc:String):DocInfos
 	{
 		var tags = [];
-		var ereg = ~/@(\w+) ([^@]+)/gs;
+		// TODO: need to parse this better as haxe source might have this sort of meta
+		var ereg = ~/@(param|exception|throws|deprecated|return|returns|since) ([^@]+)/gs;
 
 		doc = ereg.map(doc, function(e){
 			var name = e.matched(1);
@@ -33,11 +34,11 @@ class JavadocHandler {
 				default:
 			}
 			doc = trimDoc(doc);
-			tags.push({name:name, doc:markdown.markdownToHtml(doc), value:value});
+			tags.push({name:name, doc:markdown.markdownToHtml(path, doc), value:value});
 			return '';
 		});
 
-		var infos:DocInfos = {doc:markdown.markdownToHtml(doc), throws:[], params:[], tags:tags};
+		var infos:DocInfos = {doc:markdown.markdownToHtml(path, doc), throws:[], params:[], tags:tags};
 		for (tag in tags) switch (tag.name)
 		{
 			case 'param': infos.params.push(tag);
