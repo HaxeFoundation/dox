@@ -17,12 +17,7 @@ class Generator {
 	
 	public function new(api:Api, config:Config) {
 		this.api = api;
-		config.loadTemplate("macros.mtt");
-		config.loadTemplate("main.mtt");
-		config.loadTemplate("class_field.mtt");
-		config.loadTemplate("enum_field.mtt");
-		config.loadTemplate("related_types.mtt");
-		tplNav = config.loadTemplate("nav.mtt");
+		tplNav = config.loadTemplate("nav.mtt")	;
 		tplPackage = config.loadTemplate("package.mtt");
 		tplClass = config.loadTemplate("class.mtt");
 		tplEnum = config.loadTemplate("enum.mtt");

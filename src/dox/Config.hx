@@ -1,7 +1,10 @@
 package dox;
 
 @:keep
-class Config{
+class Config {
+	public var theme:Theme;
+	public var rootPath:String;
+
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
 	public var pathFilters(default, null):haxe.ds.GenericStack<Filter>;
@@ -13,8 +16,6 @@ class Config{
 	public var relativePaths:Bool;
 	
 	public var pageTitle:String;
-
-	public var rootPath:String;
 
 	function set_outputPath(v) {
 		return outputPath = haxe.io.Path.removeTrailingSlashes(v);
@@ -45,13 +46,29 @@ class Config{
 		}
 		throw "Could not resolve template: " +name;
 	}
-	
+
 	public function setRootPath(path:String) {
 		var depth = path.split(".").length - 1;
 		rootPath = "";
 		for (i in 0...depth) {
 			rootPath += "../";
 		}
+		if (rootPath == "") rootPath = "./";
+	}
+
+	public function getHeaderIncludes() {
+		var buf = new StringBuf();
+		for (inc in theme.headerIncludes) {
+			var path = new haxe.io.Path(inc);
+			var s = switch(path.ext) {
+				case 'css': '<link href="$rootPath${path.file}.css" rel="stylesheet" />';
+				case 'js': '<script type="text/javascript" src="$rootPath${path.file}.js"></script>';
+				case 'ico': '<link rel="icon" href="$rootPath${path.file}.ico" type="image/x-icon"></link>';
+				case s: throw 'Unknown header include extension: $s';
+			}
+			buf.add(s);
+		}
+		return buf.toString();
 	}
 }
 

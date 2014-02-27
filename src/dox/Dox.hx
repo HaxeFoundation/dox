@@ -6,21 +6,17 @@ class Dox {
 		var owd = Sys.getCwd();
 		var args = Sys.args();
 		var last = new haxe.io.Path(args[args.length-1]).toString();
-		var slash = last.substr(-1);
-		if (slash == "/"|| slash == "\\")
-			last = last.substr(0,last.length-1);
-		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)) {
+		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)
+		    && (args.length < 2 || args[args.length - 2].charCodeAt(0) != "-".code))
+		{
 			args.pop();
 			Sys.setCwd(last);
 		}
 
 		var cfg = new Config();
 
-		cfg.resourcePaths.push(owd + "resources");
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
-		cfg.addTemplatePath(owd + "templates");
-		cfg.addTemplatePath("templates");
 		
 		var argHandler = hxargs.Args.generate([
 			["-r", "--document-root"] => function(path:String) throw 'The -r command is obsolete and can be omitted',
@@ -46,6 +42,22 @@ class Dox {
 			@doc("Set the page main title")
 			["--title"] => function(name:String) cfg.pageTitle = name,
 			
+			@doc("Set the theme name")
+			["-theme"] => function(name:String) {
+				function setTheme(name:String) {
+					var themeConfig = sys.io.File.getContent('${owd}themes/$name/config.json');
+					var theme:Theme = haxe.Json.parse(themeConfig);
+					if (theme.parentTheme != null) {
+						setTheme(theme.parentTheme);
+					}
+					cfg.resourcePaths.push(owd + 'themes/$name/resources');
+					cfg.addTemplatePath(owd + 'themes/$name/templates');
+					loadTemplates(cfg, owd + 'themes/$name/templates');
+					return theme;
+				}
+				cfg.theme = setTheme(name);
+				cfg.addTemplatePath("templates");
+			},
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
 				
@@ -55,7 +67,33 @@ class Dox {
 			Sys.exit(0);
 		}
 		
-		argHandler.parse(args);
+		function sortArgs(args:Array<String>) {
+			var i = 0;
+			var args2 = [];
+			var hasThemeArgument = false;
+			while (i < args.length) {
+				if (args[i] == "-theme") {
+					hasThemeArgument = true;
+					args2.unshift(args[i + 1]);
+					args2.unshift(args[i]);
+					i += 2;
+				} else {
+					args2.push(args[i++]);
+				}
+			}
+			
+			if (!hasThemeArgument) {
+				args2.unshift("default");
+				args2.unshift("-theme");
+			}
+			return args2;
+		}
+		
+		argHandler.parse(sortArgs(args));
+			
+		if (cfg.rootPath == null && cfg.outputPath != null) {
+			cfg.rootPath = cfg.outputPath;
+		}
 		
 		try {
 			if (!sys.FileSystem.exists(cfg.outputPath))
@@ -133,6 +171,18 @@ class Dox {
 			for( x in x.elements() )
 				transformPackage(x,p1,p2);
 		default:
+		}
+	}
+	
+	static function loadTemplates(cfg:Config, path:String) {
+		if (!sys.FileSystem.exists(path)) {
+			return;
+		}
+		for (file in sys.FileSystem.readDirectory(path)) {
+			var path = new haxe.io.Path(file);
+			if (path.ext == "mtt") {
+				cfg.loadTemplate(file);
+			}
 		}
 	}
 }
