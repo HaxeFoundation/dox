@@ -79,6 +79,7 @@
 		::foreach arg args[0]::
 			::if arg.opt::?::end::
 			::arg.name:::$$printLinkedType(::arg.t::)
+			::if arg.value != null:: = ::arg.value::::end::
 			::if !repeat.arg.last::, ::end::
 		::end::
 		)
