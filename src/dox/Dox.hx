@@ -89,19 +89,8 @@ class Dox {
 		}
 		
 		argHandler.parse(sortArgs(args));
-			
-		if (cfg.rootPath == null && cfg.outputPath != null) {
-			cfg.rootPath = cfg.outputPath;
-		}
 		
-		try {
-			if (!sys.FileSystem.exists(cfg.outputPath))
-				sys.FileSystem.createDirectory(cfg.outputPath);
-		} catch (e:Dynamic) {
-			Sys.println('Could not create output directory ${cfg.outputPath}');
-			Sys.println(Std.string(e));
-			Sys.exit(1);
-		}
+		var writer = new Writer(cfg);
 		
 		if (!sys.FileSystem.exists(cfg.xmlPath)) {
 			Sys.println('Could not read input path ${cfg.xmlPath}');
@@ -138,7 +127,7 @@ class Dox {
 		var root = proc.process(parser.root);
 		
 		var api = new Api(cfg, proc.infos);
-		var gen = new Generator(api, cfg);
+		var gen = new Generator(api, writer);
 		
 		Sys.println("");
 		Sys.println("Generating navigation");
@@ -152,10 +141,10 @@ class Dox {
 		
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');
-			for (file in sys.FileSystem.readDirectory(dir)) {
-				sys.io.File.copy('$dir/$file', cfg.outputPath + "/" + file);
-			}
+			writer.copyFrom(dir);
 		}
+		
+		writer.finalize();
 		
 		var elapsed = Std.string(haxe.Timer.stamp() - tStart).substr(0, 5);
 		Sys.println('Done (${elapsed}s)');
