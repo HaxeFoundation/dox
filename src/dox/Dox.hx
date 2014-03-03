@@ -152,9 +152,7 @@ class Dox {
 		
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');
-			for (file in sys.FileSystem.readDirectory(dir)) {
-				sys.io.File.copy('$dir/$file', cfg.outputPath + "/" + file);
-			}
+			copy(haxe.io.Path.addTrailingSlash(dir), "", cfg.outputPath);
 		}
 		
 		var elapsed = Std.string(haxe.Timer.stamp() - tStart).substr(0, 5);
@@ -182,6 +180,22 @@ class Dox {
 			var path = new haxe.io.Path(file);
 			if (path.ext == "mtt") {
 				cfg.loadTemplate(file);
+			}
+		}
+	}
+	
+	static function copy(inDir, relDir, outDir) {
+		for (file in sys.FileSystem.readDirectory(inDir)) {
+			var inPath = inDir + file;
+			var relPath = relDir + file;
+			var outPath = outDir + "/" + relPath;
+			if (sys.FileSystem.isDirectory(inPath)) {
+				if (!sys.FileSystem.exists(outPath)) {
+					sys.FileSystem.createDirectory(outPath);
+				}
+				copy(haxe.io.Path.addTrailingSlash(inPath), relPath + "/", outDir);
+			} else {
+				sys.io.File.copy(inPath, outPath);
 			}
 		}
 	}
