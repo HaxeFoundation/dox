@@ -55,15 +55,17 @@ class Writer {
 	}
 	
 	function makeEntry(path:String, bytes:Bytes) {
-		zipEntries.add({
+		var entry = {
 			fileName: path,
 			fileSize: bytes.length,
 			fileTime: Date.now(),
 			compressed: false,
 			dataSize: bytes.length,
 			data: bytes,
-			crc32: null,
+			crc32: haxe.crypto.Crc32.make(bytes),
 			extraFields: null
-		});
+		};
+		haxe.zip.Tools.compress(entry, 1);
+		zipEntries.add(entry);
 	}
 }
