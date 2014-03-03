@@ -7,6 +7,7 @@ using StringTools;
 class Generator {
 
 	var api:Api;
+	var writer:Writer;
 	
 	var tplNav:templo.Template;
 	var tplPackage:templo.Template;
@@ -15,8 +16,10 @@ class Generator {
 	var tplTypedef:templo.Template;
 	var tplAbstract:templo.Template;
 	
-	public function new(api:Api, config:Config) {
+	public function new(api:Api, writer:Writer) {
 		this.api = api;
+		this.writer = writer;
+		var config = api.config;
 		tplNav = config.loadTemplate("nav.mtt")	;
 		tplPackage = config.loadTemplate("package.mtt");
 		tplClass = config.loadTemplate("class.mtt");
@@ -35,9 +38,9 @@ class Generator {
 			api: api,
 			root: root
 		});
-		sys.io.File.saveContent(api.config.outputPath + "/nav.js", ~/[\r\n\t]/g.replace(s, ""));
+		writer.saveContent("nav.js", ~/[\r\n\t]/g.replace(s, ""));
 	}
-	
+			
 	function generateTree(tree:TypeTree) {
 		switch(tree) {
 			case TPackage(name, full, subs):
@@ -101,9 +104,7 @@ class Generator {
 	
 	function write(path:String, content:String)
 	{
-		path = api.config.outputPath + "/" + path.split('.').join('/') + '.html';
-		path = path.replace("<", "_").replace(">", "_");
-		sys.FileSystem.createDirectory(new haxe.io.Path(path).dir);
-		sys.io.File.saveContent(path, content);
+		path = path.replace(".", "/").replace("<", "_").replace(">", "_") + '.html';
+		writer.saveContent(path, content);
 	}
 }
