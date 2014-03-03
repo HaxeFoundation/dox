@@ -102,16 +102,8 @@ class Generator {
 	function write(path:String, content:String)
 	{
 		path = api.config.outputPath + "/" + path.split('.').join('/') + '.html';
-
-		var parts = path.split("/");
-		var current = [];
-		while (parts.length > 1)
-		{
-			current.push(parts.shift());
-			var dir = current.join("/");
-			if (sys.FileSystem.exists(dir)) continue;
-			sys.FileSystem.createDirectory(dir);
-		}
+		path = path.replace("<", "_").replace(">", "_");
+		sys.FileSystem.createDirectory(new haxe.io.Path(path).dir);
 		sys.io.File.saveContent(path, content);
 	}
 }
