@@ -39,7 +39,7 @@ class Writer {
 		for (file in sys.FileSystem.readDirectory(dir)) {
 			var path = '$dir/$file';
 			if (zipEntries != null) {
-				makeEntry(path, sys.io.File.getBytes(path));
+				makeEntry(file, sys.io.File.getBytes(path));
 			} else {
 				sys.io.File.copy(path, haxe.io.Path.join([config.outputPath, file]));
 			}
