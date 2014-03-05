@@ -30,17 +30,13 @@
 			<h2 ::cond type.impl.statics.length > 0::>Class Fields</h2>
 			
 			::foreach field type.impl.statics::
-				::if field.isPublic::
-					::use "class_field.mtt"::::end::
-				::end::
+				::use "class_field.mtt"::::end::
 			::end::
 			
 			<h2 ::cond type.impl.fields.length > 0::>Instance Fields</h2>
 			
 			::foreach field type.impl.fields::
-				::if field.isPublic::
-					::use "class_field.mtt"::::end::
-				::end::
+				::use "class_field.mtt"::::end::
 			::end::
 			
 		::end::

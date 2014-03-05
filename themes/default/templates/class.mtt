@@ -38,18 +38,14 @@
 		
 		::foreach field type.statics::
 			::set isStatic = true::
-			::if field.isPublic::
-				::use "class_field.mtt"::::end::
-			::end::
+			::use "class_field.mtt"::::end::
 		::end::
 
 		<h2 ::cond type.fields.length > 0::>Instance Fields</h2>
 		
 		::foreach field type.fields::
 			::set isStatic = false::
-			::if field.isPublic::
-				::use "class_field.mtt"::::end::
-			::end::
+			::use "class_field.mtt"::::end::
 		::end::
 	</div>
 ::end::
