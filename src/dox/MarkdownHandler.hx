@@ -30,6 +30,7 @@ class MarkdownHandler {
 		return Markdown.renderHtml(blocks);
 	}
 
+	@:access(dox.Infos.resolveType)
 	function processCode(path:String, source:String) {
 		source = StringTools.htmlEscape(source);
 

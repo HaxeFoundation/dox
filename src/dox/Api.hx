@@ -4,24 +4,51 @@ import haxe.rtti.CType;
 using Lambda;
 using StringTools;
 
-@:keep class Api {
+/**
+	The Api class is the general interface to the Dox system which can be
+	accessed in templates from the global `api` instance.
+**/
+@:keep
+class Api {
+	
+	/**
+		The Dox configuration, see `Config` for details.
+	**/
 	public var config:Config;
+	
+	/**
+		This instance of `Infos` contains various information which is collected
+		by the Dox processor.
+	**/
 	public var infos:Infos;
 	
+	/**
+		The current page name. For types this is the type name, for packages it
+		is `"package "` followed by the package name.
+	**/
 	public var currentPageName:String;
-	public var currentFullName:String;
 	
 	public function new(cfg:Config, infos:Infos) {
 		this.config = cfg;
 		this.infos = infos;
 	}
 	
-	public function isPlatform(name:String)
+	/**
+		Checks if `name` is a known platform name.
+		
+		Platform names correspond to the filenames of the consumed .xml files.
+		For instance, flash.xml defines target "flash".
+	**/
+	public function isPlatform(name:String):Bool
 	{
 		return config.platforms.has(name);
 	}
 
-	public function getTreeName(tree:TypeTree) {
+	/**
+		Returns the name of `tree`, which is the unqualified name of the
+		package of type represented by `tree`.
+	**/
+	public function getTreeName(tree:TypeTree):String {
 		return switch(tree) {
 			case TPackage(name,_,_): name;
 			case TClassdecl(t): getPathName(t.path);
@@ -31,7 +58,10 @@ using StringTools;
 		}
 	}
 
-	public function getTreePath(tree:TypeTree) {
+	/**
+		Returns the full dot-path of `tree`.
+	**/
+	public function getTreePath(tree:TypeTree):String {
 		return switch(tree) {
 			case TPackage(_,path,_): path;
 			case TClassdecl(t): t.path;
@@ -41,7 +71,11 @@ using StringTools;
 		}
 	}
 
-	public function getTreePack(tree:TypeTree) {
+	/**
+		Returns the package of `tree`, which is the dot-path without the type
+		name for types and the package itself for packages.
+	**/
+	public function getTreePack(tree:TypeTree):String {
 		return switch(tree) {
 			case TPackage(_,pack,_): pack;
 			case TClassdecl(t): getPathPack(t.path);
@@ -51,7 +85,15 @@ using StringTools;
 		}
 	}
 	
-	public function getTreeUrl(tree:TypeTree) {
+	/**
+		Returns the URL of `tree`, following the conventions of Dox.
+		
+		For packages, the returned value is the slash-path of the package
+		followed by "/index.html".
+		
+		For types, `pathToUrl` is called with the type path.
+	**/
+	public function getTreeUrl(tree:TypeTree):String {
 		return switch(tree) {
 			case TPackage(_, full, _): config.rootPath + full.split(".").join("/") + "/index.html";
 			case TClassdecl(t): pathToUrl(t.path);
@@ -61,7 +103,12 @@ using StringTools;
 		}
 	}
 	
-	public function getTreeShortDesc(tree:TypeTree) {
+	/**
+		Returns the short description of `tree`.
+		
+		@todo: Document this properly.
+	**/
+	public function getTreeShortDesc(tree:TypeTree):String {
 		var infos:TypeInfos = switch(tree) {
 			case TPackage(_, full, _): null;
 			case TClassdecl(t): t;
@@ -72,12 +119,19 @@ using StringTools;
 		return getShortDesc(infos);
 	}
 	
-	public function getShortDesc(infos:TypeInfos) {
+	/**
+		Returns the short description of `infos`.
+		
+		@todo: Document this properly.
+	**/
+	public function getShortDesc(infos:TypeInfos):String {
 		return infos == null ? "" : infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
 	}
 
-	/** Gets the first sentence of a doc. */
-	public function getSentenceDesc(infos:TypeInfos) {
+	/**
+		Returns the first sentence of the documentation belonging to `infos`.
+	**/
+	public function getSentenceDesc(infos:TypeInfos):String {
 		if (infos == null) {
 			return "";
 		}
@@ -86,19 +140,33 @@ using StringTools;
 		return sentence.match(stripped) ? sentence.matched(1) : "";
 	}
 	
-	public function pathToUrl(path:Path) {
+	/**
+		Turns a dot-path into a slash-path and appends ".html".
+	**/
+	public function pathToUrl(path:Path):String {
 		return config.rootPath + path.split(".").join("/") + ".html";
 	}
 	
-	public function isKnownType(path:Path) {
+	/**
+		Checks if `path` corresponds to a known type.
+	**/
+	public function isKnownType(path:Path):Bool {
 		return infos.typeMap.exists(path);
 	}
 	
-	public function resolveType(path:Path) {
+	/**
+		Resolves a type by its dot-path `path`.
+	**/
+	public function resolveType(path:Path):Null<TypeInfos> {
 		return infos.typeMap.get(path);
 	}
 	
-	public function getTypePath(ctype:CType) {
+	/**
+		Returns the dot-path of type `ctype`.
+		
+		If `ctype` does not have a real path, `null` is returned.
+	**/
+	public function getTypePath(ctype:CType):Null<String> {
 		return switch (ctype) {
 			case CClass(path,_): path;
 			case CEnum(path, _): path;
@@ -108,25 +176,46 @@ using StringTools;
 		}
 	}
 	
-	public function getPathName(path:Path) {
+	/**
+		Returns the last part of dot-path `path`.
+	**/
+	public function getPathName(path:Path):String {
 		return path.split(".").pop();
 	}
 
-	public function getPathPack(path:Path) {
+	/**
+		Returns the package part of dot-path `path`.
+		
+		If `path` does not have a package, the empty string `""` is returned.
+	**/
+	public function getPathPack(path:Path):String {
 		var parts = path.split(".");
 		parts.pop();
 		return parts.length == 0 ? "" : parts.join(".") + ".";
 	}
 	
-	public function debug(e:Dynamic) {
+	/**
+		Traces `e` for debug purposes.
+	**/
+	public function debug(e:Dynamic):Void {
 		trace(Std.string(e));
 	}
 	
-	public function isAbstractImplementationField(field:ClassField) {
+	/**
+		Checks if `field` is an abstract implementation field.
+		
+		Abstract implementation fields are abstract fields which are not static
+		in the original definition.
+	**/
+	public function isAbstractImplementationField(field:ClassField):Bool {
 		return field.meta.exists(function(m) return m.name == ":impl");
 	}
 	
-	public function getPlatformClassString(platforms:List<String>) {
+	/**
+		Returns the CSS class string corresponding to `platforms`. If
+		`platforms is empty, `null` is returned.
+	**/
+	public function getPlatformClassString(platforms:List<String>):String {
 		if (platforms.isEmpty()) return null;
 		return "platform " + platforms.map(function(p){ return "platform-"+p; }).join(" ");
 	}
