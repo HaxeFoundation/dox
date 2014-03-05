@@ -57,6 +57,10 @@ class Dox {
 				cfg.theme = setTheme(name);
 				cfg.addTemplatePath("templates");
 			},
+			
+			@doc("Defines key = value")
+			["-D", "--define"] => function(key:String, value:String) cfg.defines[key] = value,
+			
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
 				

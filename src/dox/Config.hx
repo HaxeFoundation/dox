@@ -13,8 +13,7 @@ class Config {
 	public var resourcePaths:Array<String>;
 	public var templatePaths(default, null):haxe.ds.GenericStack<String>;
 	
-	public var relativePaths:Bool;
-	
+	public var defines:Map<String, String>;
 	public var pageTitle:String;
 
 	function set_outputPath(v) {
@@ -28,6 +27,7 @@ class Config {
 	public function new() {
 		platforms = [];
 		resourcePaths = [];
+		defines = new Map();
 		pathFilters = new haxe.ds.GenericStack<Filter>();
 		templatePaths = new haxe.ds.GenericStack<String>();
 	}

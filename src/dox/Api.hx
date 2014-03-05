@@ -130,4 +130,19 @@ using StringTools;
 		if (platforms.isEmpty()) return null;
 		return "platform " + platforms.map(function(p){ return "platform-"+p; }).join(" ");
 	}
+	
+	/**
+		Checks if `key` was defined from command line argument `-D key value`.
+	**/
+	public function isDefined(key:String):Bool {
+		return config.defines.exists(key);
+	}
+	
+	/**
+		Returns the value of `key` as defined by command line argument
+		`-D key value`. If no value is defined, null is returned.
+	**/
+	public function getValue(key:String):Null<String> {
+		return config.defines[key];
+	}
 }
