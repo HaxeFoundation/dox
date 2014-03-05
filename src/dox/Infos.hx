@@ -1,5 +1,6 @@
 package dox;
 import haxe.rtti.CType;
+using Lambda;
 
 class Infos {
 	
@@ -67,5 +68,9 @@ class Infos {
 		typeMap.set(path, typeInfos);
 		numProcessedTypes++;
 		if (numProcessedTypes & 16 == 0) Sys.print(".");
+	}
+	
+	public function hasDoxMetadata(meta:MetaData, ?parameterName:String) {
+		return meta.exists(function(m) return m.name == ":dox" && parameterName == null || m.params.has(parameterName));
 	}
 }
