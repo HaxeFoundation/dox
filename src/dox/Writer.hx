@@ -28,7 +28,10 @@ class Writer {
 	public function saveContent(path:String, content:String) {
 		if (zipEntries == null) {
 			var path = haxe.io.Path.join([config.outputPath, path]);
-			sys.FileSystem.createDirectory(new haxe.io.Path(path).dir);
+			var dir = new haxe.io.Path(path).dir;
+			if (dir != null) {
+				sys.FileSystem.createDirectory(dir);
+			}
 			sys.io.File.saveContent(path, content);
 		} else {
 			makeEntry(path, Bytes.ofString(content));
