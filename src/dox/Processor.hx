@@ -142,20 +142,10 @@ class Processor {
 		root.iter(sort);
 	}
 	
-	function processRoot(root:TypeRoot)
+	function processRoot(root:TypeRoot):TypeRoot
 	{
-		var rootTypes = [];
-		var rootPack = TPackage('top level', '', rootTypes);
-		var newRoot = [rootPack];
-
-		for (tree in root) switch (tree)
-		{
-			case TPackage(_,_,_): newRoot.push(tree);
-			default: rootTypes.push(tree);
-		}
-
-		newRoot.iter(processTree);
-		return newRoot;
+		root.iter(processTree);
+		return root;
 	}
 
 	function processTree(tree:TypeTree)
