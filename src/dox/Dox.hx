@@ -17,6 +17,7 @@ class Dox {
 
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
+		cfg.addThemePath('${owd}themes');
 		
 		var argHandler = hxargs.Args.generate([
 			["-r", "--document-root"] => function(path:String) throw 'The -r command is obsolete and can be omitted',
@@ -29,6 +30,9 @@ class Dox {
 			
 			@doc("Add template directory")
 			["-t", "--template-path"] => function(path:String) loadTemplates(cfg, path),
+			
+			@doc("Add theme directory")
+			["--theme-path"] => function(path:String) cfg.addThemePath(path),
 			
 			@doc("Add a resource directory whose contents are copied to the output directory")
 			["-res", "--resource-path"] => function(dir:String) cfg.resourcePaths.push(dir),
@@ -45,13 +49,14 @@ class Dox {
 			@doc("Set the theme name")
 			["-theme"] => function(name:String) {
 				function setTheme(name:String) {
-					var themeConfig = sys.io.File.getContent('${owd}themes/$name/config.json');
+					var themePath = cfg.loadTheme(name);
+					var themeConfig = sys.io.File.getContent('${themePath}/config.json');
 					var theme:Theme = haxe.Json.parse(themeConfig);
 					if (theme.parentTheme != null) {
 						setTheme(theme.parentTheme);
 					}
-					cfg.resourcePaths.push(owd + 'themes/$name/resources');
-					loadTemplates(cfg, owd + 'themes/$name/templates');
+					cfg.resourcePaths.push('${themePath}/resources');
+					loadTemplates(cfg, '${themePath}/templates');
 					return theme;
 				}
 				cfg.theme = setTheme(name);
@@ -73,12 +78,18 @@ class Dox {
 		function sortArgs(args:Array<String>) {
 			var i = 0;
 			var args2 = [];
+			var themePath = [];
 			var hasThemeArgument = false;
+			
 			while (i < args.length) {
 				if (args[i] == "-theme") {
 					hasThemeArgument = true;
 					args2.unshift(args[i + 1]);
 					args2.unshift(args[i]);
+					i += 2;
+				} else if (args[i] == "--theme-path") {
+					themePath.unshift(args[i + 1]);
+					themePath.unshift(args[i]);
 					i += 2;
 				} else {
 					args2.push(args[i++]);
@@ -89,7 +100,8 @@ class Dox {
 				args2.unshift("default");
 				args2.unshift("-theme");
 			}
-			return args2;
+			
+			return themePath.concat(args2);
 		}
 		
 		argHandler.parse(sortArgs(args));

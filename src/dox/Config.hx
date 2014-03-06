@@ -12,6 +12,7 @@ class Config {
 	public var platforms:Array<String>;
 	public var resourcePaths:Array<String>;
 	public var templatePaths(default, null):haxe.ds.GenericStack<String>;
+	public var themePaths(default, null):haxe.ds.GenericStack<String>;
 	
 	public var defines:Map<String, String>;
 	public var pageTitle:String;
@@ -30,6 +31,7 @@ class Config {
 		defines = new Map();
 		pathFilters = new haxe.ds.GenericStack<Filter>();
 		templatePaths = new haxe.ds.GenericStack<String>();
+		themePaths = new haxe.ds.GenericStack<String>();
 	}
 	
 	public function addFilter(pattern:String, isIncludeFilter:Bool) {
@@ -39,12 +41,23 @@ class Config {
 	public function addTemplatePath(path:String) {
 		templatePaths.add(haxe.io.Path.removeTrailingSlashes(path));
 	}
+	
+	public function addThemePath(path:String) {
+		themePaths.add(haxe.io.Path.removeTrailingSlashes(path));
+	}
 
 	public function loadTemplate(name:String) {
 		for (tp in templatePaths) {
-			if (sys.FileSystem.exists(tp + "/" +name)) return templo.Template.fromFile(tp + "/" + name);
+			if (sys.FileSystem.exists(tp + "/" + name)) return templo.Template.fromFile(tp + "/" + name);
 		}
-		throw "Could not resolve template: " +name;
+		throw "Could not resolve template: " + name;
+	}
+	
+	public function loadTheme(name:String) {
+		for (tp in themePaths) {
+			if (sys.FileSystem.exists(tp + "/" + name + "/config.json")) return tp + "/" + name;
+		}
+		throw "Could not resolve theme: " + name;
 	}
 
 	public function setRootPath(path:String) {
