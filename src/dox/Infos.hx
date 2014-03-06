@@ -2,12 +2,36 @@ package dox;
 import haxe.rtti.CType;
 using Lambda;
 
+/**
+	Infos is a collection of information collected by Dox during processing.
+	
+	An instance can be accessed as `api.infos` in templates.
+**/
 class Infos {
 	
+	/**
+		A map of dot-paths to their corresponding `TypeInfos` objects.
+	**/
 	public var typeMap:Map<String, TypeInfos>;
+	
+	/**
+		A map of dot-path classes to their sub classes.
+	**/
 	public var subClasses:Map<String, Array<TypeInfos>>;
+	
+	/**
+		A map of dot-path interfaces to their implementors.
+	**/
 	public var implementors:Map<String, Array<TypeInfos>>;
+	
+	/**
+		The number of generated types.
+	**/
 	public var numGeneratedTypes(default, set):Int;
+	
+	/**
+		The number of generated packages.
+	**/
 	public var numGeneratedPackages:Int;
 	
 	var packages:Map<String, Map<String, String>>;
@@ -31,7 +55,17 @@ class Infos {
 		Reflect.setField(this, "numGeneratedTypes", 0);
 	}
 	
-	public function resolveType(path:String, type:String)
+	/**
+		Checks if `meta` contains a `@:dox` metadata.
+		
+		If `parameterName` is not null, also checks if `@:doc` has an argument
+		equal to `parameterName`.
+	**/
+	static public function hasDoxMetadata(meta:MetaData, ?parameterName:String):Bool {
+		return meta.exists(function(m) return m.name == ":dox" && parameterName == null || m.params.has(parameterName));
+	}
+
+	function resolveType(path:String, type:String)
 	{
 		// direct match
 		if (typeMap.exists(type)) return type;
@@ -55,7 +89,8 @@ class Infos {
 		return null;
 	}
 
-	public function addType(path:String, typeInfos:TypeInfos) {
+	@:allow(dox.Processor)
+	function addType(path:String, typeInfos:TypeInfos) {
 		var parts = path.split('.');
 		var name = parts.pop();
 		var pack = parts.join('.');
@@ -68,9 +103,5 @@ class Infos {
 		typeMap.set(path, typeInfos);
 		numProcessedTypes++;
 		if (numProcessedTypes & 16 == 0) Sys.print(".");
-	}
-	
-	public function hasDoxMetadata(meta:MetaData, ?parameterName:String) {
-		return meta.exists(function(m) return m.name == ":dox" && parameterName == null || m.params.has(parameterName));
 	}
 }
