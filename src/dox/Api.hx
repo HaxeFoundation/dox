@@ -241,6 +241,7 @@ class Api {
 		then appends the path of `type` to it.
 	**/
 	public function getSourceLink(type:TypeInfos) {
-		return haxe.io.Path.join([getValue("source-path"), type.path.replace(".", "/") + ".hx"]);
+		var module = type.module != null ? type.module : type.path;
+		return haxe.io.Path.join([getValue("source-path"), module.replace(".", "/") + ".hx"]);
 	}
 }
