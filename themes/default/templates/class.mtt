@@ -1,5 +1,8 @@
 ::use 'main.mtt'::
 	<div class="header">
+		<span ::cond api.isDefined("source-path"):: class="viewsource">
+			<a href="::api.getSourceLink(type)::">View source</a>
+		</span>
 		<h1>
 			<code>
 				<span class="directive">::if type.isInterface::interface::else::class::end:: </span>
@@ -13,9 +16,6 @@
 				::end::
 			</code>
 		</h1>
-		<div ::cond api.isDefined("source-path")::>
-			::api.getSourceLink(type)::
-		</div>
 	</div>
 	<div class="body">
 		$$printModule(::type.module::)
