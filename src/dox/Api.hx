@@ -234,4 +234,13 @@ class Api {
 	public function getValue(key:String):Null<String> {
 		return config.defines[key];
 	}
+	
+	/**
+		Returns the path to the source code of `type`. This method assumes that
+		`source-path` was defined from command line (`-D source-path url`) and
+		then appends the path of `type` to it.
+	**/
+	public function getSourceLink(type:TypeInfos) {
+		return haxe.io.Path.join([getValue("source-path"), type.path.replace(".", "/") + ".hx"]);
+	}
 }

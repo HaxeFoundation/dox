@@ -13,6 +13,9 @@
 				::end::
 			</code>
 		</h1>
+		<div ::cond api.isDefined("source-path")::>
+			::api.getSourceLink(type)::
+		</div>
 	</div>
 	<div class="body">
 		$$printModule(::type.module::)
