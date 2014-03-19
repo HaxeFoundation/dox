@@ -210,7 +210,7 @@ class Processor {
 		while (doc.charAt(doc.length - 1) == '*') doc = doc.substr(0, doc.length - 1);
 		
 		// detect doc comment tyle/indent
-		var ereg = ~/^( \* |\t\* |\t \* |\t\t| +\* )/m;
+		var ereg = ~/^( \* |\t\* |\t \* |\t\t| +\* )/;
 		var matched = ereg.match(doc);
 
 		// special case for single tab indent because my regex isn't clever enough
