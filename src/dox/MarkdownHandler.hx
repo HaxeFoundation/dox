@@ -26,8 +26,12 @@ class MarkdownHandler {
 		document.parseRefLinks(lines);
 
 		// parse ast
-		var blocks = document.parseLines(lines);
-		return Markdown.renderHtml(blocks);
+		try {
+			var blocks = document.parseLines(lines);
+			return Markdown.renderHtml(blocks);
+		} catch(err: Dynamic) {
+			return markdown;
+		}
 	}
 
 	@:access(dox.Infos.resolveType)
