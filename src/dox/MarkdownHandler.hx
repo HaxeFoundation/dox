@@ -30,6 +30,7 @@ class MarkdownHandler {
 			var blocks = document.parseLines(lines);
 			return Markdown.renderHtml(blocks);
 		} catch(err: Dynamic) {
+			trace("Parsing warning: " + err);
 			return markdown;
 		}
 	}
