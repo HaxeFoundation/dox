@@ -144,8 +144,9 @@ class Processor {
 	
 	function processRoot(root:TypeRoot):TypeRoot
 	{
-		root.iter(processTree);
-		return root;
+		var newRoot = [TPackage('top level', '', root)];
+		newRoot.iter(processTree);
+		return newRoot;
 	}
 
 	function processTree(tree:TypeTree)

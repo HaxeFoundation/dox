@@ -36,7 +36,10 @@ class Generator {
 		api.config.rootPath = "::rootPath::";
 		var s = tplNav.execute({
 			api: api,
-			root: root
+			root: switch (root) {
+				case [TPackage('top level', '', subs)]: subs;
+				default: throw "root should be [top level package]";
+			}
 		});
 		writer.saveContent("nav.js", ~/[\r\n\t]/g.replace(s, ""));
 	}
