@@ -1,5 +1,7 @@
 package dox;
 
+import haxe.io.Path;
+
 class Dox {
 	static public function main() {
 		// check if we're running from haxelib (last arg is original working dir)
@@ -42,20 +44,29 @@ class Dox {
 			@doc("Set the page main title")
 			["--title"] => function(name:String) cfg.pageTitle = name,
 			
-			@doc("Set the theme name")
+			@doc("Set the theme name or path")
 			["-theme"] => function(name:String) {
-				function setTheme(name:String) {
-					var themeConfig = sys.io.File.getContent('${owd}themes/$name/config.json');
+				function setTheme(path:String) {
+					if (path.indexOf("/") == -1 && path.indexOf("\\") == -1) {
+						path = Path.normalize(Path.join([owd, "themes", path]));
+					}
+					var configPath = Path.join([path, "config.json"]);
+					var themeConfig = try
+						sys.io.File.getContent(configPath)
+					catch(e:Dynamic) {
+						Sys.println('Could not load $configPath');
+						Sys.exit(1);
+						null;
+					}
 					var theme:Theme = haxe.Json.parse(themeConfig);
 					if (theme.parentTheme != null) {
 						setTheme(theme.parentTheme);
 					}
-					cfg.resourcePaths.push(owd + 'themes/$name/resources');
-					loadTemplates(cfg, owd + 'themes/$name/templates');
+					cfg.resourcePaths.push(Path.join([path, "resources"]));
+					loadTemplates(cfg, Path.join([path, "templates"]));
 					return theme;
 				}
 				cfg.theme = setTheme(name);
-				cfg.addTemplatePath("templates");
 			},
 			
 			@doc("Defines key = value")
