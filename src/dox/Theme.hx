@@ -3,6 +3,6 @@ package dox;
 typedef Theme = {
 	name: String,
 	author: String,
-	parentTheme: Null<String>,
+	?parentTheme: String,
 	headerIncludes: Array<String>
 }
