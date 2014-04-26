@@ -57,7 +57,7 @@
 			::if !repeat.field.last::, ::end::
 		::end::
 	}
-	::case::$$printLinkedPath(::"Dynamic"::,::null::)::if args[0] != null::$$printLinkedType(::args[0]::)::end::
+	::case::$$printLinkedPath(::"Dynamic"::,::[]::)::if args[0] != null::$$printLinkedType(::args[0]::)::end::
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::end::
 </macro>
