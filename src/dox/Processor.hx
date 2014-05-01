@@ -210,7 +210,7 @@ class Processor {
 		// trim trailing asterixes
 		while (doc.charAt(doc.length - 1) == '*') doc = doc.substr(0, doc.length - 1);
 		
-		// detect doc comment tyle/indent
+		// detect doc comment style/indent
 		var ereg = ~/^( \* |\t\* |\t \* |\t\t| +\* )/;
 		var matched = ereg.match(doc);
 
