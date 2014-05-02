@@ -16,7 +16,7 @@ class JavadocHandler {
 	{
 		var tags = [];
 		// TODO: need to parse this better as haxe source might have this sort of meta
-		var ereg = ~/@(param|exception|throws|deprecated|return|returns|since) ([^@]+)/gs;
+		var ereg = ~/@(param|exception|throws|deprecated|return|returns|since)\s+([^@]+)/gs;
 
 		doc = ereg.map(doc, function(e){
 			var name = e.matched(1);
@@ -25,12 +25,10 @@ class JavadocHandler {
 			switch (name)
 			{
 				case 'param', 'exception', 'throws':
-					var i = doc.indexOf(' ');
-					if (i > -1)
-					{
-						value = doc.substring(0, i);
-						doc = doc.substr(i+1);
-					}
+					var ereg = ~/([^\s]+)(.*)/gs;
+					ereg.match(doc);
+					value = ereg.matched(1);
+					doc = ereg.matched(2);
 				default:
 			}
 			doc = trimDoc(doc);
