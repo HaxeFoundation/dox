@@ -51,3 +51,8 @@
 -D unsafe
 -xml ../bin/xml/cs.xml
 -D xmldoc
+
+--next
+-python all_py
+-xml ../bin/xml/python.xml
+-D xmldoc
