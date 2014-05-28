@@ -1,6 +1,6 @@
 A Haxe documentation generator.
 
-> Note: Dox currently requires the development branch of Haxe due to some
+> Note: Dox currently requires v3.1.x branch of Haxe due to some
 minor changes in abstract rtti xml generation. You'll also need an up to date
 haxelib (requires support for `classPath` in haxelib.json)
 
