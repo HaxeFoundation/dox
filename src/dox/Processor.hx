@@ -37,19 +37,19 @@ class Processor {
 				case TClassdecl(t):
 					t.fields = filterFields(t.fields);
 					t.statics = filterFields(t.statics);
-					if (!isFiltered(t.path))
+					if (!isFiltered(t.path) && !Infos.hasDoxMetadata(t.meta, "hide"))
 					{
 						root.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TEnumdecl(t):
-					if (!isFiltered(t.path))
+					if (!isFiltered(t.path) && !Infos.hasDoxMetadata(t.meta, "hide"))
 					{
 						root.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TTypedecl(t):
-					if (!isFiltered(t.path))
+					if (!isFiltered(t.path) && !Infos.hasDoxMetadata(t.meta, "hide"))
 					{
 						root.push(tree);
 						infos.addType(t.path, t);
@@ -73,7 +73,7 @@ class Processor {
 						t.impl.fields = fields;
 						t.impl.statics = statics;
 					}
-					if (!isFiltered(t.path))
+					if (!isFiltered(t.path) && !Infos.hasDoxMetadata(t.meta, "hide"))
 					{
 						root.push(tree);
 						infos.addType(t.path, t);
