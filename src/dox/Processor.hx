@@ -33,24 +33,30 @@ class Processor {
 				case TPackage(name, full, subs):
 					var acc = [];
 					subs.iter(filter.bind(acc));
-					if (!isFiltered(full)) root.push(TPackage(name, full, acc));
+					if (!isPathFiltered(full)) root.push(TPackage(name, full, acc));
 				case TClassdecl(t):
 					t.fields = filterFields(t.fields);
 					t.statics = filterFields(t.statics);
-					if (!isFiltered(t.path))
+					if (!isTypeFiltered(t))
 					{
 						root.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TEnumdecl(t):
-					if (!isFiltered(t.path))
+					if (!isTypeFiltered(t))
 					{
+						t.constructors = filterEnumFields(t.constructors);
 						root.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TTypedecl(t):
-					if (!isFiltered(t.path))
+					if (!isTypeFiltered(t))
 					{
+						switch (t.type)
+						{
+							case CAnonymous(fields): t.type = CAnonymous(filterFields(fields));
+							default:
+						}
 						root.push(tree);
 						infos.addType(t.path, t);
 					}
@@ -70,10 +76,10 @@ class Processor {
 								statics.push(cf);
 							}
 						});
-						t.impl.fields = fields;
-						t.impl.statics = statics;
+						t.impl.fields = filterFields(fields);
+						t.impl.statics = filterFields(statics);
 					}
-					if (!isFiltered(t.path))
+					if (!isTypeFiltered(t))
 					{
 						root.push(tree);
 						infos.addType(t.path, t);
@@ -90,6 +96,13 @@ class Processor {
 		});
 	}
 	
+	function filterEnumFields(fields:List<EnumField>) {
+		return fields.filter(function(cf) {
+			if (cf.meta.length > 0) trace(cf.meta);
+			return !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
+		});
+	}
+
 	function sort(root:TypeRoot) {
 		function getName(t:TypeTree) {
 			return switch(t) {
@@ -252,7 +265,14 @@ class Processor {
 		return tplDoc.execute({ info:info });
 	}
 	
-	function isFiltered(path:Path) {
+	function isTypeFiltered(type:{path:Path, meta:MetaData})
+	{
+		if (Infos.hasDoxMetadata(type.meta, "hide")) return true;
+		return isPathFiltered(type.path);
+	}
+
+	function isPathFiltered(path:Path) {
+		
 		var hasInclusionFilter = false;
 		for (filter in config.pathFilters) {
 			if (filter.isIncludeFilter) hasInclusionFilter = true;

@@ -58,7 +58,7 @@ class Infos {
 	/**
 		Checks if `meta` contains a `@:dox` metadata.
 		
-		If `parameterName` is not null, also checks if `@:doc` has an argument
+		If `parameterName` is not null, also checks if `@:dox` has an argument
 		equal to `parameterName`.
 	**/
 	static public function hasDoxMetadata(meta:MetaData, ?parameterName:String):Bool {

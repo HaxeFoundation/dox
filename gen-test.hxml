@@ -4,7 +4,7 @@
 
 --no-output
 -cp ../test
--main ClassTest
+-main TestClass
 -D doc-gen
 
 --each
