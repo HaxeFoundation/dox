@@ -26,9 +26,11 @@ class JavadocHandler {
 			{
 				case 'param', 'exception', 'throws':
 					var ereg = ~/([^\s]+)(.*)/gs;
-					ereg.match(doc);
-					value = ereg.matched(1);
-					doc = ereg.matched(2);
+					if (ereg.match(doc))
+					{
+						value = ereg.matched(1);
+						doc = ereg.matched(2);
+					}
 				default:
 			}
 			doc = trimDoc(doc);
