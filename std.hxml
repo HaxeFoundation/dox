@@ -1,1 +1,1 @@
--cmd haxelib run dox -o bin/pages -i bin/xml -ex microsoft -ex javax
+-cmd haxelib run dox -o bin/pages -i bin/xml -ex microsoft -ex javax -D source-path https://github.com/HaxeFoundation/haxe/blob/development/std/
