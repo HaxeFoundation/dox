@@ -165,7 +165,11 @@ class Processor {
 			case TTypedecl(t):
 				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
-
+				switch (t.type)
+				{
+					case CAnonymous(fields): fields.iter(processClassField.bind(t.path));
+					default:
+				}
 			case TClassdecl(t):
 				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
