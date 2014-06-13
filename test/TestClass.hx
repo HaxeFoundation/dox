@@ -19,6 +19,13 @@ class TestClass
 	static function main() {}
 
 	/**
+		The value of something.
+
+		@default 10
+	**/
+	public var value:Int = 10;
+
+	/**
 		Tests things.
 
 		@param foo Uh, the foo to test?
