@@ -72,6 +72,18 @@ class TestClass
 		
 	}
 
+	/**
+	 * Creates a FlxSprite at a specified position with a specified one-frame graphic. 
+	 * If none is provided, a 16x16 image of the HaxeFlixel logo is used.
+	 * 
+	 * @param   X               The initial X position of the sprite.
+	 * @param   Y               The initial Y position of the sprite.
+	 * @param   SimpleGraphic   The graphic you want to display (OPTIONAL - for simple stuff only, do NOT use for animated images!).
+	 */
+	public static function java_doc_multiline_comments() {
+
+	}
+
 	@:dox(hide) public var hiddenField:String;
 }
 

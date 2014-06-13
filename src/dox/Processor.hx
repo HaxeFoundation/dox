@@ -254,7 +254,9 @@ class Processor {
 		}
 
 		// trim additional whitespace
-		return StringTools.trim(doc);
+		doc = StringTools.trim(doc);
+
+		return doc;
 	}
 
 	function processDoc(path:String, doc:String)

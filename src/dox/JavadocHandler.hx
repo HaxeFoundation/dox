@@ -16,16 +16,17 @@ class JavadocHandler {
 	{
 		var tags = [];
 		// TODO: need to parse this better as haxe source might have this sort of meta
-		var ereg = ~/@(param|exception|throws|deprecated|return|returns|since)\s+([^@]+)/gs;
+		var ereg = ~/^@(param|exception|throws|deprecated|return|returns|since)\s+([^@]+)/gm;
 
 		doc = ereg.map(doc, function(e){
 			var name = e.matched(1);
 			var doc = e.matched(2);
 			var value = null;
+
 			switch (name)
 			{
 				case 'param', 'exception', 'throws':
-					var ereg = ~/([^\s]+)(.*)/gs;
+					var ereg = ~/([^\s]+)\s+(.*)/gs;
 					if (ereg.match(doc))
 					{
 						value = ereg.matched(1);
