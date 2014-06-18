@@ -4,15 +4,8 @@
 	"license": "MIT",
 	"tags": ["documentation"],
 	"description": "Haxe documentation generator.",
-	"version": "1.0.0-rc.1",
-	"releasenote": "First release.",
+	"version": "1.0.0",
+	"releasenote": "Bug fixes and improvements. Binary only distribution.",
 	"contributors": ["dpeek", "Simn"],
-	"classPath": "src",
-	"dependencies":
-	{
-		"hxparse":"",
-		"hxtemplo":"",
-		"hxargs":"",
-		"markdown":""
-	}
+	"dependencies": {}
 }
