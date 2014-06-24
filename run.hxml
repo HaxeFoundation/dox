@@ -1,4 +1,5 @@
 -lib hxtemplo
+-lib hxparse
 -lib hxargs
 -lib markdown
 -cp src
