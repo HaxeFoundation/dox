@@ -48,7 +48,7 @@ class Generator {
 		switch(tree) {
 			case TPackage(name, full, subs):
 				if (name.charAt(0) == "_") return;
-				api.currentPageName = "package " + name;
+				api.currentPageName = full == "" ? "top level" : full;
 				api.config.setRootPath(full == '' ? full : full + ".pack");
 				var s = tplPackage.execute({
 					api: api,
@@ -60,7 +60,7 @@ class Generator {
 				api.infos.numGeneratedPackages++;
 				subs.iter(generateTree);
 			case TClassdecl(c):
-				api.currentPageName = api.getPathName(c.path);
+				api.currentPageName = c.path;
 				api.config.setRootPath(c.path);
 				var s = tplClass.execute({
 					api: api,
@@ -71,7 +71,7 @@ class Generator {
 				write(c.path, s);
 				api.infos.numGeneratedTypes++;
 			case TEnumdecl(e):
-				api.currentPageName = api.getPathName(e.path);
+				api.currentPageName = e.path;
 				api.config.setRootPath(e.path);
 				var s = tplEnum.execute({
 					api: api,
@@ -80,7 +80,7 @@ class Generator {
 				write(e.path, s);
 				api.infos.numGeneratedTypes++;
 			case TTypedecl(t):
-				api.currentPageName = api.getPathName(t.path);
+				api.currentPageName = t.path;
 				api.config.setRootPath(t.path);
 				var s = tplTypedef.execute({
 					api: api,
@@ -89,7 +89,7 @@ class Generator {
 				write(t.path, s);
 				api.infos.numGeneratedTypes++;
 			case TAbstractdecl(a):
-				api.currentPageName = api.getPathName(a.path);
+				api.currentPageName = a.path;
 				api.config.setRootPath(a.path);
 				var s = tplAbstract.execute({
 					api: api,
