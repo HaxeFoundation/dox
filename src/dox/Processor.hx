@@ -4,9 +4,9 @@ import haxe.rtti.CType;
 using Lambda;
 
 class Processor {
-	
+
 	public var infos:Infos;
-	
+
 	var tplDoc:templo.Template;
 	var config:Config;
 	var markdownHandler:MarkdownHandler;
@@ -19,16 +19,16 @@ class Processor {
 		markdownHandler = new MarkdownHandler(cfg, infos);
 		javadocHandler = new JavadocHandler(cfg, infos, markdownHandler);
 	}
-	
+
 	public function process(root:TypeRoot) {
 		root = filter(root);
 		sort(root);
 		return processRoot(root);
 	}
-	
+
 	function filter(root:TypeRoot) {
 		var newRoot = [];
-		function filter(root, tree) {
+		function filter(root, tree):Void {
 			return switch(tree) {
 				case TPackage(name, full, subs):
 					var acc = [];
@@ -89,13 +89,13 @@ class Processor {
 		root.iter(filter.bind(newRoot));
 		return newRoot;
 	}
-	
+
 	function filterFields(fields:List<ClassField>) {
 		return fields.filter(function(cf) {
 			return cf.isPublic && !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
 		});
 	}
-	
+
 	function filterEnumFields(fields:List<EnumField>) {
 		return fields.filter(function(cf) {
 			if (cf.meta.length > 0) trace(cf.meta);
@@ -113,7 +113,7 @@ class Processor {
 				case TPackage(n,_,_): n;
 			}
 		}
-	
+
 		function compare(t1,t2) {
 			return switch [t1, t2] {
 				case [TPackage(n1,_,_),TPackage(n2,_,_)]: n1 < n2 ? -1 : 1;
@@ -123,7 +123,7 @@ class Processor {
 					getName(t1) < getName(t2) ? -1 : 1;
 			}
 		}
-		
+
 		function compareFields(cf1, cf2)
 			return switch [cf1.type, cf2.type] {
 				case [CFunction(_), CFunction(_)]:
@@ -139,7 +139,7 @@ class Processor {
 			a.sort(compareFields);
 			return a.list();
 		}
-		
+
 		function sort(t:TypeTree) {
 			switch(t) {
 				case TPackage(_, _, subs):
@@ -154,7 +154,7 @@ class Processor {
 		root.sort(compare);
 		root.iter(sort);
 	}
-	
+
 	function processRoot(root:TypeRoot):TypeRoot
 	{
 		var newRoot = [TPackage('top level', '', root)];
@@ -216,17 +216,17 @@ class Processor {
 	{
 		field.doc = processDoc(path, field.doc);
 	}
-	
+
 	function trimDoc(doc:String)
 	{
 		if (doc == null) return '';
-		
+
 		// trim leading asterixes
 		while (doc.charAt(0) == '*') doc = doc.substr(1);
 
 		// trim trailing asterixes
 		while (doc.charAt(doc.length - 1) == '*') doc = doc.substr(0, doc.length - 1);
-		
+
 		// detect doc comment style/indent
 		var ereg = ~/^( \* |\t\* |\t \* |\t\t| +\* )/m;
 		var matched = ereg.match(doc);
@@ -248,7 +248,7 @@ class Processor {
 			// make trailing space optional
 			if (string.charAt(string.length - 1) == ' ')
 				string = string.substr(0, string.length - 1) + ' ?';
-			
+
 			var indent = new EReg("^" + string, "gm");
 			doc = indent.replace(doc, "");
 		}
@@ -266,7 +266,7 @@ class Processor {
 		var info = javadocHandler.parse(path, doc);
 		return tplDoc.execute({ info:info });
 	}
-	
+
 	function isTypeFiltered(type:{path:Path, meta:MetaData})
 	{
 		if (Infos.hasDoxMetadata(type.meta, "hide")) return true;
@@ -274,7 +274,7 @@ class Processor {
 	}
 
 	function isPathFiltered(path:Path) {
-		
+
 		var hasInclusionFilter = false;
 		for (filter in config.pathFilters) {
 			if (filter.isIncludeFilter) hasInclusionFilter = true;
