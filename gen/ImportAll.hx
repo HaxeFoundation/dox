@@ -8,6 +8,9 @@ class ImportAll {
 			pack = "";
 			haxe.macro.Compiler.define("doc_gen");
 		}
+		if (Context.defined("interp")) {
+			haxe.macro.Compiler.define("macro");
+		}
 		switch( pack ) {
 		case "php":
 			if( !Context.defined("php") ) return;
@@ -60,6 +63,7 @@ class ImportAll {
 					case "haxe.macro.ExampleJSGenerator","haxe.macro.Context", "haxe.macro.Compiler": if( !Context.defined("neko") ) continue;
 					case "haxe.remoting.SocketWrapper": if( !Context.defined("flash") ) continue;
 					case "haxe.remoting.SyncSocketConnection": if( !(Context.defined("neko") || Context.defined("php") || Context.defined("cpp")) ) continue;
+					case "neko.vm.Ui" | "sys.db.Sqlite" | "sys.db.Mysql": if ( Context.defined("interp") ) continue;
 					}
 					Context.getModule(cl);
 				} else if( sys.FileSystem.isDirectory(p + "/" + file) )
