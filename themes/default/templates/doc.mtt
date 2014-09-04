@@ -1,7 +1,9 @@
 ::raw info.doc::
 
-<table class="table table-condensed" ::cond info.params.length > 0 || info.returns != null || info.throws.length > 0::>
+<table class="table table-condensed" ::cond info.params.length > 0 || info.returns != null || info.throws.length > 0 || info.defaultValue != null::>
 	<tbody>
+		<col width="10%"/>
+  		<col width="100%"/>
 		<tr ::cond info.params.length > 0::>
 			<th colspan="2">Parameters:</th>
 		</tr>
@@ -11,6 +13,10 @@
 				<td width="100%">::raw param.doc::</td>
 			</tr>
 		::end::
+		<tr ::cond info.defaultValue != null::>
+			<td>default value</td>
+			<td>::raw info.defaultValue.doc::</td>
+		</tr>
 		<tr ::cond info.returns != null::>
 			<th colspan="2">Returns:</th>
 		</tr>
