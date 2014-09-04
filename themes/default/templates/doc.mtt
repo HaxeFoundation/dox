@@ -10,19 +10,16 @@
 		::foreach param info.params::
 			<tr>
 				<td>::raw param.value::</td>
-				<td width="100%">::raw param.doc::</td>
+				<td>::raw param.doc::</td>
 			</tr>
 		::end::
 		<tr ::cond info.defaultValue != null::>
-			<td>default value</td>
+			<th>Default value:</th>
 			<td>::raw info.defaultValue.doc::</td>
 		</tr>
 		<tr ::cond info.returns != null::>
-			<th colspan="2">Returns:</th>
-		</tr>
-		<tr ::cond info.returns != null::>
-			<td></td>
-			<td width="100%">::raw info.returns.doc::</td>
+			<th>Returns:</th>
+			<td>::raw info.returns.doc::</td>
 		</tr>
 		<tr ::cond info.throws.length > 0::>
 			<th colspan="2">Throws:</th>
@@ -30,7 +27,7 @@
 		::foreach throws info.throws::
 			<tr>
 				<td>::raw throws.value::</td>
-				<td width="100%">::raw throws.doc::</td>
+				<td>::raw throws.doc::</td>
 			</tr>
 		::end::
 	</tbody>
