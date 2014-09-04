@@ -12,5 +12,14 @@
 			<td>returns</td>
 			<td>::raw info.returns.doc::</td>
 		</tr>
+		<tr ::cond info.throws != null::>
+			<th colspan="2">throws</th>
+		</tr>
+		::foreach param info.throws::
+			<tr>
+				<td>::raw param.value::</td>
+				<td>::raw param.doc::</td>
+			</tr>
+		::end::
 	</tbody>
 </table>
