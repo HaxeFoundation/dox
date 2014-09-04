@@ -16,16 +16,17 @@ class JavadocHandler {
 	{
 		var tags = [];
 		// TODO: need to parse this better as haxe source might have this sort of meta
-		var ereg = ~/@(param|exception|throws|deprecated|return|returns|since)\s+([^@]+)/gs;
+		var ereg = ~/^@(param|default|exception|throws|deprecated|return|returns|since)\s+([^@]+)/gm;
 
 		doc = ereg.map(doc, function(e){
 			var name = e.matched(1);
 			var doc = e.matched(2);
 			var value = null;
+
 			switch (name)
 			{
 				case 'param', 'exception', 'throws':
-					var ereg = ~/([^\s]+)(.*)/gs;
+					var ereg = ~/([^\s]+)\s+(.*)/gs;
 					if (ereg.match(doc))
 					{
 						value = ereg.matched(1);
@@ -46,6 +47,7 @@ class JavadocHandler {
 			case 'deprecated': infos.deprecated = tag;
 			case 'return', 'returns': infos.returns = tag;
 			case 'since': infos.since = tag;
+			case 'default': infos.defaultValue = tag;
 			default:
 		}
 		return infos;
@@ -68,9 +70,10 @@ typedef DocInfos = {
 	?returns:DocTag,
 	?deprecated:DocTag,
 	?since:DocTag,
+	?defaultValue:DocTag,
 	params:Array<DocTag>,
 	throws:Array<DocTag>,
-	tags:Array<DocTag>	
+	tags:Array<DocTag>
 }
 
 typedef DocTag = {
