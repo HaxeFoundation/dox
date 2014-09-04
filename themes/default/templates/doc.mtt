@@ -1,7 +1,9 @@
 ::raw info.doc::
 
-<table class="table table-condensed" ::cond info.params.length > 0 || info.returns != null || info.throws.length > 0::>
+<table class="table table-condensed" ::cond info.params.length > 0 || info.returns != null || info.throws.length > 0 || info.defaultValue != null::>
 	<tbody>
+		<col width="10%"/>
+  		<col width="100%"/>
 		<tr ::cond info.params.length > 0::>
 			<th colspan="2">Parameters:</th>
 		</tr>
