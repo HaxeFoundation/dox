@@ -1,24 +1,30 @@
 ::raw info.doc::
 
-<table class="table table-condensed" ::cond info.params.length > 0 || info.returns != null::>
+<table class="table table-condensed" ::cond info.params.length > 0 || info.returns != null || info.throws.length > 0::>
 	<tbody>
+		<tr ::cond info.params.length > 0::>
+			<th colspan="2">Parameters:</th>
+		</tr>
 		::foreach param info.params::
 			<tr>
 				<td>::raw param.value::</td>
-				<td>::raw param.doc::</td>
+				<td width="100%">::raw param.doc::</td>
 			</tr>
 		::end::
 		<tr ::cond info.returns != null::>
-			<td>returns</td>
+			<th colspan="2">Returns:</th>
+		</tr>
+		<tr ::cond info.returns != null::>
+			<td></td>
 			<td>::raw info.returns.doc::</td>
 		</tr>
-		<tr ::cond info.throws != null::>
-			<th colspan="2">throws</th>
+		<tr ::cond info.throws.length > 0::>
+			<th colspan="2">Throws:</th>
 		</tr>
-		::foreach param info.throws::
+		::foreach throws info.throws::
 			<tr>
-				<td>::raw param.value::</td>
-				<td>::raw param.doc::</td>
+				<td>::raw throws.value::</td>
+				<td width="100%">::raw throws.doc::</td>
 			</tr>
 		::end::
 	</tbody>
