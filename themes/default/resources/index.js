@@ -50,14 +50,14 @@ function selectVersion(e) {
 
 function setPlatform(platform) {
 	selectItem("platform", platform);
-	
+
 	var styles = ".platform { display:none }";
 	var platforms = dox.platforms;
 
 	for (var i = 0; i < platforms.length; i++)
 	{
 		var p = platforms[i];
-		
+
 		if (platform == "sys")
 		{
 			if (p != "flash" && p != "flash8" && p != "js")
@@ -73,7 +73,7 @@ function setPlatform(platform) {
 			}
 		}
 	}
-	
+
 	if (platform != "flash" && platform != "flash8" && platform != "js")
 	{
 		styles += ".platform-sys { display:inherit } ";
@@ -100,15 +100,15 @@ function selectItem(filter, value)
 $(document).ready(function(){
 	$("#nav").html(navContent);
 	var treeState = readCookie("treeState");
-	
+
 	$("#nav .expando").each(function(i, e){
 		$("img", e).first().attr("src", dox.rootPath + "triangle-closed.png");
 	});
-	
+
 	$(".treeLink").each(function() {
 		this.href = this.href.replace("::rootPath::", dox.rootPath);
 	});
-		
+
 	if (treeState != null)
 	{
 		var states = JSON.parse(treeState);
@@ -142,11 +142,11 @@ function searchQuery(query) {
 		});
 		return;
 	}
-	
+
 	console.log("Searching: "+query);
 
 	var searchSet = false;
-	
+
 	$("#nav").addClass("searching");
 	$("#nav li").each(function(index, element){
 		var e = $(element);
@@ -161,10 +161,22 @@ function searchQuery(query) {
 			e.css("display", match ? "" : "none");
 		}
 	});
-	
+
 }
 
 function searchMatch(text, query) {
-	// I should be working at Google.
-	return text.indexOf(query) > -1;
+	var textParts = text.split(".");
+	var queryParts = query.split(".");
+	if (queryParts.length > textParts.length) {
+		return false;
+	}
+	if (queryParts.length == 1) {
+		return text.indexOf(query) > -1;
+	}
+	for (i = 0; i < queryParts.length; ++i) {
+		if (textParts[i].indexOf(queryParts[i]) != 0) { // starts with
+			return false;
+		}
+	}
+	return true;
 }
