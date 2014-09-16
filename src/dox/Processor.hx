@@ -98,7 +98,6 @@ class Processor {
 
 	function filterEnumFields(fields:List<EnumField>) {
 		return fields.filter(function(cf) {
-			if (cf.meta.length > 0) trace(cf.meta);
 			return !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
 		});
 	}
