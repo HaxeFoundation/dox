@@ -5,6 +5,7 @@
             ::api.currentPageName::$$printTypeParams(::type.params::)
         </h1>
 		$$printModule(::type.module::)
+		$$printPlatforms(::type.platforms::)
 	</div>
 	<div class="body">
 		<div class="doc doc-main" ::cond type.doc != null::>

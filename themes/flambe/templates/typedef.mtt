@@ -13,6 +13,7 @@
         ::end::
 
 		$$printModule(::type.module::)
+		$$printPlatforms(::type.platforms::)
 	</div>
 
 	<div class="body">

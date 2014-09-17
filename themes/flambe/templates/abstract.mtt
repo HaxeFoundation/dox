@@ -19,7 +19,8 @@
                 </h4>
             ::end::
         ::end::
-        $$printModule(::type.module::)
+		$$printModule(::type.module::)
+		$$printPlatforms(::type.platforms::)
 	</div>
 
 	<div class="body">

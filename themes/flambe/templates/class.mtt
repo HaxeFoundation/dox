@@ -17,6 +17,7 @@
         ::end::
 
 		$$printModule(::type.module::)
+		$$printPlatforms(::type.platforms::)
 
         <div ::cond subClasses !=null::>
             ::set title = "extended by"::
