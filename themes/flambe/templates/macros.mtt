@@ -233,10 +233,8 @@
 </macro>
 
 <macro name="printPackage(type)">
-    ::set flambe_src = "/home/bruno/dev/flambe/src"::
-    ::set source_url = if (type.file != null && type.file.indexOf(flambe_src) == 0)
-        "https://github.com/aduros/flambe/blob/master/src"+type.file.split(flambe_src).join("")
-        else null::
+    ::set source_path = api.getValue("source-path")::
+    ::set source_url = if (type.file != null && source_path != null) source_path + type.file else null::
     ::if source_url != null::
         <a class="pull-right" href="::source_url::" target="_blank"><span class="icon-eye-open"></span> View source</a>
     ::end::
