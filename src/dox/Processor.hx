@@ -2,6 +2,7 @@ package dox;
 
 import haxe.rtti.CType;
 using Lambda;
+using StringTools;
 
 class Processor {
 
@@ -161,6 +162,11 @@ class Processor {
 		return newRoot;
 	}
 
+	function makeFilePathRelative(t:TypeInfos) {
+		var path = t.module == null ? t.path : t.module;
+		t.file = path.replace(".", "/") + ".hx";
+	}
+
 	function processTree(tree:TypeTree)
 	{
 		switch (tree)
@@ -173,7 +179,7 @@ class Processor {
 				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
 				t.constructors.iter(processEnumField.bind(t.path));
-
+				makeFilePathRelative(t);
 			case TTypedecl(t):
 				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
@@ -182,6 +188,7 @@ class Processor {
 					case CAnonymous(fields): fields.iter(processClassField.bind(t.path));
 					default:
 				}
+				makeFilePathRelative(t);
 			case TClassdecl(t):
 				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
@@ -195,6 +202,7 @@ class Processor {
 					if (!infos.implementors.exists(i.path)) infos.implementors.set(i.path, [t]);
 					else infos.implementors.get(i.path).push(t);
 				}
+				makeFilePathRelative(t);
 			case TAbstractdecl(t):
 				config.setRootPath(t.path);
 				if (t.impl != null)
@@ -203,6 +211,7 @@ class Processor {
 					t.impl.statics.iter(processClassField.bind(t.path));
 				}
 				t.doc = processDoc(t.path, t.doc);
+				makeFilePathRelative(t);
 		}
 	}
 
