@@ -70,23 +70,69 @@
 	</p>
 </macro>
 
+<macro name="printAccessors(get, set)">
+	::set getIdent = "default"::
+	::set setIdent = "default"::
+
+	::switch get::
+	::case 1::
+		::eval getIdent = "null"::
+	::case 2::
+		::eval getIdent = "get"::
+	::case 4::
+		::eval getIdent = "dynamic"::
+	::end::
+
+	::switch set::
+	::case 1::
+		::eval setIdent = "null"::
+	::case 2::
+		::eval setIdent = "set"::
+	::case 4::
+		::eval setIdent = "dynamic"::
+	::end::
+
+	::if (getIdent != "default" || setIdent != "default")::
+		(::getIdent::, ::setIdent::)
+	::end::
+</macro>
+
 <macro name="printFieldSignature(field, isStatic)">
 	::if isStatic::
 		<span class="keyword">static </span>
 	::end::
-	::switch field.type::
-		<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)
+
+	::set isMethod = false::
+
+	::switch field.set::
+	::case 3::
+		::eval isMethod = true::
 	::case 4::
-		<span class="keyword">function</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>
-		$$printTypeParams(::field.params::)
-		(
-		::foreach arg args[0]::
-			::if arg.opt::?::end::
-			::arg.name:::$$printLinkedType(::arg.t::)
-			::if arg.value != null:: = ::arg.value::::end::
-			::if !repeat.arg.last::, ::end::
+		::eval isMethod = true::
+		<span class="keyword">dynamic </span>
+	::end::
+
+	::switch field.get::
+	::case 5::
+		<span class="keyword">inline </span>
+	::end::
+
+	::if isMethod::
+	    ::switch field.type::
+		::case 4::
+			<span class="keyword">function</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>
+			$$printTypeParams(::field.params::)
+			(
+			::foreach arg args[0]::
+				::if arg.opt::?::end::
+				::arg.name:::$$printLinkedType(::arg.t::)
+				::if arg.value != null:: = ::arg.value::::end::
+				::if !repeat.arg.last::, ::end::
+			::end::
+			)
+			:$$printLinkedType(::args[1]::)
 		::end::
-		)
-		:$$printLinkedType(::args[1]::)
+	::else::
+		<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>$$printAccessors(::field.get::,::field.set::):$$printLinkedType(::field.type::)
 	::end::
 </macro>
