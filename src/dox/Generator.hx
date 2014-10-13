@@ -8,14 +8,14 @@ class Generator {
 
 	var api:Api;
 	var writer:Writer;
-	
+
 	var tplNav:templo.Template;
 	var tplPackage:templo.Template;
 	var tplClass:templo.Template;
 	var tplEnum:templo.Template;
 	var tplTypedef:templo.Template;
 	var tplAbstract:templo.Template;
-	
+
 	public function new(api:Api, writer:Writer) {
 		this.api = api;
 		this.writer = writer;
@@ -27,11 +27,11 @@ class Generator {
 		tplTypedef = config.loadTemplate("typedef.mtt");
 		tplAbstract = config.loadTemplate("abstract.mtt");
 	}
-	
+
 	public function generate(root:TypeRoot) {
 		root.iter(generateTree);
 	}
-	
+
 	public function generateNavigation(root:TypeRoot) {
 		api.config.rootPath = "::rootPath::";
 		var s = tplNav.execute({
@@ -43,7 +43,7 @@ class Generator {
 		});
 		writer.saveContent("nav.js", ~/[\r\n\t]/g.replace(s, ""));
 	}
-			
+
 	function generateTree(tree:TypeTree) {
 		switch(tree) {
 			case TPackage(name, full, subs):
@@ -99,7 +99,7 @@ class Generator {
 				api.infos.numGeneratedTypes++;
 		}
 	}
-	
+
 	function write(path:String, content:String)
 	{
 		path = path.replace(".", "/").replace("<", "_").replace(">", "_") + '.html';

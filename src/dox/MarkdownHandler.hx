@@ -8,12 +8,12 @@ class MarkdownHandler {
 
 	var config:Config;
 	var infos:Infos;
-	
+
 	public function new(cfg:Config, inf:Infos) {
 		config = cfg;
 		infos = inf;
 	}
-	
+
 	public function markdownToHtml(path:String, markdown:String) {
 		// create document
 		var document = new Document();
@@ -68,14 +68,14 @@ class MarkdownHandler {
 		});
 
 
-		
+
 		return source;
 	}
-	
+
 	public function pathHref(path:String) {
 		return config.rootPath + path.split(".").join("/") + ".html";
 	}
-	
+
 	public function resolveTypeLink(type:String, ?field:String) {
 		if (field == null) return pathHref(type);
 		field = field.substr(1);
@@ -86,7 +86,7 @@ class MarkdownHandler {
 class MagicCodeSyntax extends CodeSyntax {
 
 	var callback:String->String;
-	
+
 	public function new(callback:String->String) {
 		this.callback = callback;
 		super('`([^`]*)`');

@@ -7,7 +7,7 @@ using StringTools;
 class Writer {
 	var config:Config;
 	var zipEntries:Null<List<Entry>>;
-	
+
 	public function new(config:Config) {
 		this.config = config;
 		if (!config.outputPath.endsWith(".zip")) {
@@ -37,7 +37,7 @@ class Writer {
 			makeEntry(path, Bytes.ofString(content));
 		}
 	}
-	
+
 	public function copyFrom(dir:String) {
 		for (file in sys.FileSystem.readDirectory(dir)) {
 			var path = '$dir/$file';
@@ -48,7 +48,7 @@ class Writer {
 			}
 		}
 	}
-	
+
 	public function finalize() {
 		if (zipEntries != null) {
 			var output = sys.io.File.write(config.outputPath);
@@ -56,7 +56,7 @@ class Writer {
 			zip.write(zipEntries);
 		}
 	}
-	
+
 	function makeEntry(path:String, bytes:Bytes) {
 		var entry = {
 			fileName: path,

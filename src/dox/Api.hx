@@ -10,32 +10,32 @@ using StringTools;
 **/
 @:keep
 class Api {
-	
+
 	/**
 		The Dox configuration, see `Config` for details.
 	**/
 	public var config:Config;
-	
+
 	/**
 		This instance of `Infos` contains various information which is collected
 		by the Dox processor.
 	**/
 	public var infos:Infos;
-	
+
 	/**
 		The current page name. For types this is the type name, for packages it
 		is `"package "` followed by the package name.
 	**/
 	public var currentPageName:String;
-	
+
 	public function new(cfg:Config, infos:Infos) {
 		this.config = cfg;
 		this.infos = infos;
 	}
-	
+
 	/**
 		Checks if `name` is a known platform name.
-		
+
 		Platform names correspond to the filenames of the consumed .xml files.
 		For instance, flash.xml defines target "flash".
 	**/
@@ -84,13 +84,13 @@ class Api {
 			case TAbstractdecl(t): getPathPack(t.path);
 		}
 	}
-	
+
 	/**
 		Returns the URL of `tree`, following the conventions of Dox.
-		
+
 		For packages, the returned value is the slash-path of the package
 		followed by "/index.html".
-		
+
 		For types, `pathToUrl` is called with the type path.
 	**/
 	public function getTreeUrl(tree:TypeTree):String {
@@ -102,10 +102,10 @@ class Api {
 			case TAbstractdecl(t): pathToUrl(t.path);
 		}
 	}
-	
+
 	/**
 		Returns the short description of `tree`.
-		
+
 		@todo: Document this properly.
 	**/
 	public function getTreeShortDesc(tree:TypeTree):String {
@@ -118,10 +118,10 @@ class Api {
 		}
 		return getShortDesc(infos);
 	}
-	
+
 	/**
 		Returns the short description of `infos`.
-		
+
 		@todo: Document this properly.
 	**/
 	public function getShortDesc(infos:TypeInfos):String {
@@ -139,31 +139,31 @@ class Api {
 		var sentence = ~/^(.*?[.?!]+)/;
 		return sentence.match(stripped) ? sentence.matched(1) : "";
 	}
-	
+
 	/**
 		Turns a dot-path into a slash-path and appends ".html".
 	**/
 	public function pathToUrl(path:Path):String {
 		return config.rootPath + path.split(".").join("/") + ".html";
 	}
-	
+
 	/**
 		Checks if `path` corresponds to a known type.
 	**/
 	public function isKnownType(path:Path):Bool {
 		return infos.typeMap.exists(path);
 	}
-	
+
 	/**
 		Resolves a type by its dot-path `path`.
 	**/
 	public function resolveType(path:Path):Null<TypeInfos> {
 		return infos.typeMap.get(path);
 	}
-	
+
 	/**
 		Returns the dot-path of type `ctype`.
-		
+
 		If `ctype` does not have a real path, `null` is returned.
 	**/
 	public function getTypePath(ctype:CType):Null<String> {
@@ -175,7 +175,7 @@ class Api {
 			case _: null;
 		}
 	}
-	
+
 	/**
 		Returns the last part of dot-path `path`.
 	**/
@@ -185,7 +185,7 @@ class Api {
 
 	/**
 		Returns the package part of dot-path `path`.
-		
+
 		If `path` does not have a package, the empty string `""` is returned.
 	**/
 	public function getPathPack(path:Path):String {
@@ -193,24 +193,24 @@ class Api {
 		parts.pop();
 		return parts.length == 0 ? "" : parts.join(".") + ".";
 	}
-	
+
 	/**
 		Traces `e` for debug purposes.
 	**/
 	public function debug(e:Dynamic):Void {
 		trace(Std.string(e));
 	}
-	
+
 	/**
 		Checks if `field` is an abstract implementation field.
-		
+
 		Abstract implementation fields are abstract fields which are not static
 		in the original definition.
 	**/
 	public function isAbstractImplementationField(field:ClassField):Bool {
 		return field.meta.exists(function(m) return m.name == ":impl");
 	}
-	
+
 	/**
 		Returns the CSS class string corresponding to `platforms`. If
 		`platforms is empty, `null` is returned.
@@ -219,14 +219,14 @@ class Api {
 		if (platforms.isEmpty()) return null;
 		return "platform " + platforms.map(function(p){ return "platform-"+p; }).join(" ");
 	}
-	
+
 	/**
 		Checks if `key` was defined from command line argument `-D key value`.
 	**/
 	public function isDefined(key:String):Bool {
 		return config.defines.exists(key);
 	}
-	
+
 	/**
 		Returns the value of `key` as defined by command line argument
 		`-D key value`. If no value is defined, null is returned.
@@ -234,7 +234,7 @@ class Api {
 	public function getValue(key:String):Null<String> {
 		return config.defines[key];
 	}
-	
+
 	/**
 		Returns the path to the source code of `type`. This method assumes that
 		`source-path` was defined from command line (`-D source-path url`) and
