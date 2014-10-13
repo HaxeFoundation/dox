@@ -39,14 +39,25 @@ class Writer {
 	}
 
 	public function copyFrom(dir:String) {
-		for (file in sys.FileSystem.readDirectory(dir)) {
-			var path = '$dir/$file';
-			if (zipEntries != null) {
-				makeEntry(file, sys.io.File.getBytes(path));
-			} else {
-				sys.io.File.copy(path, haxe.io.Path.join([config.outputPath, file]));
+		function loop(rel) {
+			var dir = haxe.io.Path.join([dir, rel]);
+			for (file in sys.FileSystem.readDirectory(dir)) {
+				var path = haxe.io.Path.join([dir, file]);
+				if (sys.FileSystem.isDirectory(path)) {
+					var outDir = haxe.io.Path.join([config.outputPath, rel, file]);
+					if (!sys.FileSystem.exists(outDir))
+						sys.FileSystem.createDirectory(outDir);
+					loop(haxe.io.Path.join([rel, file]));
+				} else {
+					if (zipEntries != null) {
+						makeEntry(haxe.io.Path.join([rel, file]), sys.io.File.getBytes(path));
+					} else {
+						sys.io.File.copy(path, haxe.io.Path.join([config.outputPath, rel, file]));
+					}
+				}
 			}
 		}
+		loop("");
 	}
 
 	public function finalize() {
