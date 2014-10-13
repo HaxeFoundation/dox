@@ -103,6 +103,7 @@
 	::end::
 
 	::set isMethod = false::
+	::set isInline = false::
 
 	::switch field.set::
 	::case 3::
@@ -114,11 +115,12 @@
 
 	::switch field.get::
 	::case 5::
+		::eval isInline = true::
 		<span class="keyword">inline </span>
 	::end::
-
-	::if isMethod::
+	::if isMethod || isInline::
 	    ::switch field.type::
+			<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>$$printAccessors(::field.get::,::field.set::):$$printLinkedType(::field.type::)
 		::case 4::
 			<span class="keyword">function</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>
 			$$printTypeParams(::field.params::)
