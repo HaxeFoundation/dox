@@ -4,6 +4,7 @@ package dox;
 class Config {
 	public var theme:Theme;
 	public var rootPath:String;
+	public var toplevelPackage:String;
 
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
@@ -27,6 +28,7 @@ class Config {
 	public function new() {
 		platforms = [];
 		resourcePaths = [];
+		toplevelPackage = "";
 		defines = new Map();
 		pathFilters = new haxe.ds.GenericStack<Filter>();
 		templatePaths = new haxe.ds.GenericStack<String>();

@@ -45,6 +45,9 @@ class Dox {
 			@doc("Set the page main title")
 			["--title"] => function(name:String) cfg.pageTitle = name,
 
+			@doc("Set the package which serves as top-level")
+			["--toplevel-package"] => function(dotPath:String) cfg.toplevelPackage = dotPath,
+
 			@doc("Set the theme name or path")
 			["-theme"] => function(name:String) {
 				function setTheme(path:String) {

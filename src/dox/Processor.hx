@@ -29,6 +29,30 @@ class Processor {
 
 	function filter(root:TypeRoot) {
 		var newRoot = [];
+		if (config.toplevelPackage != "") {
+			var found = false;
+			function filter(toplevelFilter, tree) {
+				switch (tree) {
+					case TPackage(name, full, subs):
+						var split = toplevelFilter.split(".");
+						if (split[0] != name) {
+							return;
+						}
+						split.shift();
+						if (split.length == 0) {
+							root = subs;
+							found = true;
+							return;
+						}
+						subs.iter(filter.bind(split.join(".")));
+					case _:
+				}
+			}
+			root.iter(filter.bind(config.toplevelPackage));
+			if (!found) {
+				throw 'Could not find toplevel package ${config.toplevelPackage}';
+			}
+		}
 		function filter(root, tree):Void {
 			return switch(tree) {
 				case TPackage(name, full, subs):
