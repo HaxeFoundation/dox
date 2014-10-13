@@ -299,9 +299,11 @@ class Processor {
 		return tplDoc.execute({ info:info });
 	}
 
-	function isTypeFiltered(type:{path:Path, meta:MetaData})
+	function isTypeFiltered(type:{path:Path, meta:MetaData, isPrivate:Bool})
 	{
+		if (Infos.hasDoxMetadata(type.meta, "show")) return false;
 		if (Infos.hasDoxMetadata(type.meta, "hide")) return true;
+		if (type.isPrivate) return true;
 		return isPathFiltered(type.path);
 	}
 
