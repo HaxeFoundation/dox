@@ -27,7 +27,7 @@ class Dox {
 			@doc("Set the output path for generated pages")
 			["-o", "--output-path"] => function(path:String) cfg.outputPath = path,
 
-			@doc("Set the xml input path")
+			@doc("Set the xml input path (file names correspond to platform names)")
 			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
 
 			@doc("Add template directory")
