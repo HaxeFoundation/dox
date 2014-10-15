@@ -14,7 +14,7 @@
 			::attr class "expando" +if (depth == 0 && api.isPlatform(name)) " platform platform-" + name else ""::>
 			<div>
 				<a href="#" onclick="toggleCollapsed(this)">
-					<img src="::api.config.rootPath::triangle-closed.png"/>
+					<img/>
 				</a>
 				<a class="treeLink" href="::api.getTreeUrl(tree)::">::api.getTreeName(tree)::</a>
 			</div>
