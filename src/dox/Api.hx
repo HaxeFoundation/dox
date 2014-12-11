@@ -244,4 +244,112 @@ class Api {
 		var module = type.module != null ? type.module : type.path;
 		return haxe.io.Path.join([getValue("source-path"), module.replace(".", "/") + ".hx"]);
 	}
+
+	/**
+		Returns additional field information which is not available on the
+		`ClassField` type. See `FieldInfo` for more information.
+	**/
+	public function getFieldInfo(cf:ClassField):FieldInfo {
+		var modifiers = {
+			isInline: false,
+			isDynamic: false
+		}
+		var isMethod = false;
+		var get = "default";
+		var set = "default";
+		switch (cf.set) {
+			case RNo:
+				set = "null";
+			case RCall(_):
+				set = "set";
+			case RMethod:
+				isMethod = true;
+			case RDynamic:
+				set = "dynamic";
+				isMethod = true;
+				modifiers.isDynamic = true;
+			default:
+		}
+		switch (cf.get) {
+			case RNo:
+				get = "null";
+			case RCall(_):
+				get = "get";
+			case RDynamic:
+				get = "dynamic";
+			case RInline:
+				modifiers.isInline = true;
+			default:
+		}
+		function varOrProperty() {
+			return if (get == "default" && set == "default") {
+				Variable;
+			} else {
+				Property(get, set);
+			}
+		}
+		var kind = if (isMethod || modifiers.isInline) {
+			switch (cf.type) {
+				case CFunction(args, ret):
+					Method(args, ret);
+				default:
+					varOrProperty();
+			}
+		} else {
+			varOrProperty();
+		}
+		return {
+			kind: kind,
+			modifiers: modifiers
+		}
+	}
+}
+
+/**
+	Additional information on class fields
+**/
+typedef FieldInfo = {
+	/**
+		The kind of the field. See `FieldKind`.
+	**/
+	kind: FieldKind,
+
+	/**
+		The field modifiers. See `FieldModifiers`.
+	**/
+	modifiers: FieldModifiers
+}
+
+/**
+	Describes the kind of a class field.
+**/
+enum FieldKind {
+	/**
+		Field is a variable. Properties with `default, default` access are
+		also considered variables.
+	**/
+	Variable;
+	/**
+		Field is a property. The arguments `get` and `set` correspond to the
+		accessor.
+	**/
+	Property(get: String, set: String);
+	/**
+		Field is a method with arguments `args` and return type `ret`.
+	**/
+	Method(args: List<FunctionArgument>, ret: CType);
+}
+
+/**
+	The modifiers of a field.
+**/
+typedef FieldModifiers = {
+	/**
+		`true` if the field is `inline`, `false` otherwise
+	**/
+	isInline: Bool,
+	/**
+		`true` if the field is `dynamic`, `false` otherwise
+	**/
+	isDynamic: Bool,
 }
