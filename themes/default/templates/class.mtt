@@ -26,28 +26,34 @@
 			::set infos = subClasses::
 			::use "related_types.mtt"::::end::
 		</div>
-		
+
 		<div ::cond implementors !=null::>
 			::set title = "Implementors"::
 			::set infos = implementors::
 			::use "related_types.mtt"::::end::
 		</div>
-		
+
 		<div class="doc" ::cond type.doc != null::>
 			::raw type.doc::
 		</div>
-		
+
 		<h2 ::cond type.statics.length > 0::>Class Fields</h2>
-		
+
 		::foreach field type.statics::
 			::set isStatic = true::
 			::use "class_field.mtt"::::end::
 		::end::
 
 		<h2 ::cond type.fields.length > 0::>Instance Fields</h2>
-		
-		::foreach field type.fields::
+
+		<a onclick="toggleInheritedFields()">Toggle inherited fields</a>
+
+		::foreach field api.getAllFields(type)::
 			::set isStatic = false::
+			::if type != field.definedBy::
+				::set definedBy = field.definedBy::
+			::end::
+			::set field = field.field::
 			::use "class_field.mtt"::::end::
 		::end::
 	</div>

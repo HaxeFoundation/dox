@@ -49,3 +49,7 @@ code .inactive { color:#75715E; }
 .navbar-fixed-top { position: fixed; }
 .navbar-fixed-top .navbar-inner,
 .navbar-fixed-bottom .navbar-inner { padding: 0; }
+
+.inherited {
+	display: none;
+}

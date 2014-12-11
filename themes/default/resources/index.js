@@ -86,6 +86,13 @@ function setVersion(version) {
 	selectItem("version", version);
 }
 
+function toggleInheritedFields() {
+	dox.showInheritedFields = !dox.showInheritedFields;
+	var display = dox.showInheritedFields ? "block" : "none";
+	var style = ".inherited { display: " + display + "; }";
+	$("#dynamicStylesheet").text(style);
+}
+
 function selectItem(filter, value)
 {
 	var dropdown = $("#select-" + filter);

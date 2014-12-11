@@ -1,17 +1,22 @@
-<div ::attr class api.getPlatformClassString(field.platforms)::>
-	<a ::attr name field.name::></a>
-	<h3>
-		<p><code>$$printFieldSignature(::field::,::isStatic::)</code></p>
-		::if field.overloads != null::
-			::foreach field field.overloads::
-				<p><code>$$printFieldSignature(::field::,::isStatic::)</code></p>
+<div ::attr class if definedBy != null "inherited" else "not-inherited"::>
+	<div ::attr class api.getPlatformClassString(field.platforms)::>
+		<a ::attr name field.name::></a>
+		<h3>
+			<p><code>$$printFieldSignature(::field::,::isStatic::)</code></p>
+			::if field.overloads != null::
+				::foreach field field.overloads::
+					<p><code>$$printFieldSignature(::field::,::isStatic::)</code></p>
+				::end::
 			::end::
+		</h3>
+		<p class="availability" ::cond definedBy != null::>
+			defined by $$printLinkedPath(::definedBy.path::,::[]::)
+		</p>
+		::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
+			$$printPlatforms(::field.platforms::)
 		::end::
-	</h3>
-	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
-		$$printPlatforms(::field.platforms::)
-	::end::
-	::if field.doc != null::
-		<div class="doc">::raw field.doc::</div>
-	::end::
+		::if field.doc != null::
+			<div class="doc">::raw field.doc::</div>
+		::end::
+	</div>
 </div>
