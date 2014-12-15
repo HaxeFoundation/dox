@@ -10,7 +10,8 @@
 				"::pf::"
 				::if !repeat.pf.last::,::end::
 			::end::
-		]
+		],
+		showInheritedFields: false
 	};</script>
 	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
 </head>

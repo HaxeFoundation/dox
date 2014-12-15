@@ -303,6 +303,32 @@ class Api {
 			modifiers: modifiers
 		}
 	}
+
+	/**
+		Returns an array of all member fields of `c` respecting the inheritance
+		chain.
+	**/
+	public function getAllFields(c:Classdef):Array<MemberField> {
+		var allFields = [];
+		var fieldMap = new Map();
+		function loop(c:Classdef) {
+			for (cf in c.fields) {
+				if (!fieldMap.exists(cf.name) || cf.overloads != null) {
+					allFields.push({ field: cf, definedBy: c});
+					fieldMap[cf.name] = true;
+				}
+			}
+			if (c.superClass != null) {
+				var cSuper:Classdef = cast infos.typeMap[c.superClass.path];
+				if (cSuper != null) { // class is not part of documentation
+					loop(cSuper);
+				}
+			}
+		}
+		loop(c);
+		allFields.sort(function(f1, f2) return Reflect.compare(f1.field.name, f2.field.name));
+		return allFields;
+	}
 }
 
 /**
@@ -352,4 +378,9 @@ typedef FieldModifiers = {
 		`true` if the field is `dynamic`, `false` otherwise
 	**/
 	isDynamic: Bool,
+}
+
+typedef MemberField = {
+	field: ClassField,
+	definedBy: Classdef
 }
