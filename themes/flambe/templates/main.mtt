@@ -4,6 +4,8 @@
 	<meta charset='utf-8'/>
 	<link href="::api.config.rootPath::bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="::api.config.rootPath::bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic' rel='stylesheet' type='text/css'/>
+	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400' rel='stylesheet' type='text/css'/>
 	<script src="::api.config.rootPath::jquery-1.9.1.min.js"></script>
 	<script src="::api.config.rootPath::bootstrap/js/bootstrap.min.js"></script>
 	<link href="::api.config.rootPath::styles.css" rel="stylesheet" />
@@ -22,6 +24,14 @@
 	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
 </head>
 <body>
+        <nav class="navbar navbar-static-top" role="navigation">
+          <div class="container">
+	   <div class="navbar-header">
+	    <a class="brand" href="/"><img src="http://haxe.org/img/haxe-logo-horizontal-on-dark.svg" width="107" height="21" alt="Haxe" onerror="this.src='http://haxe.org/img/haxe-logo-horizontal-on-dark.png'"/></a>
+	    <span class="tagline">API documentation</span>
+	   </div>
+	  </div>
+	</nav>
 	<div class="container">
         <div class="row-fluid">
             <div class="span3">
