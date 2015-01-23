@@ -15,7 +15,7 @@
 		</div>
 		::if type.constructors.length > 0::
             <h3 class="section">Values</h3>
-            <div class="field">
+            <div class="fields">
                 ::foreach ctor type.constructors::
                     ::use "enum_field.mtt"::::end::
                 ::end::
