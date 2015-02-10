@@ -1,5 +1,9 @@
 ::use 'main.mtt'::
 	<div class="page-header">
+		<span ::cond api.isDefined("source-path"):: class="viewsource">
+			<a href="::api.getSourceLink(type)::">View source</a>
+		</span>
+		
         $$printPackage(::type::)
 		<h1>
             <small>::if type.isInterface::interface::else::class::end::</small>

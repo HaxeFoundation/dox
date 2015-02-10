@@ -1,5 +1,8 @@
 ::use 'main.mtt'::
 	<div class="page-header">
+		<span ::cond api.isDefined("source-path"):: class="viewsource">
+			<a href="::api.getSourceLink(type)::">View source</a>
+		</span>
         $$printPackage(::type::)
 		<h1><small>abstract</small>
             ::api.currentPageName::$$printTypeParams(::type.params::)($$printLinkedType(::type.athis::))
