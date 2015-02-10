@@ -103,7 +103,7 @@ $(document).ready(function(){
 	var treeState = readCookie("treeState");
 
 	$("#nav .expando").each(function(i, e){
-		$("i", e).first().removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
+		$("i", e).first().addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
 	});
 
 	$(".treeLink").each(function() {
@@ -116,7 +116,7 @@ $(document).ready(function(){
 		$("#nav .expando").each(function(i, e){
 			if (states[i]) {
 				$(e).addClass("expanded");
-				$("i", e).first().addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
+				$("i", e).first().removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
 			}
 		});
 	}
