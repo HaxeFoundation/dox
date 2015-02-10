@@ -1,7 +1,7 @@
 <macro name="makeTree(tree,depth)">
 	::switch tree::
 	<li ::attr data_path api.getTreePath(tree)::>
-        <a class="treeLink" href="::api.getTreeUrl(tree)::">
+        <a class="treeLink" href="::api.getTreeUrl(tree)::" title=":: api.getTreePack(tree) + api.getTreeName(tree) ::">
             <span class="pack">:: api.getTreePack(tree) ::</span>::api.getTreeName(tree)::
         </a>
 	</li>
@@ -10,7 +10,7 @@
 		<li ::cond name.charAt(0) != "_"::
 			::attr class "expando" +if (depth == 0 && api.isPlatform(name)) " platform platform-" + name else ""::>
             <a class="nav-header" href="#" onclick="return toggleCollapsed(this)">
-                <img src="::api.config.rootPath::/triangle-closed.png"/>
+		<i class="fa fa-arrow-circle-o-right"></i>
                 ::api.getTreeName(tree)::
             </a>
 			<ul class="nav nav-list">

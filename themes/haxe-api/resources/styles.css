@@ -34,11 +34,19 @@
 /*#content .body { padding-top:80px;}*/
 .nav-list {padding-right: 0;	 }
 .nav-list>li>a, .nav-list .nav-header {margin-right:0;}
+.nav-list>li>a.treeLink {padding-left:20px;}
 .nav-list a { word-wrap: break-word; font-size:14px; text-shadow: none!important;}
 .nav-list>.active>a.treeLink, .nav-list>.active>a.treeLink:hover, .nav-list>.active>a.treeLink:focus {
 	background:#F48821;
 	color:#fff;
+}
 
+.nav-list li i.fa {
+	height: 16px;
+	width: 16px;
+	color: rgb(200,200,200);
+	font-weight:normal;
+	font-size:16px;
 }
 
 .viewsource {float:right}
@@ -90,7 +98,13 @@ footer{
 }
 
 /* h1 code { padding:4px; font-size:15px; } */
-/* h3 code { padding:4px; font-size:13px; } */
+h3 code { 
+	box-shadow: 0 0 15px rgb(240, 240, 240);
+	padding: 4px 8px; 
+}
+
+h3 p { margin-left: -10px; }
+
 code {
   font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
   font-weight: normal;

@@ -10,9 +10,9 @@ function toggleInherited(el) {
 	var toggle = $(el).closest(".toggle");
 	toggle.toggleClass("toggle-on");
 	if (toggle.hasClass("toggle-on")) {
-		$("img", toggle).attr("src", dox.rootPath + "triangle-opened.png");
+		$("i", toggle).removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
 	} else {
-		$("img", toggle).attr("src", dox.rootPath + "triangle-closed.png");
+		$("i", toggle).addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
 	}
     return false;
 }
@@ -22,9 +22,9 @@ function toggleCollapsed(el) {
 	toggle.toggleClass("expanded");
 
 	if (toggle.hasClass("expanded")) {
-		$("img", toggle).first().attr("src", dox.rootPath + "triangle-opened.png");
+		$("i", toggle).removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
 	} else {
-		$("img", toggle).first().attr("src", dox.rootPath + "triangle-closed.png");
+		$("i", toggle).addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
 	}
 	updateTreeState();
     return false;
@@ -103,7 +103,7 @@ $(document).ready(function(){
 	var treeState = readCookie("treeState");
 
 	$("#nav .expando").each(function(i, e){
-		$("img", e).first().attr("src", dox.rootPath + "triangle-closed.png");
+		$("i", e).first().addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
 	});
 
 	$(".treeLink").each(function() {
@@ -116,7 +116,7 @@ $(document).ready(function(){
 		$("#nav .expando").each(function(i, e){
 			if (states[i]) {
 				$(e).addClass("expanded");
-				$("img", e).first().attr("src", dox.rootPath + "triangle-opened.png");
+				$("i", e).first().removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
 			}
 		});
 	}
