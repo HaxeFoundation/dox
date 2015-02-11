@@ -7,7 +7,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic' rel='stylesheet' type='text/css'/>
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400' rel='stylesheet' type='text/css'/>
 	<link href='http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css' rel='stylesheet' type='text/css' />
-	
+
 	<script src="::api.config.rootPath::jquery-1.9.1.min.js"></script>
 	<script src="::api.config.rootPath::bootstrap/js/bootstrap.min.js"></script>
 	<link href="::api.config.rootPath::styles.css" rel="stylesheet" />
@@ -28,13 +28,13 @@
 <body>
 	<nav class="navbar dark navbar-static-top" role="navigation">
 	  <div class="container">
-	  
+
 	   <div class="navbar-header">
-	   
+
 	    <a class="brand" href="http://haxe.org/"><img src="http://haxe.org/img/haxe-logo-horizontal-on-dark.svg" width="107" height="21" alt="Haxe" onerror="this.src='http://haxe.org/img/haxe-logo-horizontal-on-dark.png'"/></a>
 	    <span class="tagline">API Documentation</span>
 		<div class="pull-right">
-			<a href="http://haxe.org/download/" target="_blank">Download</a> | 
+			<a href="http://haxe.org/download/" target="_blank">Download</a> |
 			<a href="http://haxe.org/manual/" target="_blank">Read the manual</a>
 		</div>
 	   </div>
@@ -47,7 +47,7 @@
                 <form class="form-search" id="searchForm">
                   <div class="input-prepend input-block-level">
                     <span class="add-on"><i class="icon-search"></i></span>
-                    <input id="search" type="text" placeholder="Search" autocomplete="off"/>
+                    <input id="search" type="text" placeholder="Filter" autocomplete="off"/>
                   </div>
                 </form>
                 <div id="nav"></div>
@@ -56,19 +56,19 @@
             <div class="span9">::raw __content__::</div>
         </div>
 	</div>
-		
+
 	<footer class="section dark site-footer">
 		<div class="container">
 			<div class="copyright">
 				<p ::cond api.isDefined("version")::>This documentation is generated for version ::api.getValue('version')::</p>
-				<p>&copy;2015 
-				<a href="/foundation/" title="Haxe Foundation Website" class="hf-link">Haxe Foundation</a> | 
-				<a href="https://github.com/HaxeFoundation/haxe" title="Haxe on Github">Contribute to Haxe</a> 
+				<p>&copy;2015
+				<a href="/foundation/" title="Haxe Foundation Website" class="hf-link">Haxe Foundation</a> |
+				<a href="https://github.com/HaxeFoundation/haxe" title="Haxe on Github">Contribute to Haxe</a>
 				</p>
 			</div>
 		</div>
 	</footer>
-	
+
     <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 </body>
 </html>
