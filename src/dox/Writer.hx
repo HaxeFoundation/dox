@@ -45,7 +45,7 @@ class Writer {
 				var path = haxe.io.Path.join([dir, file]);
 				if (sys.FileSystem.isDirectory(path)) {
 					var outDir = haxe.io.Path.join([config.outputPath, rel, file]);
-					if (!sys.FileSystem.exists(outDir))
+					if (zipEntries == null && !sys.FileSystem.exists(outDir))
 						sys.FileSystem.createDirectory(outDir);
 					loop(haxe.io.Path.join([rel, file]));
 				} else {
