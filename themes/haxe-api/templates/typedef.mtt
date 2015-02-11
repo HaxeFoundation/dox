@@ -35,7 +35,7 @@
 		::end::
         ::if showSection::
             <h3 class="section">Properties</h3>
-            <div class="indent">
+            <div class="fields">
                 ::switch type.type::
                 ::case 5::
                     ::foreach field args[0]::
