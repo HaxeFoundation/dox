@@ -228,12 +228,6 @@
 </macro>
 
 <macro name="printPackage(type)">
-    ::set source_path = api.getValue("source-path")::
-    ::set source_url = if (type.file != null && source_path != null) source_path + type.file else null::
-    ::if source_url != null::
-        <a class="pull-right" href="::source_url::" target="_blank"><span class="icon-eye-open"></span> View source</a>
-    ::end::
-
     ::if type.path.indexOf(".") >= 0::
         <h4><small>package ::type.path.split(".").slice(0, -1).join(".")::</small></h4>
     ::end::
