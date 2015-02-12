@@ -84,6 +84,8 @@ footer{
 
 /* .nav .nav li { margin-left: 14px; } */
 
+.dropdown { padding: 0 9px; } 
+
 #nav.searching .expando > ul { display:inherit; }
 #nav.searching .expando > a { display:none; }
 #nav.searching ul { margin-left:0px; }
@@ -183,6 +185,7 @@ h6 {
 
 #searchForm {
   padding: 0 9px;
+  margin-bottom:10px;
 }
 
 #searchForm .control-group {

@@ -73,6 +73,16 @@
 		<span class="label">static</span>
 	::end::
 
+	::set fieldInfo = api.getFieldInfo(field)::
+
+	::if fieldInfo.modifiers.isDynamic::
+		<span class="label">dynamic</span> 
+	::end::
+
+	::if fieldInfo.modifiers.isInline::
+		<span class="label">inline</span> 
+	::end::
+	
 	::switch field.type::
         ::switch field.set::
         ::case 1::
@@ -140,7 +150,7 @@
         ::end::
     ::end::
     ::if showSection::
-        <h3 class="section">Properties</h3>
+        <h3 class="section">Fields</h3>
         <div class="fields">
             ::foreach field type.fields::
                 ::set isStatic = false::
@@ -188,7 +198,7 @@
         ::end::
     ::end::
     ::if showSection::
-        <h3 class="section">Static properties</h3>
+        <h3 class="section">Static fields</h3>
         <div class="fields">
             ::foreach field type.statics::
                 ::set isStatic = true::
