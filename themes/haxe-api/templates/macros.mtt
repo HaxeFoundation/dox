@@ -94,7 +94,7 @@
         ::end::
 
         <code>
-		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)
+		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
         </code>
 
 	::case 4::
@@ -113,6 +113,12 @@
 		::end::
         </code>
 	::end::
+</macro>
+
+<macro name="printInitExpr(expr)">
+	<span ::cond expr != null::>
+		 = ::expr::
+	</span>
 </macro>
 
 <macro name="printClassBody(type)">
