@@ -41,62 +41,43 @@ function updateTreeState(){
 
 var filters = {};
 
-function selectPlatform(e) {
-	setPlatform($(e.target).parent().attr("data"));
-}
-
 function selectVersion(e) {
 	setVersion($(e.target).parent().attr("data"));
 }
 
 function setPlatform(platform) {
-	selectItem("platform", platform);
-
+	createCookie("platform", platform);
+	$("#select-platform").val(platform);
+	
 	var styles = ".platform { display:none }";
 	var platforms = dox.platforms;
 
-	for (var i = 0; i < platforms.length; i++)
-	{
+	for (var i = 0; i < platforms.length; i++) {
 		var p = platforms[i];
-
-		if (platform == "sys")
-		{
-			if (p != "flash" && p != "flash8" && p != "js")
-			{
+		if (platform == "sys") {
+			if (p != "flash" && p != "flash8" && p != "js")	{
 				styles += ".platform-" + p + " { display:inherit } ";
 			}
 		}
 		else
 		{
-			if (platform == "all" || p == platform)
-			{
+			if (platform == "all" || p == platform)	{
 				styles += ".platform-" + p + " { display:inherit } ";
 			}
 		}
 	}
 
-	if (platform != "flash" && platform != "flash8" && platform != "js")
-	{
+	if (platform != "flash" && platform != "flash8" && platform != "js") {
 		styles += ".platform-sys { display:inherit } ";
 	}
 
 	$("#dynamicStylesheet").text(styles);
 }
-
+/*
 function setVersion(version) {
-	selectItem("version", version);
+	createCookie("version", version);
 }
-
-function selectItem(filter, value)
-{
-	var dropdown = $("#select-" + filter);
-	var item = $("li[data='"+value+"']", dropdown);
-	var label = $("a", item).text();
-	$(".dropdown-toggle", dropdown).html(label + '<b class="caret">');
-	$("li.active", dropdown).removeClass("active");
-	item.addClass("active");
-	createCookie(filter, value);
-}
+*/
 
 $(document).ready(function(){
 	$("#nav").html(navContent);
@@ -121,13 +102,18 @@ $(document).ready(function(){
 		});
 	}
 	$("head").append("<style id='dynamicStylesheet'></style>");
-
-	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
-	setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
-
+	
 	$("#search").on("input", function(e){
 		searchQuery(e.target.value);
 	});
+	
+	$("#select-platform").selectpicker().on("change", function(e){
+		var value = $(":selected", this).val();
+		setPlatform(value);
+	});
+	
+	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
+	//setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
 
 	$("#nav a").each(function () {
 		if (this.href == location.href) {
