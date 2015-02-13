@@ -103,6 +103,9 @@ $(document).ready(function(){
 	}
 	$("head").append("<style id='dynamicStylesheet'></style>");
 	
+	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
+	//setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
+
 	$("#search").on("input", function(e){
 		searchQuery(e.target.value);
 	});
@@ -112,9 +115,6 @@ $(document).ready(function(){
 		setPlatform(value);
 	});
 	
-	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
-	//setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
-
 	$("#nav a").each(function () {
 		if (this.href == location.href) {
 			$(this.parentElement).addClass("active");
