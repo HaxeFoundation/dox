@@ -5,7 +5,7 @@
 		</span>
         $$printPackage(::type::)
 		<h1><small>abstract</small>
-            ::api.currentPageName::$$printTypeParams(::type.params::)($$printLinkedType(::type.athis::))
+            ::api.getPathName(type.path)::$$printTypeParams(::type.params::)($$printLinkedType(::type.athis::))
         </h1>
 
         ::foreach t type.from::

@@ -5,7 +5,7 @@
 		</span>
         $$printPackage(::type::)
 		<h1><small>enum</small>
-            ::api.currentPageName::$$printTypeParams(::type.params::)
+            ::api.getPathName(type.path)::$$printTypeParams(::type.params::)
         </h1>
 		$$printModule(::type.module::)
 		$$printPlatforms(::type.platforms::)
