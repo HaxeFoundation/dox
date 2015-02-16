@@ -102,7 +102,10 @@ footer{
 /* h1 code { padding:4px; font-size:15px; } */
 h3 code { 
 	box-shadow: 0 0 15px rgb(240, 240, 240);
-	padding: 4px 8px; 
+	padding: 4px 8px;
+	white-space: inherit;
+	display: inline-block;
+	line-height: 1.5em;
 }
 
 h3 p { margin-left: -10px; }
