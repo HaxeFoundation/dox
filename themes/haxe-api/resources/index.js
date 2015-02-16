@@ -51,7 +51,9 @@ function setPlatform(platform) {
 	
 	var styles = ".platform { display:none }";
 	var platforms = dox.platforms;
-
+	if (platform == "flash" || platform == "flash8" || platform == "js") {
+		styles += ".package-sys { display:none; } ";
+	}
 	for (var i = 0; i < platforms.length; i++) {
 		var p = platforms[i];
 		if (platform == "sys") {
