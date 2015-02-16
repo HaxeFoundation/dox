@@ -99,6 +99,11 @@ footer{
 	text-shadow: none;
 }
 
+.availability {
+	color: #AB611A;
+	font-size: 90%;
+}
+
 /* h1 code { padding:4px; font-size:15px; } */
 h3 code { 
 	box-shadow: 0 0 15px rgb(240, 240, 240);
