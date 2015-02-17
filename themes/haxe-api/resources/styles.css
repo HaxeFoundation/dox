@@ -104,13 +104,19 @@ footer{
 	font-size: 90%;
 }
 
-/* h1 code { padding:4px; font-size:15px; } */
 h3 code { 
+	background:none;
 	box-shadow: 0 0 15px rgb(240, 240, 240);
-	padding: 4px 8px; 
+	padding: 4px 8px;
+	white-space: inherit;
+	display: inline-block;
+	line-height: 1.5em;
+	margin-left: -10px;
 }
 
-h3 p { margin-left: -10px; }
+h3 span.label {	
+	margin-right: 5px; 
+}
 
 code {
   font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
@@ -123,6 +129,13 @@ code {
   padding: 2px 4px;
   font-size: 13px;
 }
+
+code .identifier {
+  font-family:bold 14px "Helvetica Neue",Helvetica,Arial,sans-serif;
+  color:#002b36;
+  padding: 0 0 0 5px;  
+}
+
 code .identifier, code.type {
   font-weight: bold;
 }
@@ -132,7 +145,6 @@ code a { text-decoration:none; }
 code a:hover { text-decoration:underline; }
 
 /*code.dark { background:#272822; color:#F8F8F2; border:none; } */
-code .identifier { color:#002b36; }
 code .type { color:#268bd2; }
 /* code .keyword { color:#dc322f; } */
 /* code .directive { color:#2aa198; } */
