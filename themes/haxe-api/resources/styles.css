@@ -99,16 +99,17 @@ footer{
 	text-shadow: none;
 }
 
-/* h1 code { padding:4px; font-size:15px; } */
 h3 code { 
+	background:none;
 	box-shadow: 0 0 15px rgb(240, 240, 240);
 	padding: 4px 8px;
 	white-space: inherit;
 	display: inline-block;
 	line-height: 1.5em;
+	margin-left: -10px;
 }
 
-h3 p { margin-left: -10px; }
+h3 span.label {	margin-right: 5px; }
 
 code {
   font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
@@ -121,6 +122,12 @@ code {
   padding: 2px 4px;
   font-size: 13px;
 }
+
+code .identifier {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+}
+
 code .identifier, code.type {
   font-weight: bold;
 }
