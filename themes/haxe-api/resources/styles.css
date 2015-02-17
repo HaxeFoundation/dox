@@ -124,8 +124,9 @@ code {
 }
 
 code .identifier {
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-size: 14px;
+  font-family:bold 14px "Helvetica Neue",Helvetica,Arial,sans-serif;
+  color:#002b36;
+  padding: 0 3px 0px 5px;  
 }
 
 code .identifier, code.type {
@@ -137,7 +138,6 @@ code a { text-decoration:none; }
 code a:hover { text-decoration:underline; }
 
 /*code.dark { background:#272822; color:#F8F8F2; border:none; } */
-code .identifier { color:#002b36; }
 code .type { color:#268bd2; }
 /* code .keyword { color:#dc322f; } */
 /* code .directive { color:#2aa198; } */
