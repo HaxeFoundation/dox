@@ -43,10 +43,10 @@
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::
 		::if args[0].length == 0::
-			$$printLinkedPath(::"Void"::,::[]::) -&gt;&nbsp;
+			$$printLinkedPath(::"Void"::,::[]::)&nbsp;&#8209;&gt;&nbsp;
 		::else::
 			::foreach arg args[0]::
-				$$printLinkedType(::arg.t::) -&gt;&nbsp;
+				$$printLinkedType(::arg.t::)&nbsp;&#8209;&gt;&nbsp;
 			::end::
 		::end::
 		$$printLinkedType(::args[1]::)
@@ -68,7 +68,8 @@
 	</p>
 </macro>
 
-<macro name="printFieldSignature(field, isStatic)">
+<macro name="printFieldSignature(field, isStatic)"> 
+	<code>
 	::if isStatic::
 		<span class="label">static</span>
 	::end::
@@ -85,7 +86,7 @@
 	
 	::switch field.type::
         ::switch field.set::
-        ::case 1::
+	 ::case 1::
             <span class="label">read only</span>
         ::end::
         ::switch field.get::
@@ -93,12 +94,9 @@
             <span class="label">write only</span>
         ::end::
 
-        <code>
-		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
-        </code>
-
+        <a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
+       
 	::case 4::
-        <code>
 		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>
 		$$printTypeParams(::field.params::) (
 		::foreach arg args[0]::
@@ -111,8 +109,8 @@
 		::if field.name != "new"::
 			:$$printLinkedType(::args[1]::)
 		::end::
-        </code>
 	::end::
+        </code>
 </macro>
 
 <macro name="printInitExpr(expr)">
