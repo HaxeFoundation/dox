@@ -58,7 +58,7 @@ class Processor {
 				case TPackage(name, full, subs):
 					var acc = [];
 					subs.iter(filter.bind(acc));
-					if (!isPathFiltered(full)) root.push(TPackage(name, full, acc));
+					if (acc.length > 0 || !isPathFiltered(full)) root.push(TPackage(name, full, acc));
 				case TClassdecl(t):
 					t.fields = filterFields(t.fields);
 					t.statics = filterFields(t.statics);
