@@ -69,20 +69,20 @@ class TestClass
 	{
 
 	}
-	
+
 	/**
 		Tests @returns without @param
-		
+
 		@return A random String.
 	**/
 	public static function java_doc_return_without_param() {
-		
+
 	}
 
 	/**
-	 * Creates a FlxSprite at a specified position with a specified one-frame graphic. 
+	 * Creates a FlxSprite at a specified position with a specified one-frame graphic.
 	 * If none is provided, a 16x16 image of the HaxeFlixel logo is used.
-	 * 
+	 *
 	 * @param   X               The initial X position of the sprite.
 	 * @param   Y               The initial Y position of the sprite.
 	 * @param   SimpleGraphic   The graphic you want to display (OPTIONAL - for simple stuff only, do NOT use for animated images!).
@@ -92,12 +92,17 @@ class TestClass
 	}
 
 	@:dox(hide) public var hiddenField:String;
+
+	public static var hexInit = 0xFF0000;
+	public static var nonHexInit = 12;
+
+	public static function defaultValues(a = 0x00FF00, ?b = "foo", c = true) { }
 }
 
 /**
 	Some *documentation*.
 **/
-typedef TestTypeDef = 
+typedef TestTypeDef =
 {
 	/**
 		Some description with a type reference `Foo`.
@@ -122,7 +127,7 @@ enum TestEnum
 	/**
 		Some *documentation*.
 	**/
-	VisibleConstructor;	
+	VisibleConstructor;
 }
 
 @:dox(hide) enum TestHiddenEnum {}
