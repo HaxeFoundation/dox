@@ -185,11 +185,6 @@ code .macro {
     background: red;
 }
 
-.platform-flash8 div a:nth-child(2):before,.platform-flash8 h3 code:before {
-    content: " FP ";
-    background: FireBrick;
-}
-
 .platform-cs div a:nth-child(2):before,.platform-cs h3 code:before {
     content: " CS ";
     background: green;

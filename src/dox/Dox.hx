@@ -127,7 +127,6 @@ class Dox {
 				trace('Error while parsing $path');
 				throw err;
 			};
-			if (name == "flash8") transformPackage(xml, "flash", "flash8");
 			parser.process(xml, name);
 			cfg.platforms.push(name);
 		}
@@ -167,18 +166,6 @@ class Dox {
 
 		var elapsed = Std.string(haxe.Timer.stamp() - tStart).substr(0, 5);
 		Sys.println('Done (${elapsed}s)');
-	}
-
-	static function transformPackage(x:Xml, p1, p2) {
-		switch( x.nodeType ) {
-		case Xml.Element:
-			var p = x.get("path");
-			if( p != null && p.substr(0,6) == p1 + "." )
-				x.set("path",p2 + "." + p.substr(6));
-			for( x in x.elements() )
-				transformPackage(x,p1,p2);
-		default:
-		}
 	}
 
 	static function loadTemplates(cfg:Config, path:String) {
