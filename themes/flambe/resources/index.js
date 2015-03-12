@@ -51,17 +51,17 @@ function selectVersion(e) {
 
 function setPlatform(platform) {
 	selectItem("platform", platform);
-	
+
 	var styles = ".platform { display:none }";
 	var platforms = dox.platforms;
 
 	for (var i = 0; i < platforms.length; i++)
 	{
 		var p = platforms[i];
-		
+
 		if (platform == "sys")
 		{
-			if (p != "flash" && p != "flash8" && p != "js")
+			if (p != "flash" && p != "js")
 			{
 				styles += ".platform-" + p + " { display:inherit } ";
 			}
@@ -74,8 +74,8 @@ function setPlatform(platform) {
 			}
 		}
 	}
-	
-	if (platform != "flash" && platform != "flash8" && platform != "js")
+
+	if (platform != "flash" && platform != "js")
 	{
 		styles += ".platform-sys { display:inherit } ";
 	}
@@ -150,11 +150,11 @@ function searchQuery(query) {
 		});
 		return;
 	}
-	
+
 	console.log("Searching: "+query);
 
 	var searchSet = false;
-	
+
 	$("#nav").addClass("searching");
 	$("#nav li").each(function(index, element){
 		var e = $(element);
@@ -169,7 +169,7 @@ function searchQuery(query) {
 			e.css("display", match ? "" : "none");
 		}
 	});
-	
+
 }
 
 function searchMatch(text, query) {

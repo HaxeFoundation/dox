@@ -13,13 +13,6 @@
 
 --next
 
--swf all.swf
--swf-version 8
--xml ../bin/xml/flash8.xml
--D flash_lite
-
---next
-
 -js all.js
 -xml ../bin/xml/js.xml
 

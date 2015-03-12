@@ -60,7 +60,7 @@ function setPlatform(platform) {
 
 		if (platform == "sys")
 		{
-			if (p != "flash" && p != "flash8" && p != "js")
+			if (p != "flash" && p != "js")
 			{
 				styles += ".platform-" + p + " { display:inherit } ";
 			}
@@ -74,7 +74,7 @@ function setPlatform(platform) {
 		}
 	}
 
-	if (platform != "flash" && platform != "flash8" && platform != "js")
+	if (platform != "flash" && platform != "js")
 	{
 		styles += ".platform-sys { display:inherit } ";
 	}

@@ -48,16 +48,16 @@ function selectVersion(e) {
 function setPlatform(platform) {
 	createCookie("platform", platform);
 	$("#select-platform").val(platform);
-	
+
 	var styles = ".platform { display:none }";
 	var platforms = dox.platforms;
-	if (platform == "flash" || platform == "flash8" || platform == "js") {
+	if (platform == "flash" || platform == "js") {
 		styles += ".package-sys { display:none; } ";
 	}
 	for (var i = 0; i < platforms.length; i++) {
 		var p = platforms[i];
 		if (platform == "sys") {
-			if (p != "flash" && p != "flash8" && p != "js")	{
+			if (p != "flash" && p != "js")	{
 				styles += ".platform-" + p + " { display:inherit } ";
 			}
 		}
@@ -69,7 +69,7 @@ function setPlatform(platform) {
 		}
 	}
 
-	if (platform != "flash" && platform != "flash8" && platform != "js") {
+	if (platform != "flash" && platform != "js") {
 		styles += ".platform-sys { display:inherit } ";
 	}
 
@@ -104,19 +104,19 @@ $(document).ready(function(){
 		});
 	}
 	$("head").append("<style id='dynamicStylesheet'></style>");
-	
+
 	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
 	//setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
 
 	$("#search").on("input", function(e){
 		searchQuery(e.target.value);
 	});
-	
+
 	$("#select-platform").selectpicker().on("change", function(e){
 		var value = $(":selected", this).val();
 		setPlatform(value);
 	});
-	
+
 	$("#nav a").each(function () {
 		if (this.href == location.href) {
 			$(this.parentElement).addClass("active");

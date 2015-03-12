@@ -21,7 +21,7 @@ class ImportAll {
 		case "cpp":
 			if( !Context.defined("cpp") ) return;
 		case "flash8":
-			if( !Context.defined("flash") || Context.defined("flash9") ) return;
+			return; // TODO: remove this when flash8 is removed from std library
 		case "flash":
 			if( !Context.defined("flash9") ) return;
 		case "mt","mtwin":
@@ -53,8 +53,6 @@ class ImportAll {
 				var full = (pack == "") ? file : pack + "." + file;
 				if( StringTools.endsWith(file, ".hx") ) {
 					var cl = full.substr(0, full.length - 3);
-					if( StringTools.startsWith(cl,"flash8.") )
-						cl = "flash."+cl.substr(7);
 					switch( cl ) {
 					case "ImportAll", "neko.db.MacroManager": continue;
 					case "haxe.TimerQueue": if( Context.defined("neko") || Context.defined("php") || Context.defined("cpp") ) continue;
