@@ -46,7 +46,7 @@
 
 		<h2 ::cond type.fields.length > 0::>Instance Fields</h2>
 
-		<a onclick="toggleInheritedFields()">Toggle inherited fields</a>
+		<a ::cond type.superClass !=null:: onclick="toggleInheritedFields()">Toggle inherited fields</a>
 
 		::foreach field api.getAllFields(type)::
 			::set isStatic = false::
