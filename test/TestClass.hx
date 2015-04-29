@@ -13,6 +13,17 @@
  *     child = next;
  * }
  * </pre>
+ *
+ * Triple backticks code block:
+ * ```
+ * // Iterate over entity's children
+ * var child = entity.firstChild;
+ * while (child != null) {
+ *     var next = child.next; // Store in case the child is removed in process()
+ *     process(child);
+ *     child = next;
+ * }
+ * ```
  */
 class TestClass
 {
@@ -80,6 +91,52 @@ class TestClass
 	}
 
 	/**
+		Tests dynamic method 
+	**/
+	public dynamic function java_doc_dynamic() {
+
+	}
+
+	/**
+		Tests @param with spaces in front
+
+    @param myParam Int parameter.
+	**/
+	public static function java_doc_space_param(myParam: Int) {
+
+	}
+
+	/**
+    Tests @param with 4 spaces in front and multiple paragraphs.
+
+    Second paragraph.
+
+    @param myParam Int parameter.
+        Continue parameter description.
+
+        Another paragraph.
+    @param myParam2 Int parameter 2.
+	**/
+	public static function java_doc_space_multi4(myParam: Int, myParam2: Int) {
+
+	}
+
+/**
+  Tests @param with 2 spaces in front and multiple paragraphs.
+
+  Second paragraph.
+
+  @param myParam Int parameter.
+    Continue parameter description.
+
+    Another paragraph.
+  @param myParam2 Int parameter 2.
+**/
+	public static function java_doc_space_multi2(myParam: Int, myParam2: Int) {
+
+	}
+
+	/**
 	 * Creates a FlxSprite at a specified position with a specified one-frame graphic.
 	 * If none is provided, a 16x16 image of the HaxeFlixel logo is used.
 	 *
@@ -108,6 +165,17 @@ typedef TestTypeDef =
 		Some description with a type reference `Foo`.
 
 		And a Second Line `"type":"ItemDetail"`
+
+		Triple backticks code block:
+		```
+  // Iterate over entity's children
+  var child = entity.firstChild;
+  while (child != null) {
+     var next = child.next; // Store in case the child is removed in process()
+     process(child);
+     child = next;
+  }
+		```
 	**/
 	var myField:String;
 
