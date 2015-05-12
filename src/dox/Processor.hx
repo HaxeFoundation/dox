@@ -259,6 +259,35 @@ class Processor {
 		// trim trailing asterixes
 		while (doc.charAt(doc.length - 1) == '*') doc = doc.substr(0, doc.length - 1);
 
+		// replace leading whitespace from each line with tabs
+		var arr = doc.split('\n');
+		var flagCode = false;
+		var ereg = ~/^( *)/;
+		var minSpaces = 10;
+		for (idx in 0...arr.length)
+		{
+			if (arr[idx].indexOf('```') >= 0)
+				flagCode = !flagCode;
+			if (arr[idx].indexOf('<pre>') >= 0)
+				flagCode = true;
+			if (arr[idx].indexOf('</pre>') >= 0)
+				flagCode = false;
+
+			if (!flagCode && arr[idx].charAt(0) == ' ')
+			{
+				ereg.match(arr[idx]);
+				var cnt = ereg.matched(0).length;
+				var tmp = new StringBuf();
+				if (cnt < minSpaces)
+					minSpaces = cnt;
+				var max = (minSpaces > 2 ? Std.int(cnt / 2) : cnt);
+				for (i in 0...max)
+					tmp.add('\t');
+				arr[idx] = tmp.toString() + StringTools.trim(arr[idx]);
+			}
+		}
+		doc = arr.join('\n');
+
 		// detect doc comment style/indent
 		var ereg = ~/^( \* |\t\* |\t \* |\t\t| +\* )/m;
 		var matched = ereg.match(doc);
