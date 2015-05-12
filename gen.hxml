@@ -4,6 +4,7 @@
 
 --no-output
 --macro ImportAll.run()
+-dce no
 -D doc-gen
 
 --each
