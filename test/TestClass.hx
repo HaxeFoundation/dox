@@ -14,7 +14,13 @@
  * }
  * </pre>
  *
- * http://google.com
+ * Working link http://google.com
+ *
+ * Previously broken link http://php.net/manual/en/function.mail.php
+ *
+ * ```haxe
+ * 	var foo = bar;
+ * ```
  */
 class TestClass
 {
@@ -96,6 +102,13 @@ class TestClass
 
 	}
 
+	/**
+	  @param x some documentation for parameters.
+	**/
+	public function indentation_space_cadets(x:Int):Void
+	{
+	}
+
 	@:dox(hide) public var hiddenField:String;
 
 	public static var hexInit = 0xFF0000;
@@ -136,3 +149,17 @@ enum TestEnum
 }
 
 @:dox(hide) enum TestHiddenEnum {}
+
+/**
+	Use this type to have access to the bitwise operators of C# enums that have a `cs.system.FlagsAttribute` attribute.
+
+	```haxe
+		import cs.system.reflection.BindingFlags;
+
+		var binding = new Flags(BindingFlags.Public) | BindingFlags.Static | BindingFlags.NonPublic;
+	```
+**/
+class TestClass2
+{
+
+}
