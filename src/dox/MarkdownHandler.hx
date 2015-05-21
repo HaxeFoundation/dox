@@ -61,14 +61,6 @@ class MarkdownHandler {
 			return text;
 		});
 
-		// Type, null => /Null.html
-		source = ~/null/g.map(source, function(e){
-			var href = resolveTypeLink("Null");
-			return '<a href="$href">null</a>';
-		});
-
-
-
 		return source;
 	}
 
