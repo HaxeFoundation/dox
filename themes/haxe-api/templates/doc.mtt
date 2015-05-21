@@ -36,3 +36,10 @@
         Available since ::raw info.since.doc::.
     </div>
 ::end::
+
+::if info.sees.length > 0::
+    <p class="javadoc">See:</p>
+    ::foreach see info.sees::
+        <div class="indent inline-content">::raw see.doc::</div>
+    ::end::
+::end::
