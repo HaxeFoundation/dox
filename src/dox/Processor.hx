@@ -259,34 +259,23 @@ class Processor {
 		// trim trailing asterixes
 		while (doc.charAt(doc.length - 1) == '*') doc = doc.substr(0, doc.length - 1);
 
-		// detect doc comment style/indent
-		var ereg = ~/^( \* |\t\* |\t \* |\t\t| +\* )/m;
-		var matched = ereg.match(doc);
+		// trim additional whitespace
+		doc = StringTools.trim(doc);
 
-		// special case for single tab indent because my regex isn't clever enough
-		if (!matched)
-		{
-			ereg = ~/^(\t)/m;
-			matched = ereg.match(doc);
-		}
+		// detect doc comment style/indent
+		var ereg = ~/^([ \t]+(\* )?)[^\s\*]/m;
+		var matched = ereg.match(doc);
 
 		if (matched)
 		{
 			var string = ereg.matched(1);
 
-			// escape asterixes
-			string = string.split('*').join('\\*');
-
-			// make trailing space optional
-			if (string.charAt(string.length - 1) == ' ')
-				string = string.substr(0, string.length - 1) + ' ?';
+			// escape asterix and allow one optional space after it
+			string = string.split('* ').join('\\* ?');
 
 			var indent = new EReg("^" + string, "gm");
 			doc = indent.replace(doc, "");
 		}
-
-		// trim additional whitespace
-		doc = StringTools.trim(doc);
 
 		return doc;
 	}
