@@ -1,30 +1,48 @@
 ::use 'main.mtt'::
-	<div class="header">
+	<div class="page-header">
 		<span ::cond api.isDefined("source-path"):: class="viewsource">
 			<a href="::api.getSourceLink(type)::">View source</a>
 		</span>
-		<h1>
-			<code>
-				<span class="directive">typedef </span>
-				<span class="type">::type.path::</span>
-				$$printTypeParams(::type.params::)
-				::switch type.type:: = $$printLinkedType(::type.type::)
-				::case 5::
-				::end::
-			</code>
-		</h1>
-	</div>
-	<div class="body">
+        $$printPackage(::type::)
+		<h1><small>typedef</small>
+            ::api.getPathName(type.path)::$$printTypeParams(::type.params::)
+        </h1>
+
+        ::switch type.type::
+        <h4>
+            <small>alias for</small> $$printLinkedType(::type.type::)
+        </h4>
+        ::case 5::
+        ::end::
+
 		$$printModule(::type.module::)
 		$$printPlatforms(::type.platforms::)
-		<div class="doc" ::cond type.doc != null::>
-			::raw type.doc::
+	</div>
+
+	<div class="body">
+		<div class="doc doc-main" ::cond type.doc != null::>
+            <div class="indent">
+                ::raw type.doc::
+            </div>
 		</div>
+
+        ::set showSection = false::
 		::switch type.type::
 		::case 5::
 			::foreach field args[0]::
-				::use "class_field.mtt"::::end::
+				::eval showSection = true::
 			::end::
 		::end::
+        ::if showSection::
+            <h3 class="section">Properties</h3>
+            <div class="fields">
+                ::switch type.type::
+                ::case 5::
+                    ::foreach field args[0]::
+                        ::use "class_field.mtt"::::end::
+                    ::end::
+                ::end::
+            </div>
+        ::end::
 	</div>
 ::end::

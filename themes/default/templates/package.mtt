@@ -1,6 +1,20 @@
 ::use 'main.mtt'::
-	::if full == ""::<h1>top level</h1>
-	::else::<h1><span class="directive">package</span> ::full::</h1>
+	::if full == ""::
+		<h1>Haxe API documentation <small ::cond api.isDefined("version")::>version ::api.getValue('version')::</small></h1>
+		<p>Haxe is an open source toolkit based on a modern, high level, strictly typed programming language, a cross-compiler, a complete cross-platform standard library and ways to access each platform's native capabilities.</p> 
+		<h3>Getting Started With Haxe</h3>
+		<p>For getting started with Haxe, take a look at our <a href="http://haxe.org/documentation/introduction/">introduction</a>, read through the <a href="http://haxe.org/manual/">Haxe Manual</a> or look at these use cases for Haxe, including tutorials and popular libraries:</p>
+		<ul>
+			<li><a href="http://haxe.org/use-cases/games/">Games</a></li>
+			<li><a href="http://haxe.org/use-cases/web/">Web</a></li>
+			<li><a href="http://haxe.org/use-cases/desktop/">Desktop Apps</a></li>
+			<li><a href="http://haxe.org/use-cases/mobile/">Mobile Apps</a></li>
+			<li><a href="http://haxe.org/use-cases/cli/">Command Line Tools</a></li>
+			<li><a href="http://haxe.org/use-cases/cross-platform-apis/">Cross Platform APIs</a></li>
+		</ul>
+		<h3>Top Level</h3>
+	::else::
+		<h1><span class="directive">package</span> ::full::</h1>
 	::end::
 	<table class="table table-condensed">
 		<tbody>

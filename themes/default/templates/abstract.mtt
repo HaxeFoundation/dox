@@ -1,47 +1,37 @@
 ::use 'main.mtt'::
-	<div class="header">
+	<div class="page-header">
 		<span ::cond api.isDefined("source-path"):: class="viewsource">
 			<a href="::api.getSourceLink(type)::">View source</a>
 		</span>
-		<h1>
-			<code>
-				<span class="directive">abstract </span>
-				<span class="type">::type.path::</span>
-				$$printTypeParams(::type.params::)
-				($$printLinkedType(::type.athis::))
-				::foreach t type.from::
-					::if t.field == null::
-						 from $$printLinkedType(::t.t::)
-					::end::
-				::end::
-				::foreach t type.to::
-					::if t.field == null::
-						 to $$printLinkedType(::t.t::)
-					::end::
-				::end::
-			</code>
-		</h1>
-	</div>
-	<div class="body">
+        $$printPackage(::type::)
+		<h1><small>abstract</small>
+            ::api.getPathName(type.path)::$$printTypeParams(::type.params::)($$printLinkedType(::type.athis::))
+        </h1>
+       	<h4 ::cond (type.from != null || type.to != null)::>
+	        ::foreach t type.from::
+	            ::if t.field == null::
+			<small>from</small>&nbsp;$$printLinkedType(::t.t::)
+	            ::end::
+	        ::end::
+	        ::foreach t type.to::
+	            ::if t.field == null::
+			<small>to</small>&nbsp;$$printLinkedType(::t.t::)
+	            ::end::
+	        ::end::
+		</h4>
 		$$printModule(::type.module::)
 		$$printPlatforms(::type.platforms::)
-		<div class="doc" ::cond type.doc != null::>
-			::raw type.doc::
+	</div>
+
+	<div class="body">
+		<div class="doc doc-main" ::cond type.doc != null::>
+            <div class="indent">
+                ::raw type.doc::
+            </div>
 		</div>
+
 		::if type.impl != null::
-		
-			<h2 ::cond type.impl.statics.length > 0::>Class Fields</h2>
-			
-			::foreach field type.impl.statics::
-				::use "class_field.mtt"::::end::
-			::end::
-			
-			<h2 ::cond type.impl.fields.length > 0::>Instance Fields</h2>
-			
-			::foreach field type.impl.fields::
-				::use "class_field.mtt"::::end::
-			::end::
-			
-		::end::
+            $$printClassBody(::type.impl::)
+        ::end::
 	</div>
 ::end::

@@ -1,34 +1,45 @@
+::if info.deprecated != null::
+    <div class="alert inline-content">
+        <strong>Deprecated</strong>: ::raw info.deprecated.doc::
+    </div>
+::end::
+
 ::raw info.doc::
 
-<table class="table table-condensed" ::cond info.params.length > 0 || info.returns != null || info.throws.length > 0 || info.defaultValue != null::>
-	<tbody>
-		<col width="10%"/>
-  		<col width="100%"/>
-		<tr ::cond info.params.length > 0::>
-			<th colspan="2">Parameters:</th>
-		</tr>
-		::foreach param info.params::
-			<tr>
-				<td>::raw param.value::</td>
-				<td>::raw param.doc::</td>
-			</tr>
-		::end::
-		<tr ::cond info.defaultValue != null::>
-			<th>Default value:</th>
-			<td>::raw info.defaultValue.doc::</td>
-		</tr>
-		<tr ::cond info.returns != null::>
-			<th>Returns:</th>
-			<td>::raw info.returns.doc::</td>
-		</tr>
-		<tr ::cond info.throws.length > 0::>
-			<th colspan="2">Throws:</th>
-		</tr>
-		::foreach throws info.throws::
-			<tr>
-				<td>::raw throws.value::</td>
-				<td>::raw throws.doc::</td>
-			</tr>
-		::end::
-	</tbody>
-</table>
+::if info.params.length > 0::
+    <p class="javadoc">Parameters:</p>
+    ::foreach param info.params::
+        <div class="indent inline-content">
+            <code>::param.value::</code> ::raw param.doc::
+        </div>
+    ::end::
+::end::
+
+::if info.returns != null::
+    <p class="javadoc">Returns:</p>
+    <div class="indent inline-content">
+        ::raw info.returns.doc::
+    </div>
+::end::
+
+::if info.throws.length > 0::
+    <p class="javadoc">Throws:</p>
+    ::foreach throws info.throws::
+        <div class="indent inline-content">
+            <code>::throws.value::</code> ::raw throws.doc::
+        </div>
+    ::end::
+::end::
+
+::if info.since != null::
+    <div class="javadoc inline-content">
+        Available since ::raw info.since.doc::.
+    </div>
+::end::
+
+::if info.sees.length > 0::
+    <p class="javadoc">See:</p>
+    ::foreach see info.sees::
+        <div class="indent inline-content">::raw see.doc::</div>
+    ::end::
+::end::

@@ -21,7 +21,7 @@
 
 <macro name="printLinkedPath(path, params)">
 	::if api.isKnownType(path)::
-		<a class="type" ::attr href api.pathToUrl(path)::>::api.getPathName(path)::</a>
+		<a class="type" title="::api.getSentenceDesc(api.resolveType(path))::" ::attr href api.pathToUrl(path)::>::api.getPathName(path)::</a>
 	::else::
 		<span class="type">::api.getPathName(path)::</span>
 	::end::
@@ -43,10 +43,10 @@
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::
 		::if args[0].length == 0::
-			$$printLinkedPath(::"Void"::,::[]::) -&gt;&nbsp;
+			$$printLinkedPath(::"Void"::,::[]::)&nbsp;&#8209;&gt;&nbsp;
 		::else::
 			::foreach arg args[0]::
-				$$printLinkedType(::arg.t::) -&gt;&nbsp;
+				$$printLinkedType(::arg.t::)&nbsp;&#8209;&gt;&nbsp;
 			::end::
 		::end::
 		$$printLinkedType(::args[1]::)
@@ -57,17 +57,60 @@
 			::if !repeat.field.last::, ::end::
 		::end::
 	}
-	::case::$$printLinkedPath(::"Dynamic"::,::[]::)::if args[0] != null::$$printLinkedType(::args[0]::)::end::
+	::case::$$printLinkedPath(::"Dynamic"::,::null::)::if args[0] != null::&lt;$$printLinkedType(::args[0]::)&gt;::end::
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::end::
 </macro>
 
 <macro name="printModule(module)">
 	<p ::cond module != null && module != "StdTypes"::>
-		<code class="dark">
-			<span class="directive">import</span> <span class="type">::module::</span>;
-		</code>
+        <h4><small>defined in</small> ::module::</h4>
 	</p>
+</macro>
+
+<macro name="printFieldSignature(field, isStatic)">
+	<code>
+	::if isStatic::
+		<span class="label">static</span>
+	::end::
+
+	::set fieldInfo = api.getFieldInfo(field)::
+
+	::if fieldInfo.modifiers.isDynamic::
+		<span class="label">dynamic</span> 
+	::end::
+
+	::if fieldInfo.modifiers.isInline::
+		<span class="label">inline</span> 
+	::end::
+	
+	::switch field.type::
+        ::switch field.set::
+        ::case 1::
+            <span class="label">read only</span>
+        ::end::
+        ::switch field.get::
+        ::case 1::
+            <span class="label">write only</span>
+        ::end::
+
+	<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
+
+	::case 4::
+		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>
+		$$printTypeParams(::field.params::) (
+		::foreach arg args[0]::
+			::if arg.opt && arg.value == null::?::end::
+			::arg.name:::$$printLinkedType(::arg.t::)
+			::if arg.value != null && arg.value != "null":: = ::arg.value::::end::
+			::if !repeat.arg.last::, ::end::
+		::end::
+		)
+		::if field.name != "new"::
+			:$$printLinkedType(::args[1]::)
+		::end::
+	::end::
+	</code>
 </macro>
 
 <macro name="printInitExpr(expr)">
@@ -76,37 +119,130 @@
 	</span>
 </macro>
 
-<macro name="printFieldSignature(field, isStatic)">
-	::if isStatic::
-		<span class="keyword">static </span>
-	::end::
+<macro name="printClassBody(type)">
+    ::set showSection = false::
+    ::foreach field type.fields::
+        ::if field.isPublic && field.name == "new"::
+            ::switch field.type::
+            ::case 4::
+                ::eval showSection = true::
+            ::end::
+        ::end::
+    ::end::
+    ::if showSection::
+        <h3 class="section">Constructor</h3>
+        <div class="fields">
+            ::foreach field type.fields::
+                ::set isStatic = false::
+                ::if field.isPublic && field.name == "new"::
+                    ::switch field.type::
+                    ::case 4::
+                        ::use "class_field.mtt"::::end::
+                    ::end::
+                ::end::
+            ::end::
+        </div>
+    ::end::
 
-	::set fieldInfo = api.getFieldInfo(field)::
+    ::set showSection = false::
+    ::foreach field type.fields::
+        ::if field.isPublic::
+            ::switch field.type::
+                ::eval showSection = true::
+            ::case 4::
+            ::end::
+        ::end::
+    ::end::
+    ::if showSection::
+        <h3 class="section">Fields</h3>
+        <div class="fields">
+            ::foreach field type.fields::
+                ::set isStatic = false::
+                ::if field.isPublic::
+                    ::switch field.type::
+                        ::use "class_field.mtt"::::end::
+                    ::case 4::
+                    ::end::
+                ::end::
+            ::end::
+        </div>
+    ::end::
 
-	::if fieldInfo.modifiers.isDynamic::
-		<span class="keyword">dynamic </span>
-	::end::
+    ::set showSection = false::
+    ::foreach field type.fields::
+        ::if field.isPublic && field.name != "new"::
+            ::switch field.type::
+            ::case 4::
+                ::eval showSection = true::
+            ::end::
+        ::end::
+    ::end::
+    ::if showSection::
+        <h3 class="section">Methods</h3>
+        <div class="fields">
+            ::foreach field type.fields::
+                ::set isStatic = false::
+                ::if field.isPublic && field.name != "new"::
+                    ::switch field.type::
+                    ::case 4::
+                        ::use "class_field.mtt"::::end::
+                    ::end::
+                ::end::
+            ::end::
+        </div>
+    ::end::
 
-	::if fieldInfo.modifiers.isInline::
-		<span class="keyword">inline </span>
-	::end::
+    ::set showSection = false::
+    ::foreach field type.statics::
+        ::if field.isPublic::
+            ::switch field.type::
+                ::eval showSection = true::
+            ::case 4::
+            ::end::
+        ::end::
+    ::end::
+    ::if showSection::
+        <h3 class="section">Static fields</h3>
+        <div class="fields">
+            ::foreach field type.statics::
+                ::set isStatic = true::
+                ::if field.isPublic::
+                    ::switch field.type::
+                        ::use "class_field.mtt"::::end::
+                    ::case 4::
+                    ::end::
+                ::end::
+            ::end::
+        </div>
+    ::end::
 
-	::switch fieldInfo.kind::
-		::case 0::
-			<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
-		::case 1::
-			<span class="keyword">var</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>(::args[0]::,::args[1]::):$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
-		::case 2::
-			<span class="keyword">function</span> <a href="#::field.name::"><span class="identifier">::field.name::</span></a>
-			$$printTypeParams(::field.params::)
-			(
-			::foreach arg args[0]::
-				::if arg.opt && arg.value == null::?::end::
-				::arg.name:::$$printLinkedType(::arg.t::)
-				::if arg.value != null:: = ::arg.value::::end::
-				::if !repeat.arg.last::, ::end::
-			::end::
-			)
-			:$$printLinkedType(::args[1]::)
-	::end::
+    ::set showSection = false::
+    ::foreach field type.statics::
+        ::if field.isPublic::
+            ::switch field.type::
+            ::case 4::
+                ::eval showSection = true::
+            ::end::
+        ::end::
+    ::end::
+    ::if showSection::
+        <h3 class="section">Static methods</h3>
+        <div class="fields">
+            ::foreach field type.statics::
+                ::set isStatic = true::
+                ::if field.isPublic::
+                    ::switch field.type::
+                    ::case 4::
+                        ::use "class_field.mtt"::::end::
+                    ::end::
+                ::end::
+            ::end::
+        </div>
+    ::end::
+</macro>
+
+<macro name="printPackage(type)">
+    ::if type.path.indexOf(".") >= 0::
+        <h4><small>package ::type.path.split(".").slice(0, -1).join(".")::</small></h4>
+    ::end::
 </macro>
