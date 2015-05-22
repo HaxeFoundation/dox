@@ -1,6 +1,0 @@
-{
-	"name": "Some other theme",
-	"author": "markknol",
-	"parentTheme": "default",
-	"headerIncludes": ["bootstrap-combined.min.css", "jquery-1.9.1.min.js", "bootstrap.min.js", "styles.css", "favicon.ico", "nav.js", "index.js"]
-}
