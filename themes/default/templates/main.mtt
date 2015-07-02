@@ -51,7 +51,7 @@
                     <input id="search" type="text" placeholder="Search" autocomplete="off"/>
                   </div>
                 </form>		
-				<div class="dropdown">
+				<div class="dropdown" ::cond (api.config.platforms.length>1)::>
 					<select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%">
 						<option value="all" selected="true">All Platforms</option>
 						::foreach i api.config.platforms::
