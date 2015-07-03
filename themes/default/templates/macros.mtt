@@ -10,7 +10,7 @@
 </macro>
 
 <macro name="printPlatforms(platforms)">
-	<p class="availability">
+	<p class="availability" ::cond (api.config.platforms.length>1)::>
 		Available on
 		::if platforms.length == api.config.platforms.length:: all platforms
 		::elseif platforms.length > 1:: ::platforms.join(", ")::
