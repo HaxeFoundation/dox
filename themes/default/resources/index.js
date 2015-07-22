@@ -22,9 +22,9 @@ function toggleCollapsed(el) {
 	toggle.toggleClass("expanded");
 
 	if (toggle.hasClass("expanded")) {
-		$("i", toggle).removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
+		$(toggle).find("i").first().removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
 	} else {
-		$("i", toggle).addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
+		$(toggle).find("i").first().addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
 	}
 	updateTreeState();
     return false;
