@@ -7,6 +7,9 @@ Install the library via [haxelib](http://lib.haxe.org/p/dox)
 ``` 
 haxelib install dox 
 ```
+
+### Compiling Dox
+
 Install dependencies
 
 	haxelib git hxparse https://github.com/Simn/hxparse development src
@@ -14,11 +17,15 @@ Install dependencies
 	haxelib install hxargs
 	haxelib install markdown
 
-> **Note:** Dox currently requires Haxe 3.1 or higher due to some
-minor changes in abstract rtti xml generation. You'll also need an up-to-date
-haxelib (requires support for `classPath` in _haxelib.json_)
+Compile run.n:
+
+	haxe run.hxml
 
 ### Usage
+
+> **Note:** Dox requires Haxe 3.1 or higher due to some minor changes in 
+abstract rtti xml generation. You'll also need an up-to-date haxelib 
+(requires support for `classPath` in _haxelib.json_)
 
 To generate std documentation:
 
