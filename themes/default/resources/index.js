@@ -128,51 +128,97 @@ $(document).ready(function(){
 });
 
 function searchQuery(query) {
-	query = query.toLowerCase();
 	$("#searchForm").removeAttr("action");
-	if (query == "") {
+	query = query.replace(/[&<>"']/g, "");
+	if (!query || query.length<2) {
 		$("#nav").removeClass("searching");
 		$("#nav li").each(function(index, element){
 			var e = $(element);
 			e.css("display", "");
 		});
+		$("#nav ul:first-child").css("display", "block");
+		$("#search-results-list").css("display", "none");
 		return;
 	}
-
-	console.log("Searching: "+query);
-
-	var searchSet = false;
-
+	var queryParts = query.toLowerCase().split(" ");
+	var listItems = [];
+	var bestMatch = 200;
 	$("#nav").addClass("searching");
-	$("#nav li").each(function(index, element){
+	$("#nav ul:first-child").css("display","none");
+	$("#nav li").each(function(index, element) {
 		var e = $(element);
 		if (!e.hasClass("expando")) {
-			var content = e.attr("data_path").toLowerCase();
-			var match = searchMatch(content, query);
-			if (match && !searchSet) {
-				var url = dox.rootPath + e.attr("data_path").split(".").join("/") + ".html";
-				$("#searchForm").attr("action", url);
-				searchSet = true;
+			var content = e.attr("data_path");
+			var score = searchMatch(content, queryParts);
+			if (score >= 0) {
+				if (score < bestMatch) {
+					var url = dox.rootPath + e.attr("data_path").split(".").join("/") + ".html";
+					$("#searchForm").attr("action", url);
+					 // best match will be form action
+					bestMatch = score;
+				}
+
+				var elLink = $("a", element);
+				// highlight matched parts
+				var elLinkContent = elLink.text().replace(new RegExp("(" + queryParts.join("|").split(".").join("|") + ")", "ig"), "<strong>$1</strong>");
+				var liStyle = (score == 0) ? ("font-weight:bold") : "";
+				listItems.push({score: score, item: "<li style='" + liStyle + "'><a href='"+elLink.attr("href")+"'>" + elLinkContent + "</a></li>"});
 			}
-			e.css("display", match ? "" : "none");
 		}
 	});
-
+	if ($("#search-results-list").length == 0) {
+		// append to nav
+		$("#nav").parent().append("<ul id='search-results-list' class='nav nav-list'></ul>");
+	}
+	listItems.sort(function(x, y) { return x.score - y.score; }); // put in order
+	$("#search-results-list").css("display","block").html(listItems.map(function(x) { return x.item; }).join(""));
 }
 
-function searchMatch(text, query) {
-	var textParts = text.split(".");
+function match(textParts, query) {
 	var queryParts = query.split(".");
-	if (queryParts.length > textParts.length) {
-		return false;
-	}
 	if (queryParts.length == 1) {
-		return text.indexOf(query) > -1;
-	}
-	for (i = 0; i < queryParts.length; ++i) {
-		if (textParts[i].indexOf(queryParts[i]) != 0) { // starts with
-			return false;
+		var queryPart = queryParts[0];
+		for (var i = 0; i < textParts.length; ++i) {
+			var textPart = textParts[i];
+			if (textPart.indexOf(queryPart) > -1) {
+				// We don't want to match the same part twice, so let's remove it
+				textParts[i] = textParts[i].split(queryPart).join("");
+				return textPart.length - queryPart.length;
+			}
+		}
+	} else {
+		var offset = -1;
+		outer:
+		while (true) {
+			++offset;
+			if (queryParts.length + offset > textParts.length) {
+				return -1;
+			}
+			var scoreSum = 0;
+			for (var i = 0; i < queryParts.length; ++i) {
+				var queryPart = queryParts[i];
+				var textPart = textParts[i + offset];
+				var index = textPart.indexOf(queryPart);
+				if (index != 0) {
+					continue outer;
+				}
+				scoreSum += textPart.length - queryPart.length;
+			}
+			return scoreSum;
 		}
 	}
-	return true;
+}
+
+function searchMatch(text, queryParts) {
+	text = text.toLowerCase();
+	var textParts = text.split(".");
+	var scoreSum = 0;
+	for (var i = 0; i < queryParts.length; ++i) {
+		var score = match(textParts, queryParts[i]);
+		if (score == -1) {
+			return -1;
+		}
+		scoreSum += score + text.length;
+	}
+	return scoreSum;
 }
