@@ -128,51 +128,92 @@ $(document).ready(function(){
 });
 
 function searchQuery(query) {
-	query = query.toLowerCase();
 	$("#searchForm").removeAttr("action");
-	if (query == "") {
+	query = query.replace(/[&<>"']/g, "");
+	query = query.split(" ").join(".");
+	if (!query || query.length<2) {
 		$("#nav").removeClass("searching");
 		$("#nav li").each(function(index, element){
 			var e = $(element);
 			e.css("display", "");
 		});
+		$("#nav ul").css("display", "block");
+		$("#search-results-list").css("display", "none");
 		return;
 	}
 
-	console.log("Searching: "+query);
-
-	var searchSet = false;
-
+	var listItems = [];
+	var bestMatch = 200;
 	$("#nav").addClass("searching");
-	$("#nav li").each(function(index, element){
+	$("#nav ul").css("display","none");
+	$("#nav li").each(function(index, element) {
 		var e = $(element);
 		if (!e.hasClass("expando")) {
-			var content = e.attr("data_path").toLowerCase();
+			var content = e.attr("data_path");
 			var match = searchMatch(content, query);
-			if (match && !searchSet) {
+			if (match != -1 && match < bestMatch) {
 				var url = dox.rootPath + e.attr("data_path").split(".").join("/") + ".html";
 				$("#searchForm").attr("action", url);
-				searchSet = true;
+				 // best match will be form action
+				bestMatch = match;
 			}
-			e.css("display", match ? "" : "none");
+			
+			if (match != -1) {
+				var queryParts = query.split(".");
+				var elLink = $("a", element);
+				// highlight matched parts
+				var elLinkContent = elLink.text().replace(new RegExp("(" + query.split(".").join("|") + ")", "ig"), "<strong>$1</strong>");
+				var liStyle = (match == 0) ? ("font-weight:bold") : "";
+				listItems.push("<li style='" + liStyle + "'><a href='"+elLink.attr("href")+"'>" + elLinkContent + "</a></li>");
+			}
 		}
 	});
-
+	if ($("#search-results-list").length == 0) {
+		// append to nav
+		$("#nav").parent().append("<ul id='search-results-list' class='nav nav-list'></ul>");
+	}
+	listItems.sort(); // put in order
+	$("#search-results-list").css("display","block").html(listItems.join(""));
 }
 
 function searchMatch(text, query) {
+	text = text.toLowerCase();
+	query = query.toLowerCase();
+	if (text == query) {
+		return 0; // exact match
+	} 
 	var textParts = text.split(".");
 	var queryParts = query.split(".");
 	if (queryParts.length > textParts.length) {
-		return false;
+		return -1;
 	}
-	if (queryParts.length == 1) {
-		return text.indexOf(query) > -1;
+	if (queryParts.length == 1) { // no parts
+		var lengthDiff = Math.abs(Math.max(text.length, query.length)-Math.min(text.length, query.length));
+		var lastIndex = text.lastIndexOf(query);
+		if (text.indexOf(query) == 0) return 1;
+		else if (lastIndex > -1 && lastIndex == text.length-query.length) return lengthDiff * 2;
+		return text.indexOf(query) > -1 ? lengthDiff * 3 : -1;
 	}
-	for (i = 0; i < queryParts.length; ++i) {
-		if (textParts[i].indexOf(queryParts[i]) != 0) { // starts with
-			return false;
+	var matchPoints = 200;	
+	for (var i = 0; i < queryParts.length; i++) {
+		var queryPart = queryParts[i];
+		if (queryPart == "") continue;
+		for (var j = 0; j < textParts.length; j++) {
+			var isLast = j == textParts.length-1;
+			var textPart = textParts[j];
+			var reward = isLast ? 3 : 1;
+			if (textPart == queryPart) { 
+				matchPoints -= reward * reward * reward; // exact part match
+				if (i == j) {
+					matchPoints -= reward; // same path
+				}
+			} 
+			if (textPart.indexOf(queryPart) > -1) {
+				matchPoints -= reward * reward; // has part
+			} else {
+				matchPoints += reward / 2; 
+			}
 		}
 	}
-	return true;
+	return (matchPoints <= 200) ? (matchPoints | 0) : -1;
 }
