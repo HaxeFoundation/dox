@@ -137,7 +137,7 @@ function searchQuery(query) {
 			var e = $(element);
 			e.css("display", "");
 		});
-		$("#nav ul").css("display", "block");
+		$("#nav ul:first-child").css("display", "block");
 		$("#search-results-list").css("display", "none");
 		return;
 	}
@@ -145,7 +145,7 @@ function searchQuery(query) {
 	var listItems = [];
 	var bestMatch = 200;
 	$("#nav").addClass("searching");
-	$("#nav ul").css("display","none");
+	$("#nav ul:first-child").css("display","none");
 	$("#nav li").each(function(index, element) {
 		var e = $(element);
 		if (!e.hasClass("expando")) {
