@@ -12,6 +12,7 @@ class Processor {
 	var config:Config;
 	var markdownHandler:MarkdownHandler;
 	var javadocHandler:JavadocHandler;
+	var processedDocs:Map<String, Bool>;
 
 	public function new(cfg:Config) {
 		config = cfg;
@@ -19,6 +20,7 @@ class Processor {
 		tplDoc = config.loadTemplate("doc.mtt");
 		markdownHandler = new MarkdownHandler(cfg, infos);
 		javadocHandler = new JavadocHandler(cfg, infos, markdownHandler);
+		processedDocs = new Map<String, Bool>();
 	}
 
 	public function process(root:TypeRoot) {
@@ -241,12 +243,12 @@ class Processor {
 
 	function processClassField(path:String, field:ClassField)
 	{
-		field.doc = processDoc(path, field.doc);
+		field.doc = processDoc(path, field.doc, field.name);
 	}
 
 	function processEnumField(path:String, field:EnumField)
 	{
-		field.doc = processDoc(path, field.doc);
+		field.doc = processDoc(path, field.doc, field.name);
 	}
 
 	function trimDoc(doc:String)
@@ -280,8 +282,36 @@ class Processor {
 		return doc;
 	}
 
-	function processDoc(path:String, doc:String)
+	function processDoc(path:String, doc:String, ?fieldName:String)
 	{
+		processedDocs.set(path, true);
+		if (doc == null && fieldName != null)
+		{
+			var type:Dynamic = infos.typeMap.get(path);
+			if (type.interfaces != null)
+			{
+				var interfaces:List<PathParams> = type.interfaces;
+				for (i in interfaces)
+				{
+					var inter:Classdef = cast infos.typeMap.get(i.path);
+					if (inter == null) continue;
+
+					for (field in inter.fields)
+					{
+						if (field.name == fieldName)
+						{
+							doc = field.doc;
+							// prevent processing the doc twice
+							if (processedDocs.exists(i.path))
+								return doc;
+							break;
+						}
+					}
+					if (doc != null) break;
+				}
+			}
+		}
+
 		doc = trimDoc(doc);
 		if (doc == '') return '<p></p>';
 		var info = javadocHandler.parse(path, doc);

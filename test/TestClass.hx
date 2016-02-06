@@ -159,7 +159,30 @@ enum TestEnum
 		var binding = new Flags(BindingFlags.Public) | BindingFlags.Static | BindingFlags.NonPublic;
 	```
 **/
-class TestClass2
+class TestClassIndentation
 {
 
+}
+
+interface TestInterface
+{
+	/**
+		Some doc
+	**/
+	function impl1():Void;
+
+	/**
+		More doc
+	**/
+	function impl2():Void;
+}
+
+class TestImplementor implements TestInterface
+{
+	public function impl1():Void {}
+
+	/**
+		Override doc
+	**/
+	public function impl2():Void {}
 }
