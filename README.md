@@ -1,9 +1,19 @@
 # Dox
-A Haxe documentation generator.
+A Haxe documentation generator used by many popular projects such as:
+
+- [Haxe](http://api.haxe.org/)
+- [OpenFL](http://www.openfl.org/documentation/api/)
+- [HaxeUI](http://haxeui.org/docs/api/haxe/ui/toolkit/index.html)
+- [HaxeFlixel](http://api.haxeflixel.com/)
+- [HaxePunk](http://haxepunk.com/documentation/api/)
+- [Flambe](https://aduros.com/flambe/api/)
+- [Kha](http://api.kha.technology/)
+
+![](http://i.imgur.com/aQKBPsj.png)
 
 ### Installation
 
-Install the library via [haxelib](http://lib.haxe.org/p/dox)
+Install the library via [haxelib](http://lib.haxe.org/p/dox):
 ``` 
 haxelib install dox 
 ```
