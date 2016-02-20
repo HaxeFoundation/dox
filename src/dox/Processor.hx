@@ -249,11 +249,16 @@ class Processor {
 	{
 		// remove `cast` from the expression of enum abstract values (#146)
 		if (field.type.match(CAbstract(_, _)) &&
-			field.meta.exists(function(meta) return meta.name == ":impl") &&
+			hasMeta(field.meta, ":impl") && hasMeta(field.meta, ":enum") &&
 			field.get == RInline && field.set == RNo &&
 			field.expr.startsWith("cast ")) {
 			field.expr = field.expr.substr("cast ".length);
 		}
+	}
+	
+	function hasMeta(meta:MetaData, name:String)
+	{
+		return meta.exists(function(meta) return meta.name == name);
 	}
 
 	function processEnumField(path:String, field:EnumField)
