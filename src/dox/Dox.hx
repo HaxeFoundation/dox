@@ -75,7 +75,7 @@ class Dox {
 
 			@doc("Defines key = value
   Dox has some special defines:
-    -D version <version> : Version shown on index.html
+    -D version <version> : Version shown on the default theme's index.html
     -D source-path <url> : The base URL used for 'View Source' buttons")
 			["-D", "--define"] => function(key:String, value:String) cfg.defines[key] = value,
 
