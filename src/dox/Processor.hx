@@ -242,6 +242,23 @@ class Processor {
 	function processClassField(path:String, field:ClassField)
 	{
 		field.doc = processDoc(path, field.doc);
+		removeEnumAbstractCast(field);
+	}
+	
+	function removeEnumAbstractCast(field:ClassField)
+	{
+		// remove `cast` from the expression of enum abstract values (#146)
+		if (field.type.match(CAbstract(_, _)) &&
+			hasMeta(field.meta, ":impl") && hasMeta(field.meta, ":enum") &&
+			field.get == RInline && field.set == RNo &&
+			field.expr.startsWith("cast ")) {
+			field.expr = field.expr.substr("cast ".length);
+		}
+	}
+	
+	function hasMeta(meta:MetaData, name:String)
+	{
+		return meta.exists(function(meta) return meta.name == name);
 	}
 
 	function processEnumField(path:String, field:EnumField)
@@ -260,7 +277,7 @@ class Processor {
 		while (doc.charAt(doc.length - 1) == '*') doc = doc.substr(0, doc.length - 1);
 
 		// trim additional whitespace
-		doc = StringTools.trim(doc);
+		doc = doc.trim();
 
 		// detect doc comment style/indent
 		var ereg = ~/^([ \t]+(\* )?)[^\s\*]/m;

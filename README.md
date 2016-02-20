@@ -61,7 +61,7 @@ Compile run.n:
 
 ### Testing
 
-Dox currently has a non-automated test:
+Dox currently has a non-automated test. Run `haxe test.hxml` or execute the steps individually:
 
 	haxe gen-test.hxml
 	haxe pages.hxml

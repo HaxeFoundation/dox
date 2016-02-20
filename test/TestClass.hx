@@ -163,3 +163,12 @@ class TestClass2
 {
 
 }
+
+@:enum
+abstract TestEnumAbstract(Int)
+{
+	/**
+		Expression shouldn't have a `cast`.
+	**/
+	var value = 0;
+}
