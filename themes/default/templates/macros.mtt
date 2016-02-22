@@ -156,7 +156,7 @@
         ::end::
     ::end::
     ::if showSection::
-        <h3 class="section">Fields</h3>
+        <h3 class="section">Variables</h3>
         <div class="fields">
             ::foreach field type.fields::
                 ::set isStatic = false::
@@ -204,7 +204,7 @@
         ::end::
     ::end::
     ::if showSection::
-        <h3 class="section">Static fields</h3>
+        <h3 class="section">Static variables</h3>
         <div class="fields">
             ::foreach field type.statics::
                 ::set isStatic = true::
