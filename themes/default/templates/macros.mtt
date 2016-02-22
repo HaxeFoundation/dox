@@ -84,7 +84,7 @@
 		<span class="label">inline</span> 
 	::end::
 	
-	::switch field.type::
+	::switch fieldInfo.kind::
 		::switch field.set::
 		::case 1::
 			<span class="label">read only</span>
@@ -96,7 +96,7 @@
 
 	<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
 
-	::case 4::
+	::case 2::
 		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>
 		$$printTypeParams(::field.params::) (
 		::foreach arg args[0]::
