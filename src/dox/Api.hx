@@ -1,5 +1,6 @@
 package dox;
 
+import haxe.Json;
 import haxe.rtti.CType;
 using Lambda;
 using StringTools;
@@ -199,6 +200,13 @@ class Api {
 	**/
 	public function debug(e:Dynamic):Void {
 		trace(Std.string(e));
+	}
+	
+	/**
+		Traces `e` as pretty-printed Json for debug purposes.
+	 **/
+	public function debugJson(e:Dynamic) {
+		trace(Json.stringify(e, null, "  "));
 	}
 
 	/**
