@@ -124,11 +124,8 @@
 <macro name="printClassBody(type)">
 	::set showSection = false::
 	::foreach field type.fields::
-		::if field.isPublic && field.name == "new"::
-			::switch field.type::
-			::case 4::
-				::eval showSection = true::
-			::end::
+		::if field.isPublic && field.name == "new" && field.type == 4::
+			::eval showSection = true::
 		::end::
 	::end::
 	::if showSection::
@@ -136,11 +133,8 @@
 		<div class="fields">
 			::foreach field type.fields::
 				::set isStatic = false::
-				::if field.isPublic && field.name == "new"::
-					::switch field.type::
-					::case 4::
-						::use "class_field.mtt"::::end::
-					::end::
+				::if field.isPublic && field.name == "new" && field.type == 4::
+					::use "class_field.mtt"::::end::
 				::end::
 			::end::
 		</div>
@@ -148,11 +142,8 @@
 	
 	::set showSection = false::
 	::foreach field type.fields::
-		::if field.isPublic::
-			::switch field.type::
-				::eval showSection = true::
-			::case 4::
-			::end::
+		::if field.isPublic && field.type != 4::
+			::eval showSection = true::
 		::end::
 	::end::
 	::if showSection::
@@ -160,11 +151,8 @@
 		<div class="fields">
 			::foreach field type.fields::
 				::set isStatic = false::
-				::if field.isPublic::
-					::switch field.type::
-						::use "class_field.mtt"::::end::
-					::case 4::
-					::end::
+				::if field.isPublic && field.type != 4::
+					::use "class_field.mtt"::::end::
 				::end::
 			::end::
 		</div>
@@ -172,11 +160,8 @@
 	
 	::set showSection = false::
 	::foreach field type.fields::
-		::if field.isPublic && field.name != "new"::
-			::switch field.type::
-			::case 4::
-				::eval showSection = true::
-			::end::
+		::if field.isPublic && field.name != "new" && field.type == 4::
+			::eval showSection = true::
 		::end::
 	::end::
 	::if showSection::
@@ -184,11 +169,8 @@
 		<div class="fields">
 			::foreach field type.fields::
 				::set isStatic = false::
-				::if field.isPublic && field.name != "new"::
-					::switch field.type::
-					::case 4::
-						::use "class_field.mtt"::::end::
-					::end::
+				::if field.isPublic && field.name != "new" && field.type == 4::
+					::use "class_field.mtt"::::end::
 				::end::
 			::end::
 		</div>
@@ -196,11 +178,8 @@
 	
 	::set showSection = false::
 	::foreach field type.statics::
-		::if field.isPublic::
-			::switch field.type::
-				::eval showSection = true::
-			::case 4::
-			::end::
+		::if field.isPublic && field.type != 4::
+			::eval showSection = true::
 		::end::
 	::end::
 	::if showSection::
@@ -208,11 +187,8 @@
 		<div class="fields">
 			::foreach field type.statics::
 				::set isStatic = true::
-				::if field.isPublic::
-					::switch field.type::
-						::use "class_field.mtt"::::end::
-					::case 4::
-					::end::
+				::if field.isPublic && field.type != 4::
+					::use "class_field.mtt"::::end::
 				::end::
 			::end::
 		</div>
@@ -220,11 +196,8 @@
 	
 	::set showSection = false::
 	::foreach field type.statics::
-		::if field.isPublic::
-			::switch field.type::
-			::case 4::
-				::eval showSection = true::
-			::end::
+		::if field.isPublic && field.type == 4::
+			::eval showSection = true::
 		::end::
 	::end::
 	::if showSection::
@@ -232,11 +205,8 @@
 		<div class="fields">
 			::foreach field type.statics::
 				::set isStatic = true::
-				::if field.isPublic::
-					::switch field.type::
-					::case 4::
-						::use "class_field.mtt"::::end::
-					::end::
+				::if field.isPublic && field.type == 4::
+					::use "class_field.mtt"::::end::
 				::end::
 			::end::
 		</div>
