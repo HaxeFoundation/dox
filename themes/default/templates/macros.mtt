@@ -84,19 +84,19 @@
 		<span class="label">inline</span> 
 	::end::
 	
-	::switch field.type::
-        ::switch field.set::
-        ::case 1::
-            <span class="label">read only</span>
-        ::end::
-        ::switch field.get::
-        ::case 1::
-            <span class="label">write only</span>
-        ::end::
+	::switch fieldInfo.kind::
+		::switch field.set::
+		::case 1::
+			<span class="label">read only</span>
+		::end::
+		::switch field.get::
+		::case 1::
+			<span class="label">write only</span>
+		::end::
 
 	<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
 
-	::case 4::
+	::case 2::
 		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>
 		$$printTypeParams(::field.params::) (
 		::foreach arg args[0]::
@@ -122,129 +122,99 @@
 </macro>
 
 <macro name="printClassBody(type)">
-    ::set showSection = false::
-    ::foreach field type.fields::
-        ::if field.isPublic && field.name == "new"::
-            ::switch field.type::
-            ::case 4::
-                ::eval showSection = true::
-            ::end::
-        ::end::
-    ::end::
-    ::if showSection::
-        <h3 class="section">Constructor</h3>
-        <div class="fields">
-            ::foreach field type.fields::
-                ::set isStatic = false::
-                ::if field.isPublic && field.name == "new"::
-                    ::switch field.type::
-                    ::case 4::
-                        ::use "class_field.mtt"::::end::
-                    ::end::
-                ::end::
-            ::end::
-        </div>
-    ::end::
-
-    ::set showSection = false::
-    ::foreach field type.fields::
-        ::if field.isPublic::
-            ::switch field.type::
-                ::eval showSection = true::
-            ::case 4::
-            ::end::
-        ::end::
-    ::end::
-    ::if showSection::
-        <h3 class="section">Variables</h3>
-        <div class="fields">
-            ::foreach field type.fields::
-                ::set isStatic = false::
-                ::if field.isPublic::
-                    ::switch field.type::
-                        ::use "class_field.mtt"::::end::
-                    ::case 4::
-                    ::end::
-                ::end::
-            ::end::
-        </div>
-    ::end::
-
-    ::set showSection = false::
-    ::foreach field type.fields::
-        ::if field.isPublic && field.name != "new"::
-            ::switch field.type::
-            ::case 4::
-                ::eval showSection = true::
-            ::end::
-        ::end::
-    ::end::
-    ::if showSection::
-        <h3 class="section">Methods</h3>
-        <div class="fields">
-            ::foreach field type.fields::
-                ::set isStatic = false::
-                ::if field.isPublic && field.name != "new"::
-                    ::switch field.type::
-                    ::case 4::
-                        ::use "class_field.mtt"::::end::
-                    ::end::
-                ::end::
-            ::end::
-        </div>
-    ::end::
-
-    ::set showSection = false::
-    ::foreach field type.statics::
-        ::if field.isPublic::
-            ::switch field.type::
-                ::eval showSection = true::
-            ::case 4::
-            ::end::
-        ::end::
-    ::end::
-    ::if showSection::
-        <h3 class="section">Static variables</h3>
-        <div class="fields">
-            ::foreach field type.statics::
-                ::set isStatic = true::
-                ::if field.isPublic::
-                    ::switch field.type::
-                        ::use "class_field.mtt"::::end::
-                    ::case 4::
-                    ::end::
-                ::end::
-            ::end::
-        </div>
-    ::end::
-
-    ::set showSection = false::
-    ::foreach field type.statics::
-        ::if field.isPublic::
-            ::switch field.type::
-            ::case 4::
-                ::eval showSection = true::
-            ::end::
-        ::end::
-    ::end::
-    ::if showSection::
-        <h3 class="section">Static methods</h3>
-        <div class="fields">
-            ::foreach field type.statics::
-                ::set isStatic = true::
-                ::if field.isPublic::
-                    ::switch field.type::
-                    ::case 4::
-                        ::use "class_field.mtt"::::end::
-                    ::end::
-                ::end::
-            ::end::
-        </div>
-    ::end::
+	::set showSection = false::
+	::foreach field type.fields::
+		::if field.isPublic && field.name == "new" && api.isMethod(field)::
+			::eval showSection = true::
+		::end::
+	::end::
+	::if showSection::
+		<h3 class="section">Constructor</h3>
+		<div class="fields">
+			::foreach field type.fields::
+				::set isStatic = false::
+				::if field.isPublic && field.name == "new" && api.isMethod(field)::
+					::use "class_field.mtt"::::end::
+				::end::
+			::end::
+		</div>
+	::end::
+	
+	::set showSection = false::
+	::foreach field type.fields::
+		::if field.isPublic && !api.isMethod(field)::
+			::eval showSection = true::
+		::end::
+	::end::
+	::if showSection::
+		<h3 class="section">Variables</h3>
+		<div class="fields">
+			::foreach field type.fields::
+				::set isStatic = false::
+				::if field.isPublic && !api.isMethod(field)::
+					::use "class_field.mtt"::::end::
+				::end::
+			::end::
+		</div>
+	::end::
+	
+	::set showSection = false::
+	::foreach field type.fields::
+		::if field.isPublic && field.name != "new" && api.isMethod(field)::
+			::eval showSection = true::
+		::end::
+	::end::
+	::if showSection::
+		<h3 class="section">Methods</h3>
+		<div class="fields">
+			::foreach field type.fields::
+				::set isStatic = false::
+				::if field.isPublic && field.name != "new" && api.isMethod(field)::
+					::use "class_field.mtt"::::end::
+				::end::
+			::end::
+		</div>
+	::end::
+	
+	::set showSection = false::
+	::foreach field type.statics::
+		::if field.isPublic && !api.isMethod(field)::
+			::eval showSection = true::
+		::end::
+	::end::
+	::if showSection::
+		<h3 class="section">Static variables</h3>
+		<div class="fields">
+			::foreach field type.statics::
+				::set isStatic = true::
+				::if field.isPublic && !api.isMethod(field)::
+					::use "class_field.mtt"::::end::
+				::end::
+			::end::
+		</div>
+	::end::
+	
+	::set showSection = false::
+	::foreach field type.statics::
+		::if field.isPublic && api.isMethod(field)::
+			::eval showSection = true::
+		::end::
+	::end::
+	::if showSection::
+		<h3 class="section">Static methods</h3>
+		<div class="fields">
+			::foreach field type.statics::
+				::set isStatic = true::
+				::if field.isPublic && api.isMethod(field)::
+					::use "class_field.mtt"::::end::
+				::end::
+			::end::
+		</div>
+	::end::
 </macro>
 
 <macro name="printPackage(type)">
-    ::if type.path.indexOf(".") >= 0::
-        <h4><small>package ::type.path.split(".").slice(0, -1).join(".")::</small></h4>
-    ::end::
+	::if type.path.indexOf(".") >= 0::
+		<h4><small>package ::type.path.split(".").slice(0, -1).join(".")::</small></h4>
+	::end::
 </macro>

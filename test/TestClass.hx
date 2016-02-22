@@ -129,6 +129,11 @@ class TestClass
 	public static inline function collide(?ObjectOrGroup1:TestClass, ?ObjectOrGroup2:TestClass, ?NotifyCallback:Dynamic->Dynamic->Void):Void
 	{
 	}
+	
+	/**
+		Should be in the "variables" section as `callback:String -> Int -> Void`.
+	**/
+	public var callback:String->Int->Void;
 }
 
 /**

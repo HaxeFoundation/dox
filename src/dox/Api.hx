@@ -1,5 +1,6 @@
 package dox;
 
+import haxe.Json;
 import haxe.rtti.CType;
 using Lambda;
 using StringTools;
@@ -200,6 +201,13 @@ class Api {
 	public function debug(e:Dynamic):Void {
 		trace(Std.string(e));
 	}
+	
+	/**
+		Traces `e` as pretty-printed Json for debug purposes.
+	 **/
+	public function debugJson(e:Dynamic) {
+		trace(Json.stringify(e, null, "  "));
+	}
 
 	/**
 		Checks if `field` is an abstract implementation field.
@@ -302,6 +310,13 @@ class Api {
 			kind: kind,
 			modifiers: modifiers
 		}
+	}
+	
+	/**
+		Checks whether `cf` is a method using `getFieldInfo()`.
+	**/
+	public function isMethod(cf:ClassField) {
+		return getFieldInfo(cf).kind.match(Method(_, _));
 	}
 
 	/**
