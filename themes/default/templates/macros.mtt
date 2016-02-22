@@ -100,9 +100,11 @@
 		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>
 		$$printTypeParams(::field.params::) (
 		::foreach arg args[0]::
+			<span style="white-space:nowrap">
 			::if arg.opt && arg.value == null::?::end::
 			::arg.name:::$$printLinkedType(::arg.t::)
 			::if arg.value != null && arg.value != "null":: = ::arg.value::::end::
+			</span>
 			::if !repeat.arg.last::, ::end::
 		::end::
 		)
