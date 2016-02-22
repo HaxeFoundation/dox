@@ -303,6 +303,13 @@ class Api {
 			modifiers: modifiers
 		}
 	}
+	
+	/**
+		Checks whether `cf` is a method using `getFieldInfo()`.
+	**/
+	public function isMethod(cf:ClassField) {
+		return getFieldInfo(cf).kind.match(Method(_, _));
+	}
 
 	/**
 		Returns an array of all member fields of `c` respecting the inheritance

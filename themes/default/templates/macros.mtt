@@ -124,7 +124,7 @@
 <macro name="printClassBody(type)">
 	::set showSection = false::
 	::foreach field type.fields::
-		::if field.isPublic && field.name == "new" && field.type == 4::
+		::if field.isPublic && field.name == "new" && api.isMethod(field)::
 			::eval showSection = true::
 		::end::
 	::end::
@@ -133,7 +133,7 @@
 		<div class="fields">
 			::foreach field type.fields::
 				::set isStatic = false::
-				::if field.isPublic && field.name == "new" && field.type == 4::
+				::if field.isPublic && field.name == "new" && api.isMethod(field)::
 					::use "class_field.mtt"::::end::
 				::end::
 			::end::
@@ -142,7 +142,7 @@
 	
 	::set showSection = false::
 	::foreach field type.fields::
-		::if field.isPublic && field.type != 4::
+		::if field.isPublic && !api.isMethod(field)::
 			::eval showSection = true::
 		::end::
 	::end::
@@ -151,7 +151,7 @@
 		<div class="fields">
 			::foreach field type.fields::
 				::set isStatic = false::
-				::if field.isPublic && field.type != 4::
+				::if field.isPublic && !api.isMethod(field)::
 					::use "class_field.mtt"::::end::
 				::end::
 			::end::
@@ -160,7 +160,7 @@
 	
 	::set showSection = false::
 	::foreach field type.fields::
-		::if field.isPublic && field.name != "new" && field.type == 4::
+		::if field.isPublic && field.name != "new" && api.isMethod(field)::
 			::eval showSection = true::
 		::end::
 	::end::
@@ -169,7 +169,7 @@
 		<div class="fields">
 			::foreach field type.fields::
 				::set isStatic = false::
-				::if field.isPublic && field.name != "new" && field.type == 4::
+				::if field.isPublic && field.name != "new" && api.isMethod(field)::
 					::use "class_field.mtt"::::end::
 				::end::
 			::end::
@@ -178,7 +178,7 @@
 	
 	::set showSection = false::
 	::foreach field type.statics::
-		::if field.isPublic && field.type != 4::
+		::if field.isPublic && !api.isMethod(field)::
 			::eval showSection = true::
 		::end::
 	::end::
@@ -187,7 +187,7 @@
 		<div class="fields">
 			::foreach field type.statics::
 				::set isStatic = true::
-				::if field.isPublic && field.type != 4::
+				::if field.isPublic && !api.isMethod(field)::
 					::use "class_field.mtt"::::end::
 				::end::
 			::end::
@@ -196,7 +196,7 @@
 	
 	::set showSection = false::
 	::foreach field type.statics::
-		::if field.isPublic && field.type == 4::
+		::if field.isPublic && api.isMethod(field)::
 			::eval showSection = true::
 		::end::
 	::end::
@@ -205,7 +205,7 @@
 		<div class="fields">
 			::foreach field type.statics::
 				::set isStatic = true::
-				::if field.isPublic && field.type == 4::
+				::if field.isPublic && api.isMethod(field)::
 					::use "class_field.mtt"::::end::
 				::end::
 			::end::
