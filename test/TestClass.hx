@@ -115,6 +115,13 @@ class TestClass
 	public static var nonHexInit = 12;
 
 	public static function defaultValues(a = 0x00FF00, ?b = "foo", c = true) { }
+	
+	/**
+		There should not be a line break between `FlipX:Bool =` and `false`.
+	**/
+	public function add(Name:String, Frames:Array<Int>, FrameRate:Int = 30, Looped:Bool = true, FlipX:Bool = false, FlipY:Bool = false):Void
+	{	
+	}
 }
 
 /**
