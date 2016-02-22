@@ -122,6 +122,13 @@ class TestClass
 	public function add(Name:String, Frames:Array<Int>, FrameRate:Int = 30, Looped:Bool = true, FlipX:Bool = false, FlipY:Bool = false):Void
 	{	
 	}
+	
+	/**
+		There should not be a line break between `?` and `NotifyCallback`.
+	**/
+	public static inline function collide(?ObjectOrGroup1:TestClass, ?ObjectOrGroup2:TestClass, ?NotifyCallback:Dynamic->Dynamic->Void):Void
+	{
+	}
 }
 
 /**
