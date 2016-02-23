@@ -172,6 +172,12 @@ class Processor {
 				case TClassdecl(c) | TAbstractdecl({impl: c}) if (c != null):
 					c.fields = sortFields(c.fields);
 					c.statics = sortFields(c.statics);
+				case TTypedecl(t):
+					switch(t.type)
+					{
+						case CAnonymous(fields): t.type = CAnonymous(sortFields(fields));
+						default:
+					}
 				case _:
 			}
 		}
