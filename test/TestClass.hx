@@ -149,7 +149,7 @@ class TestClass
 /**
 	Some *documentation*.
 **/
-typedef TestTypeDef =
+typedef TestTypedef =
 {
 	/**
 		Some description with a type reference `Foo`.
@@ -200,4 +200,15 @@ abstract TestEnumAbstract(Int)
 		Expression shouldn't have a `cast`.
 	**/
 	var value = 0;
+}
+
+/**
+	Properties should be sorted alphabetically.
+**/
+typedef TestTypedefOrder =
+{
+	var z:Int;
+	var a:Int;
+	var b:Int;
+	var q:Int;
 }
