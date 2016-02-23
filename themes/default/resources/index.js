@@ -108,6 +108,7 @@ $(document).ready(function(){
 	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
 	//setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
 
+	$("#search").focus();
 	$("#search").on("input", function(e){
 		searchQuery(e.target.value);
 	});
