@@ -114,7 +114,17 @@ class TestClass
 	public static var hexInit = 0xFF0000;
 	public static var nonHexInit = 12;
 
-	public static function defaultValues(a = 0x00FF00, ?b = "foo", c = true) { }
+	/**
+		Arguments should look like this:
+		
+		- `a:Int = 0x00FF00`
+		- `b:String = "foo"`
+		- `c:Bool = true`
+		- `?d:String`
+		- `?e:String`
+		- `?f:String`
+	**/
+	public static function defaultValues(a = 0x00FF00, ?b = "foo", c = true, ?d:String = null, e:String = null, ?f:String) { }
 	
 	/**
 		There should not be a line break between `FlipX:Bool =` and `false`.
