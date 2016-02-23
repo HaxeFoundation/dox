@@ -112,7 +112,10 @@ $(document).ready(function(){
 	$("#search").on("input", function(e){
 		searchQuery(e.target.value);
 	});
-
+	$(window).keypress(function(e){
+		$("#search").focus();
+	})
+	
 	$("#select-platform").selectpicker().on("change", function(e){
 		var value = $(":selected", this).val();
 		setPlatform(value);
