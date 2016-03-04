@@ -33,7 +33,9 @@ class ImportAll {
 		case "cs":
 			if( !Context.defined("cs") ) return;
 		case "python":
-			if( !Context.defined("python") ) return;
+			if (!Context.defined("python") ) return;
+		case "hl":
+			if( !Context.defined("hl") ) return;
 		case "tools", "build-tool": return;
 		}
 		for( p in Context.getClassPath() ) {
