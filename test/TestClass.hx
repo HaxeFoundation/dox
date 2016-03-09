@@ -116,7 +116,7 @@ class TestClass
 
 	/**
 		Arguments should look like this:
-		
+
 		- `a:Int = 0x00FF00`
 		- `b:String = "foo"`
 		- `c:Bool = true`
@@ -125,21 +125,21 @@ class TestClass
 		- `?f:String`
 	**/
 	public static function defaultValues(a = 0x00FF00, ?b = "foo", c = true, ?d:String = null, e:String = null, ?f:String) { }
-	
+
 	/**
 		There should not be a line break between `FlipX:Bool =` and `false`.
 	**/
 	public function add(Name:String, Frames:Array<Int>, FrameRate:Int = 30, Looped:Bool = true, FlipX:Bool = false, FlipY:Bool = false):Void
-	{	
+	{
 	}
-	
+
 	/**
 		There should not be a line break between `?` and `NotifyCallback`.
 	**/
 	public static inline function collide(?ObjectOrGroup1:TestClass, ?ObjectOrGroup2:TestClass, ?NotifyCallback:Dynamic->Dynamic->Void):Void
 	{
 	}
-	
+
 	/**
 		Should be in the "variables" section as `callback:String -> Int -> Void`.
 	**/
@@ -238,7 +238,7 @@ class TestFieldVisibility
 	static public function staticFunctionPublic() {}
 
 	static private function staticFunctionPrivate() {}
-	
+
 	@:dox(hide)
 	static public function staticFunctionPublicHidden() {}
 
@@ -254,4 +254,12 @@ class TestFieldVisibility
 
 	@:dox(show)
 	private function functionPrivateShown() {}
+}
+
+/**
+	This should not be visible on the index page.
+ **/
+class Index
+{
+
 }

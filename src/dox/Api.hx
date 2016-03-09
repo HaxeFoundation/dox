@@ -145,7 +145,7 @@ class Api {
 		Turns a dot-path into a slash-path and appends ".html".
 	**/
 	public function pathToUrl(path:Path):String {
-		return config.rootPath + path.split(".").join("/") + ".html";
+		return config.rootPath + sanitizePath(path).split(".").join("/") + ".html";
 	}
 
 	/**
@@ -201,7 +201,7 @@ class Api {
 	public function debug(e:Dynamic):Void {
 		trace(Std.string(e));
 	}
-	
+
 	/**
 		Traces `e` as pretty-printed Json for debug purposes.
 	 **/
@@ -311,7 +311,7 @@ class Api {
 			modifiers: modifiers
 		}
 	}
-	
+
 	/**
 		Checks whether `cf` is a method using `getFieldInfo()`.
 	**/
@@ -343,6 +343,10 @@ class Api {
 		loop(c);
 		allFields.sort(function(f1, f2) return Reflect.compare(f1.field.name, f2.field.name));
 		return allFields;
+	}
+
+	private function sanitizePath(path:String) {
+		return ~/Index$/.replace(path, "$Index");
 	}
 }
 

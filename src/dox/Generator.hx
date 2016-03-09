@@ -44,6 +44,7 @@ class Generator {
 		writer.saveContent("nav.js", ~/[\r\n\t]/g.replace(s, ""));
 	}
 
+	@:access(dox.Api.sanitizePath)
 	function generateTree(tree:TypeTree) {
 		switch(tree) {
 			case TPackage(name, full, subs):
@@ -68,7 +69,7 @@ class Generator {
 					"subClasses": api.infos.subClasses.get(c.path),
 					"implementors": api.infos.implementors.get(c.path)
 				});
-				write(c.path, s);
+				write(api.sanitizePath(c.path), s);
 				api.infos.numGeneratedTypes++;
 			case TEnumdecl(e):
 				api.currentPageName = e.path;
@@ -77,7 +78,7 @@ class Generator {
 					api: api,
 					"type": e,
 				});
-				write(e.path, s);
+				write(api.sanitizePath(e.path), s);
 				api.infos.numGeneratedTypes++;
 			case TTypedecl(t):
 				api.currentPageName = t.path;
@@ -86,7 +87,7 @@ class Generator {
 					api: api,
 					"type": t,
 				});
-				write(t.path, s);
+				write(api.sanitizePath(t.path), s);
 				api.infos.numGeneratedTypes++;
 			case TAbstractdecl(a):
 				api.currentPageName = a.path;
@@ -95,7 +96,7 @@ class Generator {
 					api: api,
 					"type": a,
 				});
-				write(a.path, s);
+				write(api.sanitizePath(a.path), s);
 				api.infos.numGeneratedTypes++;
 		}
 	}
