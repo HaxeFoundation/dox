@@ -136,7 +136,7 @@ class Api {
 		if (infos == null) {
 			return "";
 		}
-		var stripped = ~/<.+?>/.replace(infos.doc, "").replace("\n", " ");
+		var stripped = ~/<.+?>/g.replace(infos.doc, "").replace("\n", " ");
 		var sentence = ~/^(.*?[.?!]+)/;
 		return sentence.match(stripped) ? sentence.matched(1) : "";
 	}
