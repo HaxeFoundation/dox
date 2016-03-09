@@ -145,7 +145,7 @@ class Api {
 		Turns a dot-path into a slash-path and appends ".html".
 	**/
 	public function pathToUrl(path:Path):String {
-		return config.rootPath + path.split(".").join("/") + ".html";
+		return config.rootPath + Utils.urlEscape(path).split(".").join("/") + ".html";
 	}
 
 	/**

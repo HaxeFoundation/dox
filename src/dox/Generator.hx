@@ -56,7 +56,7 @@ class Generator {
 					full: full,
 					subs: subs,
 				});
-				write(full == '' ? 'index' : full + '.index', s);
+				write(full == '' ? 'index' : full + '.index', s, false);
 				api.infos.numGeneratedPackages++;
 				subs.iter(generateTree);
 			case TClassdecl(c):
@@ -100,8 +100,9 @@ class Generator {
 		}
 	}
 
-	function write(path:String, content:String)
-	{
+	function write(path:String, content:String, escape:Bool = true) {
+		if (escape)
+			path = Utils.urlEscape(path);
 		path = path.replace(".", "/").replace("<", "_").replace(">", "_") + '.html';
 		writer.saveContent(path, content);
 	}
