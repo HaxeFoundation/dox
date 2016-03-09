@@ -212,3 +212,46 @@ typedef TestTypedefOrder =
 	var b:Int;
 	var q:Int;
 }
+
+class TestFieldVisibility
+{
+	static public var staticVarPublic:Int;
+
+	static private var staticVarPrivate:Int;
+
+	@:dox(hide)
+	static public var staticVarPublicHiden:Int;
+
+	@:dox(show)
+	static private var staticVarPrivateShown:Int;
+
+	public var varPublic:Int;
+
+	private var varPrivate:Int;
+
+	@:dox(hide)
+	public var varPublicHidden:Int;
+
+	@:dox(show)
+	private var varPrivateShown:Int;
+
+	static public function staticFunctionPublic() {}
+
+	static private function staticFunctionPrivate() {}
+	
+	@:dox(hide)
+	static public function staticFunctionPublicHidden() {}
+
+	@:dox(show)
+	static private function staticFunctionTest4() {}
+
+	public function functionPublic() {}
+
+	private function functionPrivate() {}
+
+	@:dox(hide)
+	public function functionPublicHidden() {}
+
+	@:dox(show)
+	private function functionPrivateShown() {}
+}

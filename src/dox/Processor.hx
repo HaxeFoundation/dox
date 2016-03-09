@@ -117,7 +117,7 @@ class Processor {
 
 	function filterFields(fields:List<ClassField>) {
 		return fields.filter(function(cf) {
-			return cf.isPublic && !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
+			return (cf.isPublic && !Infos.hasDoxMetadata(cf.meta, "hide")) || Infos.hasDoxMetadata(cf.meta, "show");
 		});
 	}
 
