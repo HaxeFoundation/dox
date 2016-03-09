@@ -70,6 +70,10 @@
 
 <macro name="printFieldSignature(field, isStatic)">
 	<code>
+	::if !field.isPublic::
+		<span class="label">private</span>
+	::end::
+
 	::if isStatic::
 		<span class="label">static</span>
 	::end::
