@@ -255,3 +255,11 @@ class TestFieldVisibility
 	@:dox(show)
 	private function functionPrivateShown() {}
 }
+
+/**
+	This should not be visible on the index page.
+ **/
+class Index
+{
+	
+}
