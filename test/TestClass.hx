@@ -141,6 +141,13 @@ class TestClass
 	}
 
 	/**
+		There should not be a line break between `,` and `Looped`.
+	**/
+	public function addByIndices(Name:String, Prefix:String, Indices:Array<Int>, Postfix:String, VeryVeryVeryLongArgumentName:Int = 30, Looped:Bool = true):Void
+	{
+	}
+
+	/**
 		Should be in the "variables" section as `callback:String -> Int -> Void`.
 	**/
 	public var callback:String->Int->Void;
