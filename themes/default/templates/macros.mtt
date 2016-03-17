@@ -108,8 +108,9 @@
 				::if arg.opt && (arg.value == null || arg.value == "null")::?::end::
 				::arg.name:::$$printLinkedType(::arg.t::)
 				::if arg.value != null && arg.value != "null":: = ::arg.value::::end::
+				::if !repeat.arg.last::,::end::
 			</span>
-			::if !repeat.arg.last::, ::end::
+			::if !repeat.arg.last:: ::end::
 		::end::
 		)
 		::if field.name != "new"::
