@@ -2,7 +2,7 @@
 A Haxe documentation generator used by many popular projects such as:
 
 - [Haxe](http://api.haxe.org/)
-- [OpenFL](http://www.openfl.org/documentation/api/)
+- [OpenFL](http://api.openfl.org/)
 - [HaxeUI](http://haxeui.org/docs/api/haxe/ui/toolkit/index.html)
 - [HaxeFlixel](http://api.haxeflixel.com/)
 - [HaxePunk](http://haxepunk.com/documentation/api/)
