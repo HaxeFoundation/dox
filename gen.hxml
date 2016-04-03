@@ -54,3 +54,7 @@
 --next
 --interp
 -xml ../bin/xml/macro.xml
+
+--next
+-lua all_lua
+-xml ../bin/xml/lua.xml
