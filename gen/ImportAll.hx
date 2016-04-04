@@ -3,6 +3,12 @@ import haxe.macro.Context;
 // stolen from haxe/doc/ImportAll.hx
 class ImportAll {
 
+	static function isSysTarget() {
+		return Context.defined("neko") || Context.defined("php") || Context.defined("cpp") ||
+		       Context.defined("java") || Context.defined("python") ||
+			   Context.defined("lua"); // TODO: have to add cs here, SPOD gets in the way at the moment
+	}
+
 	public static function run( ?pack ) {
 		if( pack == null ) {
 			pack = "";
@@ -27,7 +33,7 @@ class ImportAll {
 		case "mt","mtwin":
 			return;
 		case "sys":
-			if( !Context.defined("neko") && !Context.defined("php") && !Context.defined("cpp") ) return;
+			if (!isSysTarget()) return;
 		case "java":
 			if( !Context.defined("java") ) return;
 		case "cs":
@@ -60,7 +66,7 @@ class ImportAll {
 					switch( cl ) {
 					case "ImportAll", "neko.db.MacroManager": continue;
 					case "haxe.TimerQueue": if( Context.defined("neko") || Context.defined("php") || Context.defined("cpp") ) continue;
-					case "Sys": if( !(Context.defined("neko") || Context.defined("php") || Context.defined("cpp")) ) continue;
+					case "Sys": if(!isSysTarget()) continue;
 					case "haxe.web.Request": if( !(Context.defined("neko") || Context.defined("php") || Context.defined("js")) ) continue;
 					case "haxe.macro.ExampleJSGenerator","haxe.macro.Context", "haxe.macro.Compiler": if( !Context.defined("neko") ) continue;
 					case "haxe.remoting.SocketWrapper": if( !Context.defined("flash") ) continue;
