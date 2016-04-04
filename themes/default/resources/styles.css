@@ -1,8 +1,6 @@
-.navbar { margin:0 0 20px 0; padding:0; color:#fff; } 
-.navbar .tagline { position:relative; top:11px; } 
-.navbar .brand { padding: 7px 20px 7px;}
-.navbar .pull-right { position:relative; top:8px; } 
-.navbar .pull-right a {color: #F48821;}
+.main-content {
+	margin-top:65px;
+}
 
 .dark {
 	background: rgb(20,20,25);
@@ -54,7 +52,7 @@
 /** Footer sitemap **/
 footer{
 	margin-top:40px;
-	font-size:12px;
+	font-size:14px;
 }
 .copyright {
 	padding: 6px;
@@ -62,7 +60,7 @@ footer{
 	text-align:center;
 	margin: 40px 0;
 }
-.dark .copyright .hf-link { color:#F48821; }
+.dark .copyright a { color:#F48821; }
 
 /* .doc { margin-top:16px; } */
 .toggle-hide { display:block; }
@@ -303,4 +301,23 @@ pre.example:before {
   -webkit-border-radius: 4px 0;
   border-radius: 4px 0;
   border: 1px solid rgba(0,0,0,0.15);
+}
+
+@media (max-width: 767px) {
+  .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .navbar .divider { 
+    display: none;
+  }
+  
+  .main-content {
+    margin-top:0px;
+  }
+}
+@media (max-width: 979px) {
+  .main-content {
+    margin-top:15px;
+  }
 }
