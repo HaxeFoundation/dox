@@ -43,7 +43,9 @@ class ImportAll {
 		case "hl":
 			if(!Context.defined("hl") ) return;
 		case "lua":
-			if(!Context.defined("lua") ) return;
+			if (!Context.defined("lua") ) return;
+		case "ssl":
+			if (!Context.defined("neko") && !Context.defined("cpp")) return;
 		case "tools", "build-tool": return;
 		}
 		for( p in Context.getClassPath() ) {
