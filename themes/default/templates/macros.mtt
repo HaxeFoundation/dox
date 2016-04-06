@@ -67,7 +67,7 @@
 
 <macro name="printModule(module)">
 	<p ::cond module != null && module != "StdTypes"::>
-        <h4><small>module <a ::attr href api.pathToUrl(module)::>::module::</a></small></h4>
+        <h4><small>import <a ::attr href api.pathToUrl(module)::>::module::</a></small></h4>
 	</p>
 </macro>
 
