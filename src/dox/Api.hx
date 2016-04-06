@@ -60,6 +60,19 @@ class Api {
 	}
 
 	/**
+		Returns the type of `tree`.
+	**/
+	public function getTreeType(tree:TypeTree):String {
+		return switch(tree) {
+			case TPackage(_,path,_): "package";
+			case TClassdecl(t): "class";
+			case TEnumdecl(t): "enum";
+			case TTypedecl(t): "type";
+			case TAbstractdecl(t): "abstract";
+		}
+	}
+
+	/**
 		Returns the full dot-path of `tree`.
 	**/
 	public function getTreePath(tree:TypeTree):String {
@@ -96,7 +109,7 @@ class Api {
 	**/
 	public function getTreeUrl(tree:TypeTree):String {
 		return switch(tree) {
-			case TPackage(_, full, _): config.rootPath + full.split(".").join("/") + "/index.html";
+			case TPackage(_, full, _): packageToUrl(full);
 			case TClassdecl(t): pathToUrl(t.path);
 			case TEnumdecl(t): pathToUrl(t.path);
 			case TTypedecl(t): pathToUrl(t.path);
@@ -147,7 +160,15 @@ class Api {
 	public function pathToUrl(path:Path):String {
 		return config.rootPath + sanitizePath(path).split(".").join("/") + ".html";
 	}
-
+	
+	/**
+		Turns a package-path into a slash-path and appends "/index.html".
+	**/
+	public function packageToUrl(full:String):String {
+		return config.rootPath + full.split(".").join("/") + "/index.html";
+		
+	}
+	
 	/**
 		Checks if `path` corresponds to a known type.
 	**/

@@ -9,13 +9,16 @@
 	::end::
 </macro>
 
-<macro name="printPlatforms(platforms)">
+<macro name="printPlatforms(platforms, useSeparator)">
 	<p class="availability" ::cond (api.config.platforms.length>1)::>
-		Available on
+		::if (useSeparator)::<hr/>::end::
+		<em>
+		Available on 
 		::if platforms.length == api.config.platforms.length:: all platforms
 		::elseif platforms.length > 1:: ::platforms.join(", ")::
 		::else:: ::platforms.join("")::
 		::end::
+		</em>
 	</p>
 </macro>
 
@@ -64,7 +67,7 @@
 
 <macro name="printModule(module)">
 	<p ::cond module != null && module != "StdTypes"::>
-        <h4><small>import</small> ::module::</h4>
+        <h4><small>module <a ::attr href api.pathToUrl(module)::>::module::</a></small></h4>
 	</p>
 </macro>
 
@@ -220,6 +223,7 @@
 
 <macro name="printPackage(type)">
 	::if type.path.indexOf(".") >= 0::
-		<h4><small>package ::type.path.split(".").slice(0, -1).join(".")::</small></h4>
+		::set packagePath = type.path.split(".").slice(0, -1).join(".")::
+		<h4><small>package <a ::attr href api.packageToUrl(packagePath)::>::packagePath::</a></small></h4>
 	::end::
 </macro>
