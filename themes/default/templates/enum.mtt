@@ -1,7 +1,7 @@
 ::use 'main.mtt'::
 	<div class="page-header">
 		<span ::cond api.isDefined("source-path"):: class="viewsource">
-			<a href="::api.getSourceLink(type)::">View source</a>
+			<a href="::api.getSourceLink(type)::" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a>
 		</span>
 		<h1><small>enum</small> ::api.getPathName(type.path)::$$printTypeParams(::type.params::)</h1>
 		$$printPackage(::type::)
