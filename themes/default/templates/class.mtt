@@ -4,35 +4,42 @@
 			<a href="::api.getSourceLink(type)::">View source</a>
 		</span>
 
-		$$printPackage(::type::)
 		<h1>
-			<small>::if type.isInterface::interface::else::class::end::</small>
-			::api.getPathName(type.path)::$$printTypeParams(::type.params::)
+			<small>::if type.isInterface::interface::else::class::end::</small> ::api.getPathName(type.path)::$$printTypeParams(::type.params::)
 		</h1>
+		$$printPackage(::type::)
 		::if type.superClass != null::
 		<h4>
-			<small>extends</small> $$printLinkedPath(::type.superClass.path::,::type.superClass.params::)
+			<small>extends $$printLinkedPath(::type.superClass.path::,::type.superClass.params::)</small>
 		</h4>
 		::end::
+    
+		<h4 ::cond (type.interfaces.length>0)::>
+		<small>implements 
 		::foreach i type.interfaces::
-		<h4>
-			<small>implements</small> $$printLinkedPath(::i.path::,::i.params::)
-		</h4>
+			$$printLinkedPath(::i.path::,::i.params::)::if ((type.interfaces.length!=1)&&(repeat.i.index<(type.interfaces.length-1)))::, ::end::
 		::end::
+		</small>
+		</h4>
 
 		$$printModule(::type.module::)
-		$$printPlatforms(::type.platforms::)
 
-		<div ::cond subClasses !=null::>
-			::set title = "extended by"::
+		<h4 ::cond subClasses !=null::>
+      <small>
+			::set title = "extended by "::
 			::set infos = subClasses::
 			::use "related_types.mtt"::::end::
-		</div>
-		<div ::cond implementors !=null::>
-			::set title = "implemented by"::
+      </small>
+		</h4>
+		<h4 ::cond implementors !=null::>
+      <small>
+			::set title = "implemented by "::
 			::set infos = implementors::
 			::use "related_types.mtt"::::end::
-		</div>
+      </small>
+		</h4>
+    
+		$$printPlatforms(::type.platforms::,::true::)
 	</div>
 	<div class="body">
 		<div class="doc doc-main" ::cond type.doc != null::>

@@ -223,6 +223,11 @@ h6 {
   border-bottom: 1px solid #eee;
 }
 
+table .fa {
+	color: rgb(200,200,200);
+	margin-right:5px;
+}
+
 .javadoc {
   /* font-weight: normal; */
   /* font-size: small; */
@@ -232,7 +237,6 @@ h6 {
 .inline-content * {
   display: inline;
 }
-
 /**
  * Stuff for input-block-level:
  * http://stackoverflow.com/questions/13306670/bootstrap-prepended-and-appended-input-how-to-max-input-field-width

@@ -14,14 +14,17 @@
 		</ul>
 		<h3>Top Level</h3>
 	::else::
-		<h1><span class="directive">package</span> ::full::</h1>
+		<h1><small class="directive">package</small> ::full::</h1>
 	::end::
 	<table class="table table-condensed">
 		<tbody>
 			::foreach tree subs::
 				::set name = api.getTreeName(tree)::
 				<tr ::cond name.charAt(0) != "_"::>
-					<td width="200"><a href="::api.getTreeUrl(tree)::">::name::</a></td>
+					<td width="200">
+						<i ::cond api.getTreeType(tree)=="package":: class="fa fa-folder-o"></i>
+						<a href="::api.getTreeUrl(tree)::">::name::</a>
+					</td>
 					<td>::raw api.getTreeShortDesc(tree)::</td>
 				</tr>
 			::end::
