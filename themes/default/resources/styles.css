@@ -223,9 +223,22 @@ h6 {
   border-bottom: 1px solid #eee;
 }
 
-table .fa {
-	color: rgb(200,200,200);
-	margin-right:5px;
+.table p {
+  margin: 3px 0;
+}
+
+.table th, .table td {
+  border-top: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.table a small {
+  color: #666;
+}
+
+.table .fa {
+  color: rgb(200,200,200);
+  margin-right:5px;
 }
 
 .javadoc {
