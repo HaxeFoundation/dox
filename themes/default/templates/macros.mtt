@@ -226,6 +226,6 @@
 		::set packagePath = type.path.split(".").slice(0, -1).join(".")::
 		<h4><small>package <a ::attr href api.packageToUrl(packagePath)::>::packagePath::</a></small></h4>
 	::else::
-		<h4><small>package <a href="./">toplevel</a></small></h4>
+		<h4><small><a href="./">no package</a></small></h4>
 	::end::
 </macro>
