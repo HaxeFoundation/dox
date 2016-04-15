@@ -225,5 +225,7 @@
 	::if type.path.indexOf(".") >= 0::
 		::set packagePath = type.path.split(".").slice(0, -1).join(".")::
 		<h4><small>package <a ::attr href api.packageToUrl(packagePath)::>::packagePath::</a></small></h4>
+	::else::
+		<h4><small>package <a href="./">toplevel</a></small></h4>
 	::end::
 </macro>
