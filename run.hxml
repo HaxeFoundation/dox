@@ -5,4 +5,4 @@
 -cp src
 -neko run.n
 -main dox.Dox
--dce full
+-dce no

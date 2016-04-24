@@ -366,6 +366,60 @@ class Api {
 		return allFields;
 	}
 
+	/**
+		Returns inherited fields/methods of `c`. Sorted by field-name ordered by type in a map.
+	**/
+	public function getInheritedFields(c:Classdef):InheritedFields {
+		var oc = c;
+		
+		var inheritedFields:InheritedFields = {
+			methods: new Map<Classdef,Array<ClassField>>(),
+			fields:new Map<Classdef,Array<ClassField>>(),
+			types: [],
+		}
+		
+		var allFields = [];
+		var fieldMap = new Map();
+		function loop(c:Classdef) {
+			for (cf in c.fields) {
+				if (!fieldMap.exists(cf.name) || cf.overloads != null) {
+					if (c != oc) allFields.push({ field: cf, definedBy: c});
+					fieldMap[cf.name] = true;
+				}
+			}
+			if (c.superClass != null) {
+				var cSuper:Classdef = cast infos.typeMap[c.superClass.path];
+				if (cSuper != null) { // class is not part of documentation
+					inheritedFields.types.push(cSuper);
+					inheritedFields.methods.set(cSuper, []);
+					inheritedFields.fields.set(cSuper, []);
+					loop(cSuper);
+				}
+			}
+		}
+		loop(c);
+		
+		function addFieldTo(f, map) {
+			var fields = map.exists(f.definedBy) ? map.get(f.definedBy) : [];
+			fields.push(f.field);
+			map.set(f.definedBy, fields);
+		}
+		for (f in allFields) {
+			if (isMethod(f.field)) 
+				addFieldTo(f, inheritedFields.methods);
+			else 
+				addFieldTo(f, inheritedFields.fields);
+		}
+		for (fields in inheritedFields.methods) {
+			fields.sort(function(f1, f2) return Reflect.compare(f1.name, f2.name));
+		}
+		for (fields in inheritedFields.fields) {
+			fields.sort(function(f1, f2) return Reflect.compare(f1.name, f2.name));
+		}
+		
+		return inheritedFields;
+	}
+
 	private function sanitizePath(path:String) {
 		return ~/Index$/.replace(path, "$Index");
 	}
@@ -423,4 +477,11 @@ typedef FieldModifiers = {
 typedef MemberField = {
 	field: ClassField,
 	definedBy: Classdef
+}
+
+typedef InheritedFields = {
+	methods: Map<Classdef,Array<ClassField>>, 
+	fields: Map<Classdef,Array<ClassField>>,
+	// defines order of the types since keys in maps arent ordered
+	types:Array<Classdef>,
 }
