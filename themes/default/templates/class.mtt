@@ -25,20 +25,19 @@
 		$$printModule(::type.module::)
 
 		<h4 ::cond subClasses !=null::>
-      <small>
+			<small>
 			::set title = "extended by "::
 			::set infos = subClasses::
 			::use "related_types.mtt"::::end::
-      </small>
+			</small>
 		</h4>
 		<h4 ::cond implementors !=null::>
-      <small>
+			<small>
 			::set title = "implemented by "::
 			::set infos = implementors::
 			::use "related_types.mtt"::::end::
-      </small>
+			</small>
 		</h4>
-    
 		$$printPlatforms(::type.platforms::,::true::)
 	</div>
 	<div class="body">
@@ -48,5 +47,7 @@
 			</div>
 		</div>
 		$$printClassBody(::type::)
+
+		$$printInheritedFields(::type::)
 	</div>
 ::end::

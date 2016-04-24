@@ -67,11 +67,11 @@
 
 <macro name="printModule(module)">
 	<p ::cond module != null && module != "StdTypes"::>
-        <h4><small>import <a ::attr href api.pathToUrl(module)::>::module::</a></small></h4>
+		<h4><small>import <a ::attr href api.pathToUrl(module)::>::module::</a></small></h4>
 	</p>
 </macro>
 
-<macro name="printFieldSignature(field, isStatic)">
+<macro name="printFieldSignature(field, isStatic, type)">
 	<code>
 	::if !field.isPublic::
 		<span class="label">private</span>
@@ -101,7 +101,7 @@
 			<span class="label">write only</span>
 		::end::
 
-	<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
+	<a href="::api.pathToUrl(type.path)::#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
 
 	::case 2::
 		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>
@@ -219,6 +219,48 @@
 			::end::
 		</div>
 	::end::
+</macro>
+
+<macro name="printInheritedFields(type)">
+::if type.superClass != null::
+  ::set inheritedFields = api.getInheritedFields(type)::
+	::set hasFields = inheritedFields.fields.keys().hasNext()::
+	::set hasMethods = inheritedFields.methods.keys().hasNext()::
+	
+	<div class="inherited-fields well" ::cond hasFields || hasMethods::>
+		<h3 class="section" ::cond hasFields::>Inherited Variables</h3>
+		<div class="fields" ::cond hasFields::>
+			::set fields=inheritedFields.fields::
+			::foreach cl inheritedFields.types::
+				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::)</h4>
+				<div style="display:none">
+				::foreach field fields.get(cl)::
+					::set isStatic = false::
+					::set type=cl::
+					::use "class_field.mtt"::::end::
+				::end::
+				</div>
+			::end::
+		</div>
+		
+		<h3 class="section" ::cond hasMethods::>Inherited Methods</h3>
+		<div class="fields" ::cond hasMethods::>
+			::set fields=inheritedFields.methods::
+			::foreach cl inheritedFields.types::
+				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::)</h4>
+				<div style="display:none">
+				::foreach field fields.get(cl)::
+				::set isStatic = false::
+					::if field.name != "new" ::
+						::set type=cl::
+						::use "class_field.mtt"::::end::
+					::end::
+				::end::
+				</div>
+			::end::
+		</div>
+	</div>
+::end::
 </macro>
 
 <macro name="printPackage(type)">

@@ -320,6 +320,12 @@ pre.example:before {
   border: 1px solid rgba(0,0,0,0.15);
 }
 
+.inherited-fields {
+  padding: 5px 20px;
+  margin-top:1em;
+  background:#fcfcfc;
+}
+
 @media (max-width: 767px) {
   .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
     margin-right: 0;
