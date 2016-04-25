@@ -126,18 +126,18 @@ $(document).ready(function(){
 			$(this.parentElement).addClass("active");
 		}
 	});
-  
+
 	$("a.expand-button").click(function (e) {
-    var container = $(this).parent().next();
+		var container = $(this).parent().next();
 		container.toggle();
-    $("i", this).removeClass("fa-arrow-circle-o-down")
-                .removeClass("fa-arrow-circle-o-right")
-                .addClass(container.is(":visible") ? "fa-arrow-circle-o-down" : "fa-arrow-circle-o-right");
-    return false;
+		$("i", this).removeClass("fa-arrow-circle-o-down")
+				.removeClass("fa-arrow-circle-o-right")
+				.addClass(container.is(":visible") ? "fa-arrow-circle-o-down" : "fa-arrow-circle-o-right");
+		return false;
 	});
 
-    // Because there is no CSS parent selector
-    $("code.prettyprint").parents("pre").addClass("example");
+	// Because there is no CSS parent selector
+	$("code.prettyprint").parents("pre").addClass("example");
 });
 
 function searchQuery(query) {
