@@ -2,3 +2,4 @@ Thumbs.db
 bin/pages/
 *.hxproj
 /bin/haxelib*
+bin/
