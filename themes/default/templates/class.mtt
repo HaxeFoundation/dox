@@ -10,7 +10,11 @@
 		$$printPackage(::type::)
 		::if type.superClass != null::
 		<h4>
-			<small>extends $$printLinkedPath(::type.superClass.path::,::type.superClass.params::)</small>
+			::set inheritedFields = api.getInheritedFields(type)::
+			<small>extends ::foreach t inheritedFields.types::
+				$$printLinkedPath(::t.path::,::null::)::if ((inheritedFields.types.length!=1)&&(repeat.t.index<(inheritedFields.types.length-1))):: &rsaquo; ::end::
+			::end::
+			</small>
 		</h4>
 		::end::
     
