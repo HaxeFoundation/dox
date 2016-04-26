@@ -28,6 +28,10 @@
 	<script type="text/javascript" src="::api.config.rootPath::/index.js"></script>
 	<link rel="icon" href="::api.config.rootPath::/favicon.ico" type="image/x-icon"></link>
 	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
+
+	::set description = api.getShortDesc(type)::
+	::set description = description.substr(3, description.length-7)::
+	<meta name="description" ::cond type.doc!=null && description.length>0:: content="::description::"/>
 </head>
 <body>
 	<nav class="section nav dark">
