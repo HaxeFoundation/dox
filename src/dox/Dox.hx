@@ -48,6 +48,9 @@ class Dox {
 			@doc("Set the package which serves as top-level")
 			["--toplevel-package"] => function(dotPath:String) cfg.toplevelPackage = dotPath,
 
+			@doc("Disable markdown rendering")
+			["--no-markdown"] => function() cfg.useMarkdown = false,
+
 			@doc("Set the theme name or path")
 			["-theme"] => function(name:String) {
 				function setTheme(path:String) {
