@@ -12,7 +12,7 @@
 		<h4>
 			::set inheritedFields = api.getInheritedFields(type)::
 			<small>extends ::foreach t inheritedFields.types::
-				$$printLinkedPath(::t.path::,::null::)::if ((inheritedFields.types.length!=1)&&(repeat.t.index<(inheritedFields.types.length-1))):: &raquo; ::end::
+				$$printLinkedPath(::t.path::,::null::)::if ((inheritedFields.types.length!=1)&&(repeat.t.index<(inheritedFields.types.length-1))):: &rsaquo; ::end::
 			::end::
 			</small>
 		</h4>
