@@ -293,6 +293,7 @@ table.params th {
 }
 .field + .field {
   border-top: 1px solid #eee;
+  margin-top: 10px;
 }
 .fields {
   margin-left: 40px;
