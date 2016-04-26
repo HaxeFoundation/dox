@@ -35,11 +35,11 @@ class JavadocHandler {
 				default:
 			}
 			doc = trimDoc(doc);
-			tags.push({name:name, doc:markdown.markdownToHtml(path, doc), value:value});
+			tags.push({name:name, doc:config.useMarkdown ? markdown.markdownToHtml(path, doc) : doc, value:value});
 			return '';
 		});
 
-		var infos:DocInfos = {doc:markdown.markdownToHtml(path, doc), throws:[], params:[], sees:[], tags:tags};
+		var infos:DocInfos = {doc:config.useMarkdown ? markdown.markdownToHtml(path, doc) : doc, throws:[], params:[], sees:[], tags:tags};
 		for (tag in tags) switch (tag.name)
 		{
 			case 'param': infos.params.push(tag);

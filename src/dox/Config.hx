@@ -5,6 +5,7 @@ class Config {
 	public var theme:Theme;
 	public var rootPath:String;
 	public var toplevelPackage:String;
+	public var useMarkdown:Bool;
 
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
@@ -29,6 +30,7 @@ class Config {
 		platforms = [];
 		resourcePaths = [];
 		toplevelPackage = "";
+		useMarkdown = true;
 		defines = new Map();
 		pathFilters = new haxe.ds.GenericStack<Filter>();
 		templatePaths = new haxe.ds.GenericStack<String>();
