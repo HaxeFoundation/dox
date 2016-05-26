@@ -1,0 +1,12 @@
+<h1>Haxe API documentation <small ::cond api.isDefined("version")::>version ::api.getValue('version')::</small></h1>
+<p>Haxe is an open source toolkit based on a modern, high level, strictly typed programming language, a cross-compiler, a complete cross-platform standard library and ways to access each platform's native capabilities.</p> 
+<h3>Getting Started With Haxe</h3>
+<ul>
+    <li>Take a look at our <a href="http://haxe.org/documentation/introduction/">introduction</a></li>
+    <li>Read through the <a href="http://haxe.org/manual/">Haxe Manual</a></li>
+    <li>Look at these <a href="http://haxe.org/use-cases/">use cases for Haxe</a></li>
+    <li>Find and install <a href="http://lib.haxe.org/t/all/">popular Haxe libraries</a></li>
+    <li>Learn by example with the <a href="http://code.haxe.org">Haxe Code Cookbook</a></li>
+</ul>
+<hr/>
+<h3>Top Level</h3>
