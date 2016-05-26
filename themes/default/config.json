@@ -1,4 +1,8 @@
 {
   "name": "Default Haxe Theme",
-  "author": "Haxe Foundation"
+  "author": "Haxe Foundation",
+  "defines": {
+    "collapsedClass": "fa-arrow-circle-o-right",
+    "expandedClass": "fa-arrow-circle-o-down" 
+  }
 }

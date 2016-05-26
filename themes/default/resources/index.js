@@ -1,3 +1,6 @@
+var collapsedClass = "fa-arrow-circle-o-right";
+var expandedClass = "fa-arrow-circle-o-down";
+
 function createCookie(name, value, days) {
 	localStorage.setItem(name, value);
 }
@@ -10,9 +13,9 @@ function toggleInherited(el) {
 	var toggle = $(el).closest(".toggle");
 	toggle.toggleClass("toggle-on");
 	if (toggle.hasClass("toggle-on")) {
-		$("i", toggle).removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
+		$("i", toggle).removeClass(collapsedClass).addClass(expandedClass);
 	} else {
-		$("i", toggle).addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
+		$("i", toggle).addClass(collapsedClass).removeClass(expandedClass);
 	}
     return false;
 }
@@ -22,9 +25,9 @@ function toggleCollapsed(el) {
 	toggle.toggleClass("expanded");
 
 	if (toggle.hasClass("expanded")) {
-		$(toggle).find("i").first().removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
+		$(toggle).find("i").first().removeClass(collapsedClass).addClass(expandedClass);
 	} else {
-		$(toggle).find("i").first().addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
+		$(toggle).find("i").first().addClass(collapsedClass).removeClass(expandedClass);
 	}
 	updateTreeState();
     return false;
@@ -86,7 +89,7 @@ $(document).ready(function(){
 	var treeState = readCookie("treeState");
 
 	$("#nav .expando").each(function(i, e){
-		$("i", e).first().addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
+		$("i", e).first().addClass(collapsedClass).removeClass(expandedClass);
 	});
 
 	$(".treeLink").each(function() {
@@ -99,7 +102,7 @@ $(document).ready(function(){
 		$("#nav .expando").each(function(i, e){
 			if (states[i]) {
 				$(e).addClass("expanded");
-				$("i", e).first().removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
+				$("i", e).first().removeClass(collapsedClass).addClass(expandedClass);
 			}
 		});
 	}
@@ -130,9 +133,9 @@ $(document).ready(function(){
 	$("a.expand-button").click(function (e) {
 		var container = $(this).parent().next();
 		container.toggle();
-		$("i", this).removeClass("fa-arrow-circle-o-down")
-				.removeClass("fa-arrow-circle-o-right")
-				.addClass(container.is(":visible") ? "fa-arrow-circle-o-down" : "fa-arrow-circle-o-right");
+		$("i", this).removeClass(expandedClass)
+				.removeClass(collapsedClass)
+				.addClass(container.is(":visible") ? expandedClass : collapsedClass);
 		return false;
 	});
 

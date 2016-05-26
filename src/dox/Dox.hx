@@ -69,6 +69,11 @@ class Dox {
 					if (theme.parentTheme != null) {
 						setTheme(theme.parentTheme);
 					}
+					// set theme defines
+					for (varName in Reflect.fields(theme.defines)) {
+						var varValue = Reflect.field(theme.defines, varName);
+						cfg.defines.set(varName, varValue);
+					}
 					cfg.resourcePaths.push(Path.join([path, "resources"]));
 					loadTemplates(cfg, Path.join([path, "templates"]));
 					return theme;
