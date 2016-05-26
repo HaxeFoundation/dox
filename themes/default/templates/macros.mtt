@@ -90,7 +90,7 @@
 	::if fieldInfo.modifiers.isInline::
 		<span class="label">inline</span> 
 	::end::
-	
+
 	::switch fieldInfo.kind::
 		::switch field.set::
 		::case 1::
@@ -100,6 +100,8 @@
 		::case 1::
 			<span class="label">write only</span>
 		::end::
+
+	::use"additional_field_labels.mtt"::::end::
 
 	<a href="::api.pathToUrl(type.path)::#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
 
