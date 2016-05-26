@@ -234,7 +234,7 @@
 		<div class="fields" ::cond hasFields::>
 			::set fields=inheritedFields.fields::
 			::foreach cl inheritedFields.types::
-				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::)</h4>
+				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa ::api.config.defines.get("collapsedClass")::"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::)</h4>
 				<div style="display:none">
 				::foreach field fields.get(cl)::
 					::set isStatic = false::
@@ -249,7 +249,7 @@
 		<div class="fields" ::cond hasMethods::>
 			::set fields=inheritedFields.methods::
 			::foreach cl inheritedFields.types::
-				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::)</h4>
+				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa ::api.config.defines.get("collapsedClass")::"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::)</h4>
 				<div style="display:none">
 				::foreach field fields.get(cl)::
 				::set isStatic = false::
