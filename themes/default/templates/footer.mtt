@@ -1,0 +1,11 @@
+<footer class="section dark site-footer">
+	<div class="container">
+		<div class="copyright">
+			<p ::cond api.isDefined("version")::>This documentation is generated for version ::api.getValue('version')::</p>
+			<p>&copy;2015&nbsp;
+			<a href="http://haxe.org/foundation/" title="Haxe Foundation Website" class="hf-link">Haxe Foundation</a> |&nbsp;
+			<a href="https://github.com/HaxeFoundation/haxe" title="Haxe on Github">Contribute to Haxe</a>
+			</p>
+		</div>
+	</div>
+</footer>
