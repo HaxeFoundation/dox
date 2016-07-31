@@ -9,7 +9,7 @@ A Haxe documentation generator used by many popular projects such as:
 - [Flambe](https://aduros.com/flambe/api/)
 - [Kha](http://api.kha.technology/)
 
-![](http://i.imgur.com/aQKBPsj.png)
+![image](https://cloud.githubusercontent.com/assets/576184/17273397/e88ed39a-56b3-11e6-9892-b668258d3fd3.png)
 
 ### Installation
 
