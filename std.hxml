@@ -1,1 +1,1 @@
--cmd haxelib run dox --title "Haxe API" -o bin/api-latest -D version 3.2.0 -i bin/xml -ex microsoft -ex javax -ex cs.internal -D source-path https://github.com/HaxeFoundation/haxe/blob/development/std/
+-cmd haxelib run dox --title "My project API documentation" -o bin/api-latest -D version 3.2.0 -D haxe_branded true -D website "http://haxe.org" -D themeColor 0x141419 -i bin/xml -ex microsoft -ex javax -ex cs.internal -D source-path https://github.com/HaxeFoundation/haxe/blob/development/std/
