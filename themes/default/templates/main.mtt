@@ -11,13 +11,8 @@
 ::elseif (api.std.parseInt(themeColor) > 7829367)::::set textColor="0x000000"::::end::
 
 ::use "header.mtt"::::end::
-
 <body>
-::if api.isDefined("haxe_branded")::
-	::use "topbar_branded.mtt"::::end::
-::else::
-	::use "topbar_default.mtt"::::end::
-::end::
+::use "topbar.mtt"::::end::
 <div class="container main-content">
 	<div class="row-fluid">
 		<div class="span3">
