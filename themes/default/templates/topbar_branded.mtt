@@ -12,10 +12,9 @@
 <nav class="section nav dark">
 	<div class="navbar navbar-fixed-top navbar-inverse">
 		<div class="navbar-inner">
+			<button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" type="button"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
 			<a class="brand haxe-logo" ::attr href if(api.isDefined("website")) api.getValue("website") else api.config.rootPath::><img alt="Haxe" height="21" onerror="this.src='http://haxe.org/img/haxe-logo-horizontal-on-dark.png'" src="http://haxe.org/img/haxe-logo-horizontal-on-dark.svg" width="107" /></a>
-			
 			<a class="brand sub lib" ::attr href api.config.rootPath::>API</a>
-
 			<div class="nav-collapse collapse">
 				<ul class="nav">
 					<!-- required submenu  on every subsite, put class="active" on   -->

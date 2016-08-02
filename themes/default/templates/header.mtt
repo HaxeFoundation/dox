@@ -1,4 +1,3 @@
-
 <head>
 	<meta charset='utf-8'/>
 	<link href="::api.config.rootPath::bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -23,9 +22,9 @@
 			::end::
 		]
 	};</script>
-	<script type="text/javascript" src="::api.config.rootPath::/nav.js"></script>
-	<script type="text/javascript" src="::api.config.rootPath::/index.js"></script>
-	<link rel="icon" href="::api.config.rootPath::/favicon.ico" type="image/x-icon"></link>
+	<script type="text/javascript" src="::api.config.rootPath::nav.js"></script>
+	<script type="text/javascript" src="::api.config.rootPath::index.js"></script>
+	<link rel="icon" href="::api.config.rootPath::favicon.ico" type="image/x-icon"></link>
 	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
 
 	::set description = api.getShortDesc(type)::

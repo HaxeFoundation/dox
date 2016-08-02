@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-	
+
+<!-- use theme color or fallback -->
 ::set themeColor="0xFAFAFA"::
 ::if (api.isDefined("themeColor"))::::set themeColor=api.getValue("themeColor")::::end::
 
