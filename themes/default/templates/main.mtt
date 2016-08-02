@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-::use "header.mtt"::::end::
-
+	
 ::set themeColor="0xFAFAFA"::
 ::if (api.isDefined("themeColor"))::::set themeColor=api.getValue("themeColor")::::end::
 
@@ -9,6 +8,8 @@
 ::set textColor="0xFFFFFF"::
 ::if (api.isDefined("textColor"))::::set textColor=api.getValue("textColor")::
 ::elseif (api.std.parseInt(themeColor) > 7829367)::::set textColor="0x000000"::::end::
+
+::use "header.mtt"::::end::
 
 <body>
 ::if api.isDefined("haxe_branded")::
