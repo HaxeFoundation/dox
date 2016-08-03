@@ -9,6 +9,8 @@
 	::end::
 </macro>
 
+<macro name="getHexValue(value)">::value.split("0x").join("#")::</macro>
+
 <macro name="printPlatforms(platforms, useSeparator)">
 	<p class="availability" ::cond (api.config.platforms.length>1)::>
 		::if (useSeparator)::<hr/>::end::

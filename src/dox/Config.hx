@@ -6,6 +6,7 @@ class Config {
 	public var rootPath:String;
 	public var toplevelPackage:String;
 	public var useMarkdown:Bool;
+	public var date:Date;
 
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
@@ -34,6 +35,7 @@ class Config {
 		defines = new Map();
 		pathFilters = new haxe.ds.GenericStack<Filter>();
 		templatePaths = new haxe.ds.GenericStack<String>();
+		date = Date.now();
 	}
 
 	public function addFilter(pattern:String, isIncludeFilter:Bool) {

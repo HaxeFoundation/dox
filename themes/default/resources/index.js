@@ -10,9 +10,9 @@ function toggleInherited(el) {
 	var toggle = $(el).closest(".toggle");
 	toggle.toggleClass("toggle-on");
 	if (toggle.hasClass("toggle-on")) {
-		$("i", toggle).removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
+		$("i", toggle).removeClass("fa-arrow-circle-right").addClass("fa-arrow-circle-down");
 	} else {
-		$("i", toggle).addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
+		$("i", toggle).addClass("fa-arrow-circle-right").removeClass("fa-arrow-circle-down");
 	}
     return false;
 }
@@ -22,9 +22,9 @@ function toggleCollapsed(el) {
 	toggle.toggleClass("expanded");
 
 	if (toggle.hasClass("expanded")) {
-		$(toggle).find("i").first().removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
+		$(toggle).find("i").first().removeClass("fa-arrow-circle-right").addClass("fa-arrow-circle-down");
 	} else {
-		$(toggle).find("i").first().addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
+		$(toggle).find("i").first().addClass("fa-arrow-circle-right").removeClass("fa-arrow-circle-down");
 	}
 	updateTreeState();
     return false;
@@ -86,7 +86,7 @@ $(document).ready(function(){
 	var treeState = readCookie("treeState");
 
 	$("#nav .expando").each(function(i, e){
-		$("i", e).first().addClass("fa-arrow-circle-o-right").removeClass("fa-arrow-circle-o-down");
+		$("i", e).first().addClass("fa-arrow-circle-right").removeClass("fa-arrow-circle-down");
 	});
 
 	$(".treeLink").each(function() {
@@ -99,7 +99,7 @@ $(document).ready(function(){
 		$("#nav .expando").each(function(i, e){
 			if (states[i]) {
 				$(e).addClass("expanded");
-				$("i", e).first().removeClass("fa-arrow-circle-o-right").addClass("fa-arrow-circle-o-down");
+				$("i", e).first().removeClass("fa-arrow-circle-right").addClass("fa-arrow-circle-down");
 			}
 		});
 	}
@@ -130,9 +130,9 @@ $(document).ready(function(){
 	$("a.expand-button").click(function (e) {
 		var container = $(this).parent().next();
 		container.toggle();
-		$("i", this).removeClass("fa-arrow-circle-o-down")
-				.removeClass("fa-arrow-circle-o-right")
-				.addClass(container.is(":visible") ? "fa-arrow-circle-o-down" : "fa-arrow-circle-o-right");
+		$("i", this).removeClass("fa-arrow-circle-down")
+				.removeClass("fa-arrow-circle-right")
+				.addClass(container.is(":visible") ? "fa-arrow-circle-down" : "fa-arrow-circle-right");
 		return false;
 	});
 

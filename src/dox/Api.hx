@@ -29,6 +29,11 @@ class Api {
 	**/
 	public var currentPageName:String;
 
+	/**
+	 * Expose Std for theme.
+	 */
+	public var std = Std;
+	
 	public function new(cfg:Config, infos:Infos) {
 		this.config = cfg;
 		this.infos = infos;
