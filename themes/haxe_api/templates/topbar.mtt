@@ -6,6 +6,7 @@
 .nav-list>.active>a.treeLink, .nav-list>.active>a.treeLink:hover, .nav-list>.active>a.treeLink:focus {
 	background:#F48821;
 	color:#fff;
+	text-shadow:0 0 0 transparent;
 }
 "::
 </style>
