@@ -3,3 +3,4 @@ bin/pages/
 *.hxproj
 /bin/haxelib*
 bin/
+.vscode/
