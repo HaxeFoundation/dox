@@ -4,3 +4,4 @@ bin/pages/
 /bin/haxelib*
 bin/
 .vscode/
+dump/
