@@ -26,8 +26,6 @@ class ImportAll {
 			if( !Context.defined("js") ) return;
 		case "cpp":
 			if( !Context.defined("cpp") ) return;
-		case "flash8":
-			return; // TODO: remove this when flash8 is removed from std library
 		case "flash":
 			if( !Context.defined("flash9") ) return;
 		case "mt","mtwin":

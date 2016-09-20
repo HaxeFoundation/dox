@@ -175,6 +175,13 @@ class Api {
 	}
 	
 	/**
+		Checks if `t` corresponds to a core type.
+	**/
+	public function isCoreType(t:TypeInfos):Bool {
+		return t.meta.exists(function(m) return m.name == ":coreType");
+	}
+
+	/**
 		Checks if `path` corresponds to a known type.
 	**/
 	public function isKnownType(path:Path):Bool {
