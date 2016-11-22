@@ -61,7 +61,7 @@ class ImportAll {
 				if( file == ".svn" || file == "_std" || file == "src")
 					continue;
 				var full = (pack == "") ? file : pack + "." + file;
-				if( StringTools.endsWith(file, ".hx") ) {
+				if( StringTools.endsWith(file, ".hx") && file.indexOf(".") < 0 ) {
 					var cl = full.substr(0, full.length - 3);
 					switch( cl ) {
 					case "ImportAll", "neko.db.MacroManager": continue;
