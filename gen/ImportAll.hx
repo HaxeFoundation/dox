@@ -6,7 +6,7 @@ class ImportAll {
 	static function isSysTarget() {
 		return Context.defined("neko") || Context.defined("php") || Context.defined("cpp") ||
 		       Context.defined("java") || Context.defined("python") ||
-			   Context.defined("lua"); // TODO: have to add cs here, SPOD gets in the way at the moment
+			   Context.defined("lua") || Context.defined("hl"); // TODO: have to add cs here, SPOD gets in the way at the moment
 	}
 
 	public static function run( ?pack ) {
@@ -61,7 +61,7 @@ class ImportAll {
 				if( file == ".svn" || file == "_std" || file == "src")
 					continue;
 				var full = (pack == "") ? file : pack + "." + file;
-				if( StringTools.endsWith(file, ".hx") ) {
+				if( StringTools.endsWith(file, ".hx") && file.substr(0, file.length - 3).indexOf(".") < 0 ) {
 					var cl = full.substr(0, full.length - 3);
 					switch( cl ) {
 					case "ImportAll", "neko.db.MacroManager": continue;
