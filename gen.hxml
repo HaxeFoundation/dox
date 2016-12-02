@@ -58,3 +58,7 @@
 --next
 -lua all_lua
 -xml ../bin/xml/lua.xml
+
+--next
+-hl all_hl
+-xml ../bin/xml/hl.xml
