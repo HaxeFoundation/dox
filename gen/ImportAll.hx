@@ -18,6 +18,8 @@ class ImportAll {
 			haxe.macro.Compiler.define("macro");
 		}
 		switch( pack ) {
+		case "php7":
+			if( !Context.defined("php7") ) return;
 		case "php":
 			if( !Context.defined("php") ) return;
 		case "neko":
