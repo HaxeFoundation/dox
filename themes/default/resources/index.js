@@ -108,13 +108,9 @@ $(document).ready(function(){
 	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
 	//setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
 
-	$("#search").focus();
 	$("#search").on("input", function(e){
 		searchQuery(e.target.value);
 	});
-	$(window).keypress(function(e){
-		$("#search").focus();
-	})
 	
 	$("#select-platform").selectpicker().on("change", function(e){
 		var value = $(":selected", this).val();

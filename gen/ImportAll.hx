@@ -18,6 +18,8 @@ class ImportAll {
 			haxe.macro.Compiler.define("macro");
 		}
 		switch( pack ) {
+		case "php7":
+			if( !Context.defined("php7") ) return;
 		case "php":
 			if( !Context.defined("php") ) return;
 		case "neko":
@@ -71,8 +73,8 @@ class ImportAll {
 					case "haxe.macro.ExampleJSGenerator","haxe.macro.Context", "haxe.macro.Compiler": if( !Context.defined("neko") ) continue;
 					case "haxe.remoting.SocketWrapper": if( !Context.defined("flash") ) continue;
 					case "haxe.remoting.SyncSocketConnection": if( !(Context.defined("neko") || Context.defined("php") || Context.defined("cpp")) ) continue;
-					case "neko.vm.Ui" | "sys.db.Sqlite" | "sys.db.Mysql": if ( Context.defined("interp") ) continue;
-					case "sys.db.Sqlite" | "sys.db.Mysql" | "cs.db.AdoNet": if ( Context.defined("cs") ) continue;
+					case "neko.vm.Ui" | "sys.db.Sqlite" | "sys.db.Mysql" if ( Context.defined("interp") ): continue;
+					case "sys.db.Sqlite" | "sys.db.Mysql" | "cs.db.AdoNet" if ( Context.defined("cs") ): continue;
 					case "haxe.PythonSyntax" | "haxe.PythonInternal": continue; // temp hack (https://github.com/HaxeFoundation/haxe/issues/3321)
 					}
 					Context.getModule(cl);
