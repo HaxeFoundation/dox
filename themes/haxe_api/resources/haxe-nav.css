@@ -151,3 +151,12 @@ nav .navbar .nav>li>.dropdown-menu:after {
 .navbar .brand.sub.ide:before {
 	color:#f89c0e;
 }
+
+.main-content {
+	margin-top:65px;
+}
+.nav-list>.active>a.treeLink, .nav-list>.active>a.treeLink:hover, .nav-list>.active>a.treeLink:focus {
+	background:#F48821;
+	color:#fff;
+	text-shadow:0 0 0 transparent;
+}
