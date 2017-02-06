@@ -22,8 +22,10 @@ class Api {
 		by the Dox processor.
 	**/
 	public var infos:Infos;
-	
-	
+
+	/**
+		The top-level root node.
+	**/
 	public var root:TypeRoot;
 
 	/**
