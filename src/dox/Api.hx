@@ -22,6 +22,9 @@ class Api {
 		by the Dox processor.
 	**/
 	public var infos:Infos;
+	
+	
+	public var root:TypeRoot;
 
 	/**
 		The current page name. For types this is the type name, for packages it
@@ -34,9 +37,10 @@ class Api {
 	 */
 	public var std = Std;
 	
-	public function new(cfg:Config, infos:Infos) {
+	public function new(cfg:Config, infos:Infos, root:TypeRoot) {
 		this.config = cfg;
 		this.infos = infos;
+		this.root = root;
 	}
 
 	/**
@@ -174,6 +178,13 @@ class Api {
 		
 	}
 	
+	/**
+		Checks if `t` corresponds to a core type.
+	**/
+	public function isCoreType(t:TypeInfos):Bool {
+		return t.meta.exists(function(m) return m.name == ":coreType");
+	}
+
 	/**
 		Checks if `path` corresponds to a known type.
 	**/
