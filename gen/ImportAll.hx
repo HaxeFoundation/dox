@@ -6,7 +6,7 @@ class ImportAll {
 	static function isSysTarget() {
 		return Context.defined("neko") || Context.defined("php") || Context.defined("cpp") ||
 		       Context.defined("java") || Context.defined("python") ||
-			   Context.defined("lua"); // TODO: have to add cs here, SPOD gets in the way at the moment
+			   Context.defined("lua") || Context.defined("hl"); // TODO: have to add cs here, SPOD gets in the way at the moment
 	}
 
 	public static function run( ?pack ) {
@@ -18,6 +18,8 @@ class ImportAll {
 			haxe.macro.Compiler.define("macro");
 		}
 		switch( pack ) {
+		case "php7":
+			if( !Context.defined("php7") ) return;
 		case "php":
 			if( !Context.defined("php") ) return;
 		case "neko":
@@ -26,8 +28,6 @@ class ImportAll {
 			if( !Context.defined("js") ) return;
 		case "cpp":
 			if( !Context.defined("cpp") ) return;
-		case "flash8":
-			return; // TODO: remove this when flash8 is removed from std library
 		case "flash":
 			if( !Context.defined("flash9") ) return;
 		case "mt","mtwin":
@@ -63,7 +63,7 @@ class ImportAll {
 				if( file == ".svn" || file == "_std" || file == "src")
 					continue;
 				var full = (pack == "") ? file : pack + "." + file;
-				if( StringTools.endsWith(file, ".hx") ) {
+				if( StringTools.endsWith(file, ".hx") && file.substr(0, file.length - 3).indexOf(".") < 0 ) {
 					var cl = full.substr(0, full.length - 3);
 					switch( cl ) {
 					case "ImportAll", "neko.db.MacroManager": continue;
@@ -73,8 +73,8 @@ class ImportAll {
 					case "haxe.macro.ExampleJSGenerator","haxe.macro.Context", "haxe.macro.Compiler": if( !Context.defined("neko") ) continue;
 					case "haxe.remoting.SocketWrapper": if( !Context.defined("flash") ) continue;
 					case "haxe.remoting.SyncSocketConnection": if( !(Context.defined("neko") || Context.defined("php") || Context.defined("cpp")) ) continue;
-					case "neko.vm.Ui" | "sys.db.Sqlite" | "sys.db.Mysql": if ( Context.defined("interp") ) continue;
-					case "sys.db.Sqlite" | "sys.db.Mysql" | "cs.db.AdoNet": if ( Context.defined("cs") ) continue;
+					case "neko.vm.Ui" | "sys.db.Sqlite" | "sys.db.Mysql" if ( Context.defined("interp") ): continue;
+					case "sys.db.Sqlite" | "sys.db.Mysql" | "cs.db.AdoNet" if ( Context.defined("cs") ): continue;
 					case "haxe.PythonSyntax" | "haxe.PythonInternal": continue; // temp hack (https://github.com/HaxeFoundation/haxe/issues/3321)
 					}
 					Context.getModule(cl);
