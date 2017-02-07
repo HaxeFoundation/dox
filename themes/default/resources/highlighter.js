@@ -11,13 +11,26 @@ EReg.prototype = {
 };
 var Highlighter = function() { };
 Highlighter.main = function() {
-	js.JQuery("pre code").each(function() {
-		var el = js.JQuery(this);
-		if(!el.hasClass("highlighted")) {
-			el.html(Highlighter.syntaxHighlight(el.html()));
-			el.addClass("highlighted");
+	var _g = 0;
+	var _g1 = window.document.getElementsByTagName("code");
+	while(_g < _g1.length) {
+		var el = _g1[_g];
+		++_g;
+		if(Highlighter.hasClass(el,"prettyprint")) {
+			if(!Highlighter.hasClass(el,"highlighted")) {
+				if(Highlighter.hasClass(el,"haxe") || Highlighter.hasClass(el,"js") || Highlighter.hasClass(el,"javascript")) {
+					el.innerHTML = Highlighter.syntaxHighlight(el.innerHTML);
+					el.className += " highlighted";
+				} else if(Highlighter.hasClass(el,"hxml")) {
+					el.innerHTML = Highlighter.syntaxHighlightHXML(el.innerHTML);
+					el.className += " highlighted";
+				}
+			}
 		}
-	});
+	}
+};
+Highlighter.hasClass = function(el,className) {
+	return el.className.indexOf(className) != -1;
 };
 Highlighter.syntaxHighlight = function(html) {
 	var kwds = ["abstract","trace","break","case","cast","class","continue","default","do","dynamic","else","enum","extends","extern","for","function","if","implements","import","in","inline","interface","macro","new","override","package","private","public","return","static","switch","throw","try","typedef","untyped","using","var","while"];
@@ -29,12 +42,16 @@ Highlighter.syntaxHighlight = function(html) {
 	html = vals1.replace(html,"<span class='val'>$1</span>");
 	html = types.replace(html,"<span class='type'>$1</span>");
 	html = new EReg("(\"[^\"]*\")","g").replace(html,"<span class='str'>$1</span>");
-	html = new EReg("(//.+\n)","g").replace(html,"<span class='cmt'>$1</span>");
-	html = new EReg("(/\\*\\*?[^*]*\\*?\\*/)","g").replace(html,"<span class='cmt'>$1</span>");
+	html = new EReg("(//.+?)(\n|$)","g").replace(html,"<span class='cmt'>$1</span>$2");
+	html = new EReg("(/\\*\\*?(.|\n)+?\\*?\\*/)","g").replace(html,"<span class='cmt'>$1</span>");
 	return html;
 };
-var q = window.jQuery;
-var js = js || {}
-js.JQuery = q;
+Highlighter.syntaxHighlightHXML = function(html) {
+	html = new EReg("\\b(haxe)\\b","g").replace(html,"<span class='kwd'>$1</span>");
+	html = new EReg("(\"[^\"]*\")","g").replace(html,"<span class='str'>$1</span>");
+	html = new EReg("(--?.+?)(\\s)","g").replace(html,"<span class='val'>$1</span>$2");
+	html = new EReg("(#.+?)(\n|$)","g").replace(html,"<span class='cmt'>$1</span>$2");
+	return html;
+};
 Highlighter.main();
 })(typeof console != "undefined" ? console : {log:function(){}});
