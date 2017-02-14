@@ -112,7 +112,7 @@ $(document).ready(function(){
 		searchQuery(e.target.value);
 	});
 	
-	$("#select-platform").selectpicker().on("change", function(e){
+	$("#select-platform").on("change", function(e){
 		var value = $(":selected", this).val();
 		setPlatform(value);
 	});

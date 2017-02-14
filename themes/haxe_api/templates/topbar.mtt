@@ -1,15 +1,5 @@
-<style>
-::raw "
-.main-content {
-	margin-top:65px;
-}
-.nav-list>.active>a.treeLink, .nav-list>.active>a.treeLink:hover, .nav-list>.active>a.treeLink:focus {
-	background:#F48821;
-	color:#fff;
-	text-shadow:0 0 0 transparent;
-}
-"::
-</style>
+<script src="::api.config.rootPath::bootstrap/js/bootstrap.min.js"></script>
+<link href="::api.config.rootPath::haxe-nav.css" rel="stylesheet" />
 <nav class="section nav dark">
 	<div class="navbar navbar-fixed-top navbar-inverse">
 		<div class="navbar-inner">
