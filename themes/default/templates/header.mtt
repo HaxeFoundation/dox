@@ -12,6 +12,7 @@
 	<script src="::api.config.rootPath::bootstrap/js/bootstrap.min.js"></script>
 	<script src="::api.config.rootPath::bootstrap/js/bootstrap-select.min.js"></script>
 	<link href="::api.config.rootPath::styles.css" rel="stylesheet" />
+	<link href="::api.config.rootPath::extra-styles.css" rel="stylesheet" />
 	<link href="::api.config.rootPath::haxe-nav.css" rel="stylesheet" />
 	<script type="text/javascript">var dox = {
 		rootPath: "::api.config.rootPath::",
