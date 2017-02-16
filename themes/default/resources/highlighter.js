@@ -12,7 +12,7 @@ EReg.prototype = {
 var Highlighter = function() { };
 Highlighter.main = function() {
 	var _g = 0;
-	var _g1 = window.document.getElementsByTagName("code");
+	var _g1 = window.document.body.querySelectorAll("pre code");
 	while(_g < _g1.length) {
 		var el = _g1[_g];
 		++_g;
