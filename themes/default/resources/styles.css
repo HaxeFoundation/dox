@@ -33,7 +33,7 @@
 .nav-list {padding-right: 0;	 }
 .nav-list>li>a, .nav-list .nav-header {margin-right:0;}
 .nav-list>li>a.treeLink {padding-left:20px;}
-.nav-list a { word-wrap: break-word; font-size:14px; text-shadow: none!important;}
+.nav-list a { overflow: hidden; font-size:14px; text-shadow: none!important;}
 .nav-list>.active>a.treeLink, .nav-list>.active>a.treeLink:hover, .nav-list>.active>a.treeLink:focus {
 	background:#999;
 	color:#fff;
