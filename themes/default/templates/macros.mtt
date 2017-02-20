@@ -86,11 +86,11 @@
 	::set fieldInfo = api.getFieldInfo(field)::
 
 	::if fieldInfo.modifiers.isDynamic::
-		<span class="label">dynamic</span> 
+		<span class="label">dynamic</span>
 	::end::
 
 	::if fieldInfo.modifiers.isInline::
-		<span class="label">inline</span> 
+		<span class="label">inline</span>
 	::end::
 	
 	::switch fieldInfo.kind::
