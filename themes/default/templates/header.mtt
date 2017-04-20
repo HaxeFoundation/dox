@@ -4,9 +4,9 @@
 	<link href="::api.config.rootPath::bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
 	<link href="::api.config.rootPath::bootstrap/css/bootstrap-select.min.css" rel="stylesheet" />
 	
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic' rel='stylesheet' type='text/css'/>
-	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400' rel='stylesheet' type='text/css'/>
-	<link href='http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css' rel='stylesheet' type='text/css' />
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic' rel='stylesheet' type='text/css'/>
+	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400' rel='stylesheet' type='text/css'/>
+	<link href='https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css' rel='stylesheet' type='text/css' />
 
 	<script src="::api.config.rootPath::jquery-1.9.1.min.js"></script>
 	<script src="::api.config.rootPath::bootstrap/js/bootstrap.min.js"></script>
