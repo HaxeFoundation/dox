@@ -6,7 +6,7 @@ class ImportAll {
 	static function isSysTarget() {
 		return Context.defined("neko") || Context.defined("php") || Context.defined("cpp") ||
 		       Context.defined("java") || Context.defined("python") ||
-			   Context.defined("lua") || Context.defined("hl"); // TODO: have to add cs here, SPOD gets in the way at the moment
+			   Context.defined("lua") || Context.defined("hl") || Context.defined("eval"); // TODO: have to add cs here, SPOD gets in the way at the moment
 	}
 
 	public static function run( ?pack ) {
@@ -44,6 +44,8 @@ class ImportAll {
 			if(!Context.defined("hl") ) return;
 		case "lua":
 			if (!Context.defined("lua") ) return;
+		case "eval":
+			if (!Context.defined("eval") ) return;
 		case "ssl":
 			if (!Context.defined("neko") && !Context.defined("cpp")) return;
 		case "tools", "build-tool": return;
