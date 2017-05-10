@@ -54,6 +54,9 @@ footer{
 	margin-top:40px;
 	font-size:14px;
 }
+.section.site-footer {
+	border-bottom: 0px;
+}
 .copyright {
 	padding: 6px;
 	overflow: hidden;
