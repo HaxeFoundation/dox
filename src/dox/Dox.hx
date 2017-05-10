@@ -20,6 +20,7 @@ class Dox {
 		}
 
 		var cfg = new Config();
+		var help = false;
 
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
@@ -87,13 +88,20 @@ class Dox {
     -D source-path <url> : The base URL used for 'View Source' buttons")
 			["-D", "--define"] => function(key:String, value:String) cfg.defines[key] = value,
 
+			@doc("Display this list of options")
+			["-help", "--help"] => function() help = true,
+
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
 
-		if (args.length == 0) {
+		function printHelp() {
 			Sys.println("Dox 1.0");
 			Sys.println(argHandler.getDoc());
 			Sys.exit(0);
+		}
+
+		if (args.length == 0) {
+			printHelp();
 		}
 
 		function sortArgs(args:Array<String>) {
@@ -119,6 +127,9 @@ class Dox {
 		}
 
 		argHandler.parse(sortArgs(args));
+		if (help) {
+			printHelp();
+		}
 
 		var writer = new Writer(cfg);
 
