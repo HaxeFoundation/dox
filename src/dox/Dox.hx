@@ -25,7 +25,7 @@ class Dox {
 		var argHandler = hxargs.Args.generate([
 			["-r", "--document-root"] => function(path:String) throw 'The -r command is obsolete and can be omitted',
 
-			@doc("Set the output path for generated pages")
+			@doc("Set the output path for generated pages (directory or a .zip file)")
 			["-o", "--output-path"] => function(path:String) cfg.outputPath = path,
 
 			@doc("Set the xml input path (file names correspond to platform names)")
