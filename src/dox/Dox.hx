@@ -5,16 +5,19 @@ import sys.FileSystem;
 
 class Dox {
 	static public function main() {
-		// check if we're running from haxelib (last arg is original working dir)
-		var owd = Sys.getCwd();
-		owd = haxe.io.Path.addTrailingSlash(owd);
 		var args = Sys.args();
-		var last = new haxe.io.Path(args[args.length-1]).toString();
-		if (sys.FileSystem.exists(last) && sys.FileSystem.isDirectory(last)
-		    && (args.length < 2 || args[args.length - 2].charCodeAt(0) != "-".code))
-		{
-			args.pop();
-			Sys.setCwd(last);
+		var owd = Sys.getCwd();
+		owd = Path.addTrailingSlash(owd);
+
+		// check if we're running from haxelib (last arg is original working dir)
+		var last = args[args.length - 1];
+		if (last != null) {
+			var path = new Path(last).toString();
+			if (FileSystem.exists(path) && FileSystem.isDirectory(path)
+				&& (args.length < 2 || args[args.length - 2].charCodeAt(0) != "-".code)) {
+				args.pop();
+				Sys.setCwd(path);
+			}
 		}
 
 		var cfg = new Config();
@@ -120,7 +123,7 @@ class Dox {
 
 		var writer = new Writer(cfg);
 
-		if (!sys.FileSystem.exists(cfg.xmlPath)) {
+		if (!FileSystem.exists(cfg.xmlPath)) {
 			Sys.println('Could not read input path ${cfg.xmlPath}');
 			Sys.exit(1);
 		}
@@ -129,7 +132,7 @@ class Dox {
 		var tStart = haxe.Timer.stamp();
 
 		function parseFile(path) {
-			var name = new haxe.io.Path(path).file;
+			var name = new Path(path).file;
 			Sys.println('Parsing $path');
 			var data = sys.io.File.getContent(path);
 			var xml = try Xml.parse(data).firstElement() catch(err:Dynamic) {
@@ -140,8 +143,8 @@ class Dox {
 			cfg.platforms.push(name);
 		}
 
-		if (sys.FileSystem.isDirectory(cfg.xmlPath)) {
-			for (file in sys.FileSystem.readDirectory(cfg.xmlPath)) {
+		if (FileSystem.isDirectory(cfg.xmlPath)) {
+			for (file in FileSystem.readDirectory(cfg.xmlPath)) {
 				if (!StringTools.endsWith(file, ".xml")) continue;
 				parseFile(cfg.xmlPath + "/" +file);
 			}
@@ -179,11 +182,11 @@ class Dox {
 
 	static function loadTemplates(cfg:Config, path:String) {
 		cfg.addTemplatePath(path);
-		if (!sys.FileSystem.exists(path)) {
+		if (!FileSystem.exists(path)) {
 			return;
 		}
-		for (file in sys.FileSystem.readDirectory(path)) {
-			var path = new haxe.io.Path(file);
+		for (file in FileSystem.readDirectory(path)) {
+			var path = new Path(file);
 			if (path.ext == "mtt") {
 				cfg.loadTemplate(file);
 			}
