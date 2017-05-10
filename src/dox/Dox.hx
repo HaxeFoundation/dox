@@ -11,10 +11,9 @@ class Dox {
 
 		// check if we're running from haxelib (last arg is original working dir)
 		var last = args[args.length - 1];
-		if (last != null) {
+		if (last != null && Sys.getEnv("HAXELIB_RUN") == "1") {
 			var path = new Path(last).toString();
-			if (FileSystem.exists(path) && FileSystem.isDirectory(path)
-				&& (args.length < 2 || args[args.length - 2].charCodeAt(0) != "-".code)) {
+			if (FileSystem.exists(path) && FileSystem.isDirectory(path)) {
 				args.pop();
 				Sys.setCwd(path);
 			}
