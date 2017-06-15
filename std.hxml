@@ -1,1 +1,1 @@
--cmd haxelib run dox -i bin/xml -o bin/api-latest.zip -theme haxe_api --title "Haxe API" -D version 3.4.1 -D website "https://haxe.org/" -ex microsoft -ex javax -ex cs.internal -D source-path https://github.com/HaxeFoundation/haxe/blob/development/std/
+-cmd haxelib run dox -i bin/xml -o bin/api-latest.zip -theme haxe_api --title "Haxe API" -D version 4.0.0 -D website "https://haxe.org/" -ex microsoft -ex javax -ex cs.internal -D source-path https://github.com/HaxeFoundation/haxe/blob/development/std/
