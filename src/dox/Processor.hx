@@ -31,7 +31,7 @@ class Processor {
 		var newRoot = [];
 		if (config.toplevelPackage != "") {
 			var found = false;
-			function filter(toplevelFilter, tree) {
+			function filter(toplevelFilter:String, tree) {
 				switch (tree) {
 					case TPackage(name, full, subs):
 						var split = toplevelFilter.split(".");
