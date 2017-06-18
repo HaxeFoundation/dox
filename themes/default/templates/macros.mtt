@@ -30,7 +30,7 @@
 	::else::
 		<span class="type">::api.getPathName(path)::</span>
 	::end::
-	::if params.length > 0::
+	::if params != null && params.length > 0::
 		&lt;
 		::foreach param params::
 			$$printLinkedType(::param::)
