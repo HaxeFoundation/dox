@@ -20,7 +20,7 @@
 			<form class="form-search" id="searchForm">
 			<div class="input-prepend input-block-level">
 				<span class="add-on"><i class="icon-search"></i></span>
-				<input id="search" type="text" placeholder="Search" autocomplete="off"/>
+				<input id="search" type="text" placeholder="Filter" autocomplete="off"/>
 			</div>
 			</form>		
 			<div class="dropdown" ::cond (api.config.platforms.length>1)::>
