@@ -34,7 +34,7 @@
 ::end::
 
 ::if info.events.length > 0::
-	<p class="javadoc">Throws:</p>
+	<p class="javadoc">Events:</p>
 		<table class="table table-bordered params">
 	::foreach event info.events::
 		<div class="indent inline-content">
