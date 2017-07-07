@@ -16,7 +16,7 @@ class JavadocHandler {
 	{
 		var tags = [];
 		// TODO: need to parse this better as haxe source might have this sort of meta
-		var ereg = ~/^@(param|default|exception|throws|deprecated|return|returns|since|see)\s+([^@]+)/gm;
+		var ereg = ~/^@(param|default|exception|throws|deprecated|return|returns|since|see|event)\s+([^@]+)/gm;
 
 		doc = ereg.map(doc, function(e){
 			var name = e.matched(1);
@@ -25,7 +25,7 @@ class JavadocHandler {
 
 			switch (name)
 			{
-				case 'param', 'exception', 'throws':
+				case 'param', 'exception', 'throws', 'event':
 					var ereg = ~/([^\s]+)\s+(.*)/gs;
 					if (ereg.match(doc))
 					{
@@ -39,7 +39,7 @@ class JavadocHandler {
 			return '';
 		});
 
-		var infos:DocInfos = {doc:config.useMarkdown ? markdown.markdownToHtml(path, doc) : doc, throws:[], params:[], sees:[], tags:tags};
+		var infos:DocInfos = {doc:config.useMarkdown ? markdown.markdownToHtml(path, doc) : doc, throws:[], params:[], sees:[], events:[], tags:tags};
 		for (tag in tags) switch (tag.name)
 		{
 			case 'param': infos.params.push(tag);
@@ -49,6 +49,7 @@ class JavadocHandler {
 			case 'since': infos.since = tag;
 			case 'default': infos.defaultValue = tag;
 			case 'see': infos.sees.push(tag);
+			case 'event': infos.events.push(tag);
 			default:
 		}
 		return infos;
@@ -75,6 +76,7 @@ typedef DocInfos = {
 	sees:Array<DocTag>,
 	params:Array<DocTag>,
 	throws:Array<DocTag>,
+	events:Array<DocTag>,
 	tags:Array<DocTag>
 }
 

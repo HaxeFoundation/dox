@@ -97,6 +97,9 @@ class TestClass
 	 *
 	 * @see     http://google.com
 	 * @see     http://haxe.org
+	 *
+	 * @event   added           Dispatched when something is added.
+	 * @event   removed         Dispatched when something is removed.
 	 */
 	public static function java_doc_multiline_comments() {
 
