@@ -1,64 +1,21 @@
 {
 	"version": "2.0.0",
-	"command": "haxe",
 	"tasks": [
 		{
-			"taskName": "run.hxml",
-			"suppressTaskName": true,
-			"args": [
-				"run.hxml"
-			],
-			"isBuildCommand": true,
-			"problemMatcher": "$haxe"
+			"type": "hxml",
+			"file": "run.hxml",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		},
 		{
-			"taskName": "gen-test.hxml",
-			"suppressTaskName": true,
-			"args": [
-				"gen-test.hxml"
-			],
-			"problemMatcher": "$haxe"
-		},
-		{
-			"taskName": "gen.hxml",
-			"suppressTaskName": true,
-			"args": [
-				"gen.hxml"
-			],
-			"problemMatcher": "$haxe"
-		},
-		{
-			"taskName": "haxelib.hxml",
-			"suppressTaskName": true,
-			"args": [
-				"haxelib.hxml"
-			],
-			"problemMatcher": "$haxe"
-		},
-		{
-			"taskName": "pages.hxml",
-			"suppressTaskName": true,
-			"args": [
-				"pages.hxml"
-			],
-			"problemMatcher": "$haxe"
-		},
-		{
-			"taskName": "std.hxml",
-			"suppressTaskName": true,
-			"args": [
-				"std.hxml"
-			],
-			"problemMatcher": "$haxe"
-		},
-		{
-			"taskName": "test.hxml",
-			"suppressTaskName": true,
-			"args": [
-				"test.hxml"
-			],
-			"isTestCommand": true,
-			"problemMatcher": "$haxe"
+			"type": "hxml",
+			"file": "test.hxml",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
 		}
 	]
 }
