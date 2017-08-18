@@ -1,5 +1,8 @@
 {
 	"haxe.displayConfigurations": [
 		["run.hxml"]
-	]
+	],
+	"files.associations": {
+		"*.mtt": "xml"
+	}
 }
