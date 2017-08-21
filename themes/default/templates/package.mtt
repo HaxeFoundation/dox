@@ -7,7 +7,7 @@
 		<tr ::cond full != ""::>
 			<th width="200">
 				<i class="fa fa-folder-o"></i>
-				<a href="../index.html" title="::full.split(".").slice(0,-1).join(".")::">..</a>
+				<a href="::api.packageToUrl(full.split(".").slice(0,-1).join("."))::" title="::full.split(".").slice(0,-1).join(".")::">..</a>
 			</th>
 			<td></td>
 		</tr>
