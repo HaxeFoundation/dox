@@ -144,7 +144,13 @@ class Api {
 		@todo: Document this properly.
 	**/
 	public function getShortDesc(infos:TypeInfos):String {
-		return infos == null ? "" : infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
+		if (infos == null) {
+			return "";
+		}
+
+		var withoutAuthor = new EReg("^(<p>@author .*</p>)", "").replace(infos.doc, "");
+		var firstParagraph = withoutAuthor.substr(0, withoutAuthor.indexOf('</p>') + 4);
+		return firstParagraph;
 	}
 
 	/**
