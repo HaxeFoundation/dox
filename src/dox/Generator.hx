@@ -37,7 +37,7 @@ class Generator {
 		var s = tplNav.execute({
 			api: api,
 			root: switch (root) {
-				case [TPackage('top level', '', subs)]: subs;
+				case [TPackage(_, '', subs)]: subs;
 				default: throw "root should be [top level package]";
 			}
 		});
@@ -49,7 +49,7 @@ class Generator {
 		switch(tree) {
 			case TPackage(name, full, subs):
 				if (name.charAt(0) == "_") return;
-				api.currentPageName = full == "" ? "top level" : full;
+				api.currentPageName = full == "" ? name : full;
 				api.config.setRootPath(full == '' ? full : full + ".pack");
 				var s = tplPackage.execute({
 					api: api,
