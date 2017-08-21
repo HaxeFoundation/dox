@@ -187,7 +187,7 @@ class Processor {
 
 	function processRoot(root:TypeRoot):TypeRoot
 	{
-		var newRoot = [TPackage('top level', '', root)];
+		var newRoot = [TPackage(config.toplevelPackage == '' ? 'top level' : config.toplevelPackage, '', root)];
 		newRoot.iter(processTree);
 		return newRoot;
 	}
