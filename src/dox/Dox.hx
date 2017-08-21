@@ -165,8 +165,8 @@ class Dox {
 		Sys.println("Processing types");
 		var proc = new Processor(cfg);
 		var root = proc.process(parser.root);
-
-		var api = new Api(cfg, proc.infos);
+		
+		var api = new Api(cfg, proc.infos, root);
 		var gen = new Generator(api, writer);
 
 		Sys.println("");

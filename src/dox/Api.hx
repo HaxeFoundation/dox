@@ -24,6 +24,11 @@ class Api {
 	public var infos:Infos;
 
 	/**
+		The top-level root node.
+	**/
+	public var root:TypeRoot;
+
+	/**
 		The current page name. For types this is the type name, for packages it
 		is `"package "` followed by the package name.
 	**/
@@ -34,9 +39,10 @@ class Api {
 	 */
 	public var std = Std;
 	
-	public function new(cfg:Config, infos:Infos) {
+	public function new(cfg:Config, infos:Infos, root:TypeRoot) {
 		this.config = cfg;
 		this.infos = infos;
+		this.root = root;
 	}
 
 	/**
