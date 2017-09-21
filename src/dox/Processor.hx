@@ -60,8 +60,8 @@ class Processor {
 					subs.iter(filter.bind(acc));
 					if (acc.length > 0 || !isPathFiltered(full)) root.push(TPackage(name, full, acc));
 				case TClassdecl(t):
-					t.fields = filterFields(t.fields);
-					t.statics = filterFields(t.statics);
+					filterFields(t.fields);
+					filterFields(t.statics);
 					if (!isTypeFiltered(t))
 					{
 						root.push(tree);
@@ -87,8 +87,8 @@ class Processor {
 					}
 				case TAbstractdecl(t):
 					if (t.impl != null) {
-						var fields = new List<ClassField>();
-						var statics = new List<ClassField>();
+						t.impl.fields = new Array<ClassField>();
+						t.impl.statics = new Array<ClassField>();
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
 								if (cf.name == "_new") cf.name = "new";
@@ -96,13 +96,13 @@ class Processor {
 									case CFunction(args,_): args.pop();
 									case _:
 								}
-								fields.push(cf);
+								t.impl.fields.push(cf);
 							} else {
-								statics.push(cf);
+								t.impl.statics.push(cf);
 							}
 						});
-						t.impl.fields = filterFields(fields);
-						t.impl.statics = filterFields(statics);
+						filterFields(t.impl.fields);
+						filterFields(t.impl.statics);
 					}
 					if (!isTypeFiltered(t))
 					{
@@ -115,13 +115,13 @@ class Processor {
 		return newRoot;
 	}
 
-	function filterFields(fields:List<ClassField>) {
+	function filterFields(fields:Array<ClassField>) {
 		return fields.filter(function(cf) {
 			return (cf.isPublic && !Infos.hasDoxMetadata(cf.meta, "hide")) || Infos.hasDoxMetadata(cf.meta, "show");
 		});
 	}
 
-	function filterEnumFields(fields:List<EnumField>) {
+	function filterEnumFields(fields:Array<EnumField>) {
 		return fields.filter(function(cf) {
 			return !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
 		});
@@ -158,10 +158,8 @@ class Processor {
 					cf1.name < cf2.name ? -1 : 1;
 			}
 
-		function sortFields(fields:List<ClassField>) {
-			var a = fields.array();
-			a.sort(compareFields);
-			return a.list();
+		inline function sortFields(fields:Array<ClassField>) {
+			fields.sort(compareFields);
 		}
 
 		function sort(t:TypeTree) {
@@ -170,12 +168,12 @@ class Processor {
 					subs.sort(compare);
 					subs.iter(sort);
 				case TClassdecl(c) | TAbstractdecl({impl: c}) if (c != null):
-					c.fields = sortFields(c.fields);
-					c.statics = sortFields(c.statics);
+					sortFields(c.fields);
+					sortFields(c.statics);
 				case TTypedecl(t):
 					switch(t.type)
 					{
-						case CAnonymous(fields): t.type = CAnonymous(sortFields(fields));
+						case CAnonymous(fields): sortFields(fields); t.type = CAnonymous(fields);
 						default:
 					}
 				case _:

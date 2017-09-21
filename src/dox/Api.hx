@@ -33,7 +33,7 @@ class Api {
 	 * Expose Std for theme.
 	 */
 	public var std = Std;
-	
+
 	public function new(cfg:Config, infos:Infos) {
 		this.config = cfg;
 		this.infos = infos;
@@ -165,15 +165,15 @@ class Api {
 	public function pathToUrl(path:Path):String {
 		return config.rootPath + sanitizePath(path).split(".").join("/") + ".html";
 	}
-	
+
 	/**
 		Turns a package-path into a slash-path and appends "/index.html".
 	**/
 	public function packageToUrl(full:String):String {
 		return config.rootPath + full.split(".").join("/") + "/index.html";
-		
+
 	}
-	
+
 	/**
 		Checks if `t` corresponds to a core type.
 	**/
@@ -383,13 +383,13 @@ class Api {
 	**/
 	public function getInheritedFields(c:Classdef):InheritedFields {
 		var oc = c;
-		
+
 		var inheritedFields:InheritedFields = {
 			methods: new Map<Classdef,Array<ClassField>>(),
 			fields:new Map<Classdef,Array<ClassField>>(),
 			types: [],
 		}
-		
+
 		var allFields = [];
 		var fieldMap = new Map();
 		function loop(c:Classdef) {
@@ -410,16 +410,16 @@ class Api {
 			}
 		}
 		loop(c);
-		
+
 		function addFieldTo(f, map) {
 			var fields = map.exists(f.definedBy) ? map.get(f.definedBy) : [];
 			fields.push(f.field);
 			map.set(f.definedBy, fields);
 		}
 		for (f in allFields) {
-			if (isMethod(f.field)) 
+			if (isMethod(f.field))
 				addFieldTo(f, inheritedFields.methods);
-			else 
+			else
 				addFieldTo(f, inheritedFields.fields);
 		}
 		for (fields in inheritedFields.methods) {
@@ -428,7 +428,7 @@ class Api {
 		for (fields in inheritedFields.fields) {
 			fields.sort(function(f1, f2) return Reflect.compare(f1.name, f2.name));
 		}
-		
+
 		return inheritedFields;
 	}
 
@@ -469,7 +469,7 @@ enum FieldKind {
 	/**
 		Field is a method with arguments `args` and return type `ret`.
 	**/
-	Method(args: List<FunctionArgument>, ret: CType);
+	Method(args: Array<FunctionArgument>, ret: CType);
 }
 
 /**
@@ -492,7 +492,7 @@ typedef MemberField = {
 }
 
 typedef InheritedFields = {
-	methods: Map<Classdef,Array<ClassField>>, 
+	methods: Map<Classdef,Array<ClassField>>,
 	fields: Map<Classdef,Array<ClassField>>,
 	// defines order of the types since keys in maps arent ordered
 	types:Array<Classdef>,

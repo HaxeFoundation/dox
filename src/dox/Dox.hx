@@ -75,7 +75,7 @@ class Dox {
 					}
 					var resourcesPath = Path.join([path, "resources"]);
 					if (FileSystem.exists(resourcesPath)) cfg.resourcePaths.push(resourcesPath);
-					
+
 					loadTemplates(cfg, Path.join([path, "templates"]));
 					return theme;
 				}
