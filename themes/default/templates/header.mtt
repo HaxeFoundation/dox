@@ -31,4 +31,5 @@
 	::set description = api.getShortDesc(type)::
 	::set description = description.substr(3, description.length-7)::
 	<meta name="description" ::cond type.doc!=null && description.length>0:: content="::description::"/>
+	::use "extra-headers.mtt"::::end::
 </head>
