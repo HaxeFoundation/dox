@@ -51,59 +51,67 @@ class Generator {
 				if (name.charAt(0) == "_") return;
 				api.currentPageName = full == "" ? name : full;
 				api.config.setRootPath(full == '' ? full : full + ".pack");
+				api.currentPageUrl = fileUrl(full == '' ? 'index' : full + '.index');
 				var s = tplPackage.execute({
 					api: api,
 					name: name,
 					full: full,
 					subs: subs,
 				});
-				write(full == '' ? 'index' : full + '.index', s);
+				write(api.currentPageUrl, s);
 				api.infos.numGeneratedPackages++;
 				subs.iter(generateTree);
 			case TClassdecl(c):
 				api.currentPageName = c.path;
 				api.config.setRootPath(c.path);
+				api.currentPageUrl = fileUrl(api.sanitizePath(c.path));
 				var s = tplClass.execute({
 					api: api,
 					"type": c,
 					"subClasses": api.infos.subClasses.get(c.path),
 					"implementors": api.infos.implementors.get(c.path)
 				});
-				write(api.sanitizePath(c.path), s);
+				write(api.currentPageUrl, s);
 				api.infos.numGeneratedTypes++;
 			case TEnumdecl(e):
 				api.currentPageName = e.path;
 				api.config.setRootPath(e.path);
+				api.currentPageUrl = fileUrl(api.sanitizePath(e.path));
 				var s = tplEnum.execute({
 					api: api,
 					"type": e,
 				});
-				write(api.sanitizePath(e.path), s);
+				write(api.currentPageUrl, s);
 				api.infos.numGeneratedTypes++;
 			case TTypedecl(t):
 				api.currentPageName = t.path;
 				api.config.setRootPath(t.path);
+				api.currentPageUrl = fileUrl(api.sanitizePath(t.path));
 				var s = tplTypedef.execute({
 					api: api,
 					"type": t,
 				});
-				write(api.sanitizePath(t.path), s);
+				write(api.currentPageUrl, s);
 				api.infos.numGeneratedTypes++;
 			case TAbstractdecl(a):
 				api.currentPageName = a.path;
 				api.config.setRootPath(a.path);
+				api.currentPageUrl = fileUrl(api.sanitizePath(a.path));
 				var s = tplAbstract.execute({
 					api: api,
 					"type": a,
 				});
-				write(api.sanitizePath(a.path), s);
+				write(api.currentPageUrl, s);
 				api.infos.numGeneratedTypes++;
 		}
 	}
 
-	function write(path:String, content:String)
+	function fileUrl(path:String) {
+		return path.replace(".", "/").replace("<", "_").replace(">", "_") + '.html';
+	}
+
+	function write(fileUrl:String, content:String)
 	{
-		path = path.replace(".", "/").replace("<", "_").replace(">", "_") + '.html';
-		writer.saveContent(path, content);
+		writer.saveContent(fileUrl, content);
 	}
 }

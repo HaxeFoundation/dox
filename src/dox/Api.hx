@@ -30,6 +30,11 @@ class Api {
 	public var currentPageName:String;
 
 	/**
+		The current page relative url.
+	**/
+	public var currentPageUrl:String;
+
+	/**
 	 * Expose Std for theme.
 	 */
 	public var std = Std;
