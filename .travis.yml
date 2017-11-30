@@ -19,7 +19,7 @@ install:
   - haxelib install hxcpp
   - haxelib install hxcs
   - haxelib install hxjava
-  - haxelib install all --always
+  - haxelib install run.hxml --always
   - haxelib dev dox .
   - haxelib list
 
