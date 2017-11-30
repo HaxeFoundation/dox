@@ -1,0 +1,29 @@
+language: haxe
+
+os:
+  - linux
+  - osx
+
+osx_image: xcode9.1
+dist: trusty
+
+haxe:
+  - "3.4.4"
+  - development
+
+matrix:
+  allow_failures:
+    - haxe: development
+
+install:
+  - haxelib install hxcpp
+  - haxelib install hxcs
+  - haxelib install hxjava
+  - haxelib install all --always
+  - haxelib dev dox .
+  - haxelib list
+
+script:
+  - haxe run.hxml
+  - haxe gen-test.hxml
+  - haxe pages.hxml
