@@ -60,8 +60,8 @@ class Processor {
 					subs.iter(filter.bind(acc));
 					if (acc.length > 0 || !isPathFiltered(full)) root.push(TPackage(name, full, acc));
 				case TClassdecl(t):
-					filterFields(t.fields);
-					filterFields(t.statics);
+					t.fields = filterFields(t.fields);
+					t.statics = filterFields(t.statics);
 					if (!isTypeFiltered(t))
 					{
 						root.push(tree);
@@ -87,8 +87,13 @@ class Processor {
 					}
 				case TAbstractdecl(t):
 					if (t.impl != null) {
+						#if (haxe_ver < 4)
+						t.impl.fields = new List<ClassField>();
+						t.impl.statics = new List<ClassField>();
+						#else
 						t.impl.fields = new Array<ClassField>();
 						t.impl.statics = new Array<ClassField>();
+						#end
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
 								if (cf.name == "_new") cf.name = "new";
@@ -101,8 +106,8 @@ class Processor {
 								t.impl.statics.push(cf);
 							}
 						});
-						filterFields(t.impl.fields);
-						filterFields(t.impl.statics);
+						t.impl.fields = filterFields(t.impl.fields);
+						t.impl.statics = filterFields(t.impl.statics);
 					}
 					if (!isTypeFiltered(t))
 					{
@@ -115,13 +120,21 @@ class Processor {
 		return newRoot;
 	}
 
+	#if (haxe_ver < 4)
+	function filterFields(fields:List<ClassField>) {
+	#else
 	function filterFields(fields:Array<ClassField>) {
+	#end
 		return fields.filter(function(cf) {
 			return (cf.isPublic && !Infos.hasDoxMetadata(cf.meta, "hide")) || Infos.hasDoxMetadata(cf.meta, "show");
 		});
 	}
 
+	#if (haxe_ver < 4)
+	function filterEnumFields(fields:List<EnumField>) {
+	#else
 	function filterEnumFields(fields:Array<EnumField>) {
+	#end
 		return fields.filter(function(cf) {
 			return !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
 		});
@@ -158,9 +171,17 @@ class Processor {
 					cf1.name < cf2.name ? -1 : 1;
 			}
 
+		#if (haxe_ver < 4)
+		function sortFields(fields:List<ClassField>) {
+			var a = fields.array();
+			a.sort(compareFields);
+			return a.list();
+		}
+		#else
 		inline function sortFields(fields:Array<ClassField>) {
 			fields.sort(compareFields);
 		}
+		#end
 
 		function sort(t:TypeTree) {
 			switch(t) {

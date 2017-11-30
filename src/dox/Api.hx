@@ -474,7 +474,11 @@ enum FieldKind {
 	/**
 		Field is a method with arguments `args` and return type `ret`.
 	**/
+	#if (haxe_ver < 4)
+	Method(args: List<FunctionArgument>, ret: CType);
+	#else
 	Method(args: Array<FunctionArgument>, ret: CType);
+	#end
 }
 
 /**
