@@ -15,6 +15,7 @@ class Generator {
 	var tplEnum:templo.Template;
 	var tplTypedef:templo.Template;
 	var tplAbstract:templo.Template;
+	var tplError:templo.Template;
 
 	public function new(api:Api, writer:Writer) {
 		this.api = api;
@@ -26,6 +27,7 @@ class Generator {
 		tplEnum = config.loadTemplate("enum.mtt");
 		tplTypedef = config.loadTemplate("typedef.mtt");
 		tplAbstract = config.loadTemplate("abstract.mtt");
+		tplError = config.loadTemplate("404.mtt");
 	}
 
 	public function generate(root:TypeRoot) {
@@ -42,6 +44,23 @@ class Generator {
 			}
 		});
 		writer.saveContent("nav.js", ~/[\r\n\t]/g.replace(s, ""));
+	}
+
+	public function generateErrorPage(root:TypeRoot) {
+		var full = 'File not found';
+		var name = 'File not found';
+		api.config.setRootPath('');
+		api.currentPageName = full == "" ? name : full;
+		var s = tplError.execute({
+			api: api,
+			name: name,
+			full: full,
+			root: switch (root) {
+				case [TPackage(_, '', subs)]: subs;
+				default: throw "root should be [top level package]";
+			}
+		});
+		writer.saveContent("404.html", ~/[\r\n\t]/g.replace(s, ""));
 	}
 
 	@:access(dox.Api.sanitizePath)
