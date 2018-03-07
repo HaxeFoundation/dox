@@ -88,11 +88,11 @@ class Processor {
 				case TAbstractdecl(t):
 					if (t.impl != null) {
 						#if (haxe_ver < 4)
-						t.impl.fields = new List<ClassField>();
-						t.impl.statics = new List<ClassField>();
+						if (t.impl.fields == null) t.impl.fields = new List<ClassField>();
+						if (t.impl.statics == null) t.impl.statics = new List<ClassField>();
 						#else
-						t.impl.fields = new Array<ClassField>();
-						t.impl.statics = new Array<ClassField>();
+						if (t.impl.fields == null) t.impl.fields = new Array<ClassField>();
+						if (t.impl.statics == null) t.impl.statics = new Array<ClassField>();
 						#end
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
