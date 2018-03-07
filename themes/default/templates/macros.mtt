@@ -73,24 +73,64 @@
 	</p>
 </macro>
 
+<macro name="printFieldDeprecation(field)">
+	::if (field.meta != null)::
+		::foreach meta field.meta::
+			::if (meta.name == ":deprecated")::
+			<div class="alert alert-warning alert-deprecated">
+				<strong>Deprecated:</strong> 
+				::if (meta.params != null && meta.params.length > 0)::
+					::foreach param meta.params::
+						::param::
+						::if !repeat.param.last::, ::end::
+					::end::
+				::end::
+			</div>
+			::end::
+		::end::
+	::end::
+</macro>
+
+<macro name="printMeta(field)">
+	::if (field.meta != null)::
+		::foreach meta field.meta::
+			::if (meta.name != ":deprecated")::::if false::<!--skip deprecation meta, see printFieldDeprecation -->::end::
+				::set metaName = meta.name.substr(1)::
+				::set displayMetaName = "@" + meta.name::
+				<span class="label label-meta label-meta-::metaName::" title="::displayMetaName:: metadata">::displayMetaName::
+				::if (meta.params != null && meta.params.length > 0)::(
+					::foreach param meta.params::
+						$$printMetaParam(::param::)
+						::if !repeat.param.last::,::end::
+					::end::
+				)::end::</span>
+			::end::
+		::end::
+	::end::
+</macro>
+
+<macro name="printMetaParam(param)">::if (param.substr(0,9) == "<![CDATA[")::::param.substr(9,param.length-3-9)::::else::::param::::end::</macro>
+
 <macro name="printFieldSignature(field, isStatic, type)">
 	<code>
 	::if !field.isPublic::
-		<span class="label">private</span>
+		<span class="label label-private">private</span>
 	::end::
+	
+	$$printMeta(::field::)
 
 	::if isStatic::
-		<span class="label">static</span>
+		<span class="label label-static">static</span>
 	::end::
 
 	::set fieldInfo = api.getFieldInfo(field)::
 
 	::if fieldInfo.modifiers.isDynamic::
-		<span class="label">dynamic</span>
+		<span class="label label-dynamic">dynamic</span>
 	::end::
 
 	::if fieldInfo.modifiers.isInline::
-		<span class="label">inline</span>
+		<span class="label label-inline">inline</span>
 	::end::
 	
 	::switch fieldInfo.kind::

@@ -1,4 +1,5 @@
 <div class="field">
+	
 	<h3>
 		<code>
 			<a name="::ctor.name::" href="#::ctor.name::">
@@ -9,6 +10,8 @@
 			::end::
 		</code>
 	</h3>
+	$$printFieldDeprecation(::ctor::)
+	
 	<div class="doc" ::cond ctor.doc != null::>
 		::raw ctor.doc::
 	</div>

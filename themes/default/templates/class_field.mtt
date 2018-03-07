@@ -8,6 +8,7 @@
 ::end::
 
 	<a ::attr name field.name::></a>
+	
 	<h3>
 		<p class="anchor">$$printFieldSignature(::field::,::isStatic::,::type::)</p>
 		::if field.overloads != null::
@@ -16,9 +17,12 @@
 			::end::
 		::end::
 	</h3>
+	$$printFieldDeprecation(::field::)
+	
 	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
 		$$printPlatforms(::field.platforms::,::false::)
 	::end::
+	
 	::if field.doc != null::
 		<div class="doc">::raw field.doc::</div>
 	::end::

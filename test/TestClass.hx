@@ -266,6 +266,31 @@ class TestFieldVisibility
 	private function functionPrivateShown() {}
 }
 
+
+@:deprecated("Use newer class")
+@:generic
+class TestMetaData
+{
+	/**
+		Deprecated red color value
+	**/
+	@:metaWithParams("123", 123)
+	@:deprecated("Use `red` instead")
+	@:metaWithoutParams
+	public static var deprecatedRed = 0xFF0000;
+	
+	
+	/**
+		Cool red color value Dont use `deprecatedRed`, `TestMetaData.deprecatedRed`, `RED`, `TestMetaData.RED` or `Std.int` or `haxe.io.Eof.new`
+	**/
+	@:meta
+	@:to
+	public static var red = 12;
+	public static var RED = 12;
+	
+}
+
+
 /**
 	This should not be visible on the index page.
  **/
@@ -273,3 +298,6 @@ class Index
 {
 
 }
+
+@:generic class GenericClass<T> {}
+class ChildOfGeneric extends GenericClass<String> {}

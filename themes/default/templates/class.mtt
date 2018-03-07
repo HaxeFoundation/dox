@@ -11,9 +11,14 @@
 		::if type.superClass != null::
 		<h4>
 			::set inheritedFields = api.getInheritedFields(type)::
-			<small>extends ::foreach t inheritedFields.types::
-				$$printLinkedPath(::t.path::,::null::)::if ((inheritedFields.types.length!=1)&&(repeat.t.index<(inheritedFields.types.length-1))):: &rsaquo; ::end::
-			::end::
+			<small>extends 
+				::if (inheritedFields.types.length>0)::
+					::foreach t inheritedFields.types::
+					$$printLinkedPath(::t.path::,::null::)::if ((inheritedFields.types.length!=1)&&(repeat.t.index<(inheritedFields.types.length-1))):: &rsaquo; ::end::
+					::end::
+				::else::
+					$$printLinkedPath(::type.superClass.path::,::null::)
+				::end::
 			</small>
 		</h4>
 		::end::
@@ -25,7 +30,7 @@
 		::end::
 		</small>
 		</h4>
-
+		
 		$$printModule(::type.module::)
 
 		<h4 ::cond subClasses !=null::>
@@ -42,6 +47,9 @@
 			::use "related_types.mtt"::::end::
 			</small>
 		</h4>
+		
+		$$printMeta(::type::)
+
 		$$printPlatforms(::type.platforms::,::true::)
 	</div>
 	<div class="body">
