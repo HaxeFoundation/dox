@@ -14,8 +14,10 @@
  * }
  * </pre>
  *
- * Working link http://google.com
+ * Working link <http://google.com>
+ * Doesnt work link http://google.com
  *
+ * Previously broken link <http://php.net/manual/en/function.mail.php>
  * Previously broken link http://php.net/manual/en/function.mail.php
  *
  * ```haxe
@@ -198,7 +200,7 @@ enum TestEnum
 		var binding = new Flags(BindingFlags.Public) | BindingFlags.Static | BindingFlags.NonPublic;
 	```
 **/
-class TestClass2
+class TestCodeBlock
 {
 
 }
@@ -266,6 +268,26 @@ class TestFieldVisibility
 	private function functionPrivateShown() {}
 }
 
+/**
+	* `obj`
+	* `this.obj`, 
+	* `this.OBJ`
+	* `TestLinks.obj`
+	* `TestLinks.OBJ`
+	* `Std.int`
+	* `haxe.io.Eof.new`
+	* `true` or `false`
+	* `Type`
+	* `TestMetaData.RED`
+	* `TestEnum.VisibleConstructor`
+	* `this.obj + this.OBJ`
+	* `TestLinks.obj + TestLinks.OBJ`
+**/
+class TestLinks {
+	public var obj:Int;
+	
+	public var OBJ = { x: 10, y:10 };
+}
 
 @:deprecated("Use newer class")
 @:generic
@@ -279,17 +301,12 @@ class TestMetaData
 	@:metaWithoutParams
 	public static var deprecatedRed = 0xFF0000;
 	
-	
-	/**
-		Cool red color value Dont use `deprecatedRed`, `TestMetaData.deprecatedRed`, `RED`, `TestMetaData.RED` or `Std.int` or `haxe.io.Eof.new`
-	**/
 	@:meta
 	@:to
 	public static var red = 12;
 	public static var RED = 12;
 	
 }
-
 
 /**
 	This should not be visible on the index page.

@@ -38,7 +38,7 @@ class MarkdownHandler {
 	@:access(dox.Infos.resolveType)
 	function processCode(path:String, source:String) {
 		source = StringTools.htmlEscape(source);
-
+		
 		// this.field => #field
 		source = ~/this\.(\w+)/g.map(source, function(e){
 			var field = e.matched(1);
@@ -46,21 +46,46 @@ class MarkdownHandler {
 		});
 
 		// Type, pack.Type, pack.Type.field => pack/Type.html#field
-		source = ~/\b((\w+\.)*[A-Z]\w+)(\.\w+)*\b/g.map(source, function(e){
-			var text = e.matched(0);
-			var type =  e.matched(1);
-
-			type = infos.resolveType(path, type);
-			if (type != null)
-			{
-				var field = e.matched(3);
-				var href = resolveTypeLink(type, field);
-				return '<a href="$href">$text</a>';
+		source = ~/\b([A-Za-z_$][\w\.$]+)\b/g.map(source, function(e){
+			var match = e.matched(0);
+			
+			var tmp1 = match.split(".");
+			var field = tmp1.pop();
+			var type = tmp1.join(".");
+			
+			var tmp2 = match.split(".");
+			tmp2.pop(); // split possible field
+			var type2 = tmp2.pop();
+			var path2 = tmp2.join(".");
+			
+			var possibleTypes = [
+				infos.resolveType(path, type), 
+				infos.resolveType(type, field), 
+				infos.resolveType(path, field),
+			];
+			if (type2 != null) possibleTypes.push(infos.resolveType(path, type2));
+			if (path2 != null) possibleTypes.push(infos.resolveType(path, path2));
+			if (type2 != null && path2 != null) possibleTypes.push(infos.resolveType(type2, path2));
+			
+			while (possibleTypes.length > 0) {
+				var type = possibleTypes.pop();
+				if (type != null) { 
+					var href = resolveTypeLink(type, field);
+					return '<a href="$href">$match</a>';
+				}
 			}
-
-			return text;
+			
+			return match;
 		});
 
+		// true|false => Bool
+		source = ~/\b(true|false)\b/g.map(source, function(e){
+			var field = e.matched(1);
+			var path = "Bool";
+			var type = infos.resolveType(path, path);
+			return if (type != null) '<a href="${resolveTypeLink(type)}">$field</a>' else field;
+		});
+		
 		return source;
 	}
 
@@ -70,8 +95,7 @@ class MarkdownHandler {
 
 	public function resolveTypeLink(type:String, ?field:String) {
 		if (field == null) return pathHref(type);
-		field = field.substr(1);
-		return pathHref(type) + "#" + field;
+		return if (type != field) pathHref(type) + "#" + field else pathHref(type);
 	}
 }
 
