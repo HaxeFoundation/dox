@@ -42,8 +42,19 @@
 
 ::use "footer.mtt"::::end::
 
+
 <script src="::api.config.rootPath::/highlighter.js"></script>
 <link href="::api.config.rootPath::highlighter.css" rel="stylesheet" />
 	
+::if (api.isDefined("googleAnalytics"))::
+::set trackingID=api.getValue("googleAnalytics")::
+<script async="async" src="https://www.googletagmanager.com/gtag/js?id=::trackingID::"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);} 
+gtag('js', new Date());
+gtag('config', '::trackingID::');
+</script>
+::end::
 </body>
 </html>
