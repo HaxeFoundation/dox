@@ -3,11 +3,10 @@ A Haxe documentation generator used by many popular projects such as:
 
 - [Haxe](http://api.haxe.org/)
 - [OpenFL](http://api.openfl.org/)
-- [HaxeUI](http://haxeui.org/docs/api/haxe/ui/toolkit/index.html)
 - [HaxeFlixel](http://api.haxeflixel.com/)
 - [HaxePunk](http://haxepunk.com/documentation/api/)
 - [Flambe](https://aduros.com/flambe/api/)
-- [Kha](http://api.kha.technology/)
+- [Kha](http://api.kha.tech/)
 
 ![image](https://cloud.githubusercontent.com/assets/576184/17273397/e88ed39a-56b3-11e6-9892-b668258d3fd3.png)
 
