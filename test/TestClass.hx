@@ -310,7 +310,7 @@ class TestMetaData
 
 /**
 	This should not be visible on the index page.
- **/
+**/
 class Index
 {
 
@@ -318,3 +318,11 @@ class Index
 
 @:generic class GenericClass<T> {}
 class ChildOfGeneric extends GenericClass<String> {}
+
+/**
+	This interface shouldn't show compiler-generated get_ / set_ fields (#239).
+**/
+interface TestInterface
+{
+	public var active(get, set):Bool;
+}

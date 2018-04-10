@@ -126,7 +126,11 @@ class Processor {
 	function filterFields(fields:Array<ClassField>) {
 	#end
 		return fields.filter(function(cf) {
-			return (cf.isPublic && !Infos.hasDoxMetadata(cf.meta, "hide")) || Infos.hasDoxMetadata(cf.meta, "show");
+			var hide = Infos.hasDoxMetadata(cf.meta, "hide");
+			var show = Infos.hasDoxMetadata(cf.meta, "show");
+			var compilerGenerated = cf.meta.exists(function(struct) return struct.name == ":compilerGenerated");
+
+			return (cf.isPublic && !hide && !compilerGenerated) || show;
 		});
 	}
 
@@ -338,8 +342,8 @@ class Processor {
 		return isPathFiltered(type.path);
 	}
 
-	function isPathFiltered(path:Path) {
-
+	function isPathFiltered(path:Path)
+	{
 		var hasInclusionFilter = false;
 		for (filter in config.pathFilters) {
 			if (filter.isIncludeFilter) hasInclusionFilter = true;
