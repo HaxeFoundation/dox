@@ -16,6 +16,7 @@ abstract Container<T>(ContainerType<T>) from ContainerType<T> to ContainerType<T
 		a.sort(f);
 		return a.list();
 		#else
+		this.sort(f);
 		return this;
 		#end
 	}
