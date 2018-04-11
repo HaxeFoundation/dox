@@ -87,13 +87,8 @@ class Processor {
 					}
 				case TAbstractdecl(t):
 					if (t.impl != null) {
-						#if (haxe_ver < 4)
-						if (t.impl.fields == null) t.impl.fields = new List<ClassField>();
-						if (t.impl.statics == null) t.impl.statics = new List<ClassField>();
-						#else
-						if (t.impl.fields == null) t.impl.fields = new Array<ClassField>();
-						if (t.impl.statics == null) t.impl.statics = new Array<ClassField>();
-						#end
+						if (t.impl.fields == null) t.impl.fields = new Container<ClassField>();
+						if (t.impl.statics == null) t.impl.statics = new Container<ClassField>();
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
 								if (cf.name == "_new") cf.name = "new";
@@ -120,11 +115,7 @@ class Processor {
 		return newRoot;
 	}
 
-	#if (haxe_ver < 4)
-	function filterFields(fields:List<ClassField>) {
-	#else
-	function filterFields(fields:Array<ClassField>) {
-	#end
+	function filterFields(fields:Container<ClassField>) {
 		return fields.filter(function(cf) {
 			var hide = Infos.hasDoxMetadata(cf.meta, "hide");
 			var show = Infos.hasDoxMetadata(cf.meta, "show");
@@ -134,11 +125,7 @@ class Processor {
 		});
 	}
 
-	#if (haxe_ver < 4)
-	function filterEnumFields(fields:List<EnumField>) {
-	#else
-	function filterEnumFields(fields:Array<EnumField>) {
-	#end
+	function filterEnumFields(fields:Container<EnumField>) {
 		return fields.filter(function(cf) {
 			return !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
 		});
@@ -175,17 +162,9 @@ class Processor {
 					cf1.name < cf2.name ? -1 : 1;
 			}
 
-		#if (haxe_ver < 4)
-		function sortFields(fields:List<ClassField>) {
-			var a = fields.array();
-			a.sort(compareFields);
-			return a.list();
+		inline function sortFields(fields:Container<ClassField>) {
+			return fields.sort(compareFields);
 		}
-		#else
-		inline function sortFields(fields:Array<ClassField>) {
-			fields.sort(compareFields);
-		}
-		#end
 
 		function sort(t:TypeTree) {
 			switch(t) {
@@ -193,12 +172,14 @@ class Processor {
 					subs.sort(compare);
 					subs.iter(sort);
 				case TClassdecl(c) | TAbstractdecl({impl: c}) if (c != null):
-					sortFields(c.fields);
-					sortFields(c.statics);
+					c.fields = sortFields(c.fields);
+					c.statics = sortFields(c.statics);
 				case TTypedecl(t):
 					switch(t.type)
 					{
-						case CAnonymous(fields): sortFields(fields); t.type = CAnonymous(fields);
+						case CAnonymous(fields):
+							fields = sortFields(fields);
+							t.type = CAnonymous(fields);
 						default:
 					}
 				case _:
