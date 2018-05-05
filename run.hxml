@@ -1,8 +1,2 @@
--lib hxtemplo
--lib hxparse
--lib hxargs
--lib markdown
--cp src
+runBase.hxml
 -neko run.n
--main dox.Dox
--dce no

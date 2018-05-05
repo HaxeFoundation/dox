@@ -6,6 +6,20 @@ import sys.FileSystem;
 class Dox {
 	static public function main() {
 		var args = Sys.args();
+
+		#if !macro // doesn't get any more interp than this
+		function hasInterpArg() return args.indexOf("--interp") != -1;
+
+		if (hasInterpArg()) {
+			while (hasInterpArg()) {
+				args.remove("--interp");
+			}
+			var haxeArgs = ["runBase.hxml", "--interp", "--"].concat(args);
+			Sys.println("haxe " + haxeArgs.join(" "));
+			Sys.exit(Sys.command("haxe", haxeArgs));
+		}
+		#end
+
 		var owd = Sys.getCwd();
 		owd = Path.addTrailingSlash(owd);
 
@@ -81,6 +95,9 @@ class Dox {
 				}
 				cfg.theme = setTheme(name);
 			},
+
+			@doc("Run dox using Haxe's macro interpreter (only with Haxe 4 and dox from source).")
+			["--interp"] => function() { /* handled above, just want the --help doc */ },
 
 			@doc("Defines key = value
   Dox has some special defines:
