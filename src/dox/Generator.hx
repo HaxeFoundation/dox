@@ -20,7 +20,7 @@ class Generator {
 		this.api = api;
 		this.writer = writer;
 		var config = api.config;
-		tplNav = config.loadTemplate("nav.mtt")	;
+		tplNav = config.loadTemplate("nav.mtt");
 		tplPackage = config.loadTemplate("package.mtt");
 		tplClass = config.loadTemplate("class.mtt");
 		tplEnum = config.loadTemplate("enum.mtt");
