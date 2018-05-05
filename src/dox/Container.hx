@@ -1,7 +1,5 @@
 package dox;
 
-using Lambda;
-
 private typedef ContainerType<T> = #if (haxe_ver < 4) List<T> #else Array<T> #end;
 
 @:forward(filter)
@@ -12,9 +10,9 @@ abstract Container<T>(ContainerType<T>) from ContainerType<T> to ContainerType<T
 
 	public function sort(f:T->T->Int) {
 		#if (haxe_ver < 4)
-		var a = this.array();
+		var a = Lambda.array(this);
 		a.sort(f);
-		return a.list();
+		return Lambda.list(a);
 		#else
 		this.sort(f);
 		return this;
