@@ -1,4 +1,6 @@
 # Dox
+[![Build Status](https://travis-ci.org/HaxeFoundation/dox.svg?branch=master)](https://travis-ci.org/HaxeFoundation/dox)
+
 A Haxe documentation generator used by many popular projects such as:
 
 - [Haxe](http://api.haxe.org/)
