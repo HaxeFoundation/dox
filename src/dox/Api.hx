@@ -175,6 +175,9 @@ class Api {
 		Turns a package-path into a slash-path and appends "/index.html".
 	**/
 	public function packageToUrl(full:String):String {
+		if(full == config.toplevelPackage) {
+			return config.rootPath + "index.html";
+		}
 		return config.rootPath + full.split(".").join("/") + "/index.html";
 
 	}
