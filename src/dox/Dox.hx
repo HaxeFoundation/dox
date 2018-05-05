@@ -173,6 +173,9 @@ class Dox {
 		Sys.println("Generating navigation");
 		gen.generateNavigation(root);
 
+		Sys.println("Generating 404 page");
+		gen.generateErrorPage(root);
+
 		Sys.println('Generating to ${cfg.outputPath}');
 		gen.generate(root);
 
