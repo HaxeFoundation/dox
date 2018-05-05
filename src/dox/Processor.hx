@@ -87,8 +87,8 @@ class Processor {
 					}
 				case TAbstractdecl(t):
 					if (t.impl != null) {
-						if (t.impl.fields == null) t.impl.fields = new Container<ClassField>();
-						if (t.impl.statics == null) t.impl.statics = new Container<ClassField>();
+						var fields = new Container<ClassField>();
+						var statics = new Container<ClassField>();
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
 								if (cf.name == "_new") cf.name = "new";
@@ -96,13 +96,13 @@ class Processor {
 									case CFunction(args,_): args.pop();
 									case _:
 								}
-								t.impl.fields.push(cf);
+								fields.push(cf);
 							} else {
-								t.impl.statics.push(cf);
+								statics.push(cf);
 							}
 						});
-						t.impl.fields = filterFields(t.impl.fields);
-						t.impl.statics = filterFields(t.impl.statics);
+						t.impl.fields = filterFields(fields);
+						t.impl.statics = filterFields(statics);
 					}
 					if (!isTypeFiltered(t))
 					{

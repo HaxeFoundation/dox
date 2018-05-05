@@ -20,4 +20,12 @@ abstract Container<T>(ContainerType<T>) from ContainerType<T> to ContainerType<T
 		return this;
 		#end
 	}
+
+	public function push(t:T) {
+		#if (haxe_ver < 4)
+		this.add(t);
+		#else
+		this.push(t);
+		#end
+	}
 }
