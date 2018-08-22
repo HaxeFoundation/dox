@@ -8,7 +8,8 @@ class Dox {
 		var args = Sys.args();
 
 		#if !macro // doesn't get any more interp than this
-		function hasInterpArg() return args.indexOf("--interp") != -1;
+		function hasInterpArg()
+			return args.indexOf("--interp") != -1;
 
 		if (hasInterpArg()) {
 			while (hasInterpArg()) {
@@ -39,6 +40,7 @@ class Dox {
 		cfg.outputPath = "pages";
 		cfg.xmlPath = "xml";
 
+		// @formatter:off
 		var argHandler = hxargs.Args.generate([
 			["-r", "--document-root"] => function(path:String) throw 'The -r command is obsolete and can be omitted',
 
@@ -110,7 +112,7 @@ class Dox {
 
 			_ => function(arg:String) throw "Unknown command: " +arg
 		]);
-
+		// @formatter:on
 		function printHelp() {
 			Sys.println("Dox 1.2.0");
 			Sys.println(argHandler.getDoc());
@@ -162,7 +164,7 @@ class Dox {
 			var name = new Path(path).file;
 			Sys.println('Parsing $path');
 			var data = sys.io.File.getContent(path);
-			var xml = try Xml.parse(data).firstElement() catch(err:Dynamic) {
+			var xml = try Xml.parse(data).firstElement() catch (err:Dynamic) {
 				trace('Error while parsing $path');
 				throw err;
 			};
@@ -172,8 +174,9 @@ class Dox {
 
 		if (FileSystem.isDirectory(cfg.xmlPath)) {
 			for (file in FileSystem.readDirectory(cfg.xmlPath)) {
-				if (!StringTools.endsWith(file, ".xml")) continue;
-				parseFile(cfg.xmlPath + "/" +file);
+				if (!StringTools.endsWith(file, ".xml"))
+					continue;
+				parseFile(cfg.xmlPath + "/" + file);
 			}
 		} else {
 			parseFile(cfg.xmlPath);

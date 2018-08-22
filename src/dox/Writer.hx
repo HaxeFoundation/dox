@@ -2,6 +2,7 @@ package dox;
 
 import haxe.zip.Entry;
 import haxe.io.Bytes;
+
 using StringTools;
 
 class Writer {

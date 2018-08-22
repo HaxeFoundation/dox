@@ -2,6 +2,7 @@ package dox;
 
 import haxe.Json;
 import haxe.rtti.CType;
+
 using Lambda;
 using StringTools;
 
@@ -11,7 +12,6 @@ using StringTools;
 **/
 @:keep
 class Api {
-
 	/**
 		The Dox configuration, see `Config` for details.
 	**/
@@ -50,8 +50,7 @@ class Api {
 		Platform names correspond to the filenames of the consumed .xml files.
 		For instance, flash.xml defines target "flash".
 	**/
-	public function isPlatform(name:String):Bool
-	{
+	public function isPlatform(name:String):Bool {
 		return config.platforms.has(name);
 	}
 
@@ -60,8 +59,8 @@ class Api {
 		package of type represented by `tree`.
 	**/
 	public function getTreeName(tree:TypeTree):String {
-		return switch(tree) {
-			case TPackage(name,_,_): name;
+		return switch (tree) {
+			case TPackage(name, _, _): name;
 			case TClassdecl(t): getPathName(t.path);
 			case TEnumdecl(t): getPathName(t.path);
 			case TTypedecl(t): getPathName(t.path);
@@ -73,8 +72,8 @@ class Api {
 		Returns the type of `tree`.
 	**/
 	public function getTreeType(tree:TypeTree):String {
-		return switch(tree) {
-			case TPackage(_,path,_): "package";
+		return switch (tree) {
+			case TPackage(_, path, _): "package";
 			case TClassdecl(t): "class";
 			case TEnumdecl(t): "enum";
 			case TTypedecl(t): "type";
@@ -86,8 +85,8 @@ class Api {
 		Returns the full dot-path of `tree`.
 	**/
 	public function getTreePath(tree:TypeTree):String {
-		return switch(tree) {
-			case TPackage(_,path,_): path;
+		return switch (tree) {
+			case TPackage(_, path, _): path;
 			case TClassdecl(t): t.path;
 			case TEnumdecl(t): t.path;
 			case TTypedecl(t): t.path;
@@ -100,8 +99,8 @@ class Api {
 		name for types and the package itself for packages.
 	**/
 	public function getTreePack(tree:TypeTree):String {
-		return switch(tree) {
-			case TPackage(_,pack,_): pack;
+		return switch (tree) {
+			case TPackage(_, pack, _): pack;
 			case TClassdecl(t): getPathPack(t.path);
 			case TEnumdecl(t): getPathPack(t.path);
 			case TTypedecl(t): getPathPack(t.path);
@@ -118,7 +117,7 @@ class Api {
 		For types, `pathToUrl` is called with the type path.
 	**/
 	public function getTreeUrl(tree:TypeTree):String {
-		return switch(tree) {
+		return switch (tree) {
 			case TPackage(_, full, _): packageToUrl(full);
 			case TClassdecl(t): pathToUrl(t.path);
 			case TEnumdecl(t): pathToUrl(t.path);
@@ -133,7 +132,7 @@ class Api {
 		@todo: Document this properly.
 	**/
 	public function getTreeShortDesc(tree:TypeTree):String {
-		var infos:TypeInfos = switch(tree) {
+		var infos:TypeInfos = switch (tree) {
 			case TPackage(_, full, _): null;
 			case TClassdecl(t): t;
 			case TEnumdecl(t): t;
@@ -175,11 +174,10 @@ class Api {
 		Turns a package-path into a slash-path and appends "/index.html".
 	**/
 	public function packageToUrl(full:String):String {
-		if(full == config.toplevelPackage) {
+		if (full == config.toplevelPackage) {
 			return config.rootPath + "index.html";
 		}
 		return config.rootPath + full.split(".").join("/") + "/index.html";
-
 	}
 
 	/**
@@ -210,7 +208,7 @@ class Api {
 	**/
 	public function getTypePath(ctype:CType):Null<String> {
 		return switch (ctype) {
-			case CClass(path,_): path;
+			case CClass(path, _): path;
 			case CEnum(path, _): path;
 			case CTypedef(path, _): path;
 			case CAbstract(path, _): path;
@@ -245,7 +243,7 @@ class Api {
 
 	/**
 		Traces `e` as pretty-printed Json for debug purposes.
-	 **/
+	**/
 	public function debugJson(e:Dynamic) {
 		trace(Json.stringify(e, null, "  "));
 	}
@@ -265,8 +263,11 @@ class Api {
 		`platforms is empty, `null` is returned.
 	**/
 	public function getPlatformClassString(platforms:List<String>):String {
-		if (platforms.isEmpty()) return null;
-		return "platform " + platforms.map(function(p){ return "platform-"+p; }).join(" ");
+		if (platforms.isEmpty())
+			return null;
+		return "platform " + platforms.map(function(p) {
+			return "platform-" + p;
+		}).join(" ");
 	}
 
 	/**
@@ -370,7 +371,7 @@ class Api {
 		function loop(c:Classdef) {
 			for (cf in c.fields) {
 				if (!fieldMap.exists(cf.name) || cf.overloads != null) {
-					allFields.push({ field: cf, definedBy: c});
+					allFields.push({field: cf, definedBy: c});
 					fieldMap[cf.name] = true;
 				}
 			}
@@ -393,8 +394,8 @@ class Api {
 		var oc = c;
 
 		var inheritedFields:InheritedFields = {
-			methods: new Map<Classdef,Array<ClassField>>(),
-			fields:new Map<Classdef,Array<ClassField>>(),
+			methods: new Map<Classdef, Array<ClassField>>(),
+			fields: new Map<Classdef, Array<ClassField>>(),
 			types: [],
 		}
 
@@ -403,7 +404,8 @@ class Api {
 		function loop(c:Classdef) {
 			for (cf in c.fields) {
 				if (!fieldMap.exists(cf.name) || cf.overloads != null) {
-					if (c != oc) allFields.push({ field: cf, definedBy: c});
+					if (c != oc)
+						allFields.push({field: cf, definedBy: c});
 					fieldMap[cf.name] = true;
 				}
 			}
@@ -452,12 +454,12 @@ typedef FieldInfo = {
 	/**
 		The kind of the field. See `FieldKind`.
 	**/
-	kind: FieldKind,
+	kind:FieldKind,
 
 	/**
 		The field modifiers. See `FieldModifiers`.
 	**/
-	modifiers: FieldModifiers
+	modifiers:FieldModifiers
 }
 
 /**
@@ -469,15 +471,17 @@ enum FieldKind {
 		also considered variables.
 	**/
 	Variable;
+
 	/**
 		Field is a property. The arguments `get` and `set` correspond to the
 		accessor.
 	**/
-	Property(get: String, set: String);
+	Property(get:String, set:String);
+
 	/**
 		Field is a method with arguments `args` and return type `ret`.
 	**/
-	Method(args: Container<FunctionArgument>, ret: CType);
+	Method(args:Container<FunctionArgument>, ret:CType);
 }
 
 /**
@@ -487,21 +491,22 @@ typedef FieldModifiers = {
 	/**
 		`true` if the field is `inline`, `false` otherwise
 	**/
-	isInline: Bool,
+	isInline:Bool,
+
 	/**
 		`true` if the field is `dynamic`, `false` otherwise
 	**/
-	isDynamic: Bool,
+	isDynamic:Bool,
 }
 
 typedef MemberField = {
-	field: ClassField,
-	definedBy: Classdef
+	field:ClassField,
+	definedBy:Classdef
 }
 
 typedef InheritedFields = {
-	methods: Map<Classdef,Array<ClassField>>,
-	fields: Map<Classdef,Array<ClassField>>,
+	methods:Map<Classdef, Array<ClassField>>,
+	fields:Map<Classdef, Array<ClassField>>,
 	// defines order of the types since keys in maps arent ordered
 	types:Array<Classdef>,
 }

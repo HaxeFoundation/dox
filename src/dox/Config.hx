@@ -7,15 +7,12 @@ class Config {
 	public var toplevelPackage:String;
 	public var useMarkdown:Bool;
 	public var date:Date;
-
 	public var outputPath(default, set):String;
 	public var xmlPath(default, set):String;
 	public var pathFilters(default, null):haxe.ds.GenericStack<Filter>;
-
 	public var platforms:Array<String>;
 	public var resourcePaths:Array<String>;
 	public var templatePaths(default, null):haxe.ds.GenericStack<String>;
-
 	public var defines:Map<String, String>;
 	public var pageTitle:String;
 
@@ -48,9 +45,10 @@ class Config {
 
 	public function loadTemplate(name:String) {
 		for (tp in templatePaths) {
-			if (sys.FileSystem.exists(tp + "/" +name)) return templo.Template.fromFile(tp + "/" + name);
+			if (sys.FileSystem.exists(tp + "/" + name))
+				return templo.Template.fromFile(tp + "/" + name);
 		}
-		throw "Could not resolve template: " +name;
+		throw "Could not resolve template: " + name;
 	}
 
 	public function setRootPath(path:String) {
@@ -59,14 +57,15 @@ class Config {
 		for (i in 0...depth) {
 			rootPath += "../";
 		}
-		if (rootPath == "") rootPath = "./";
+		if (rootPath == "")
+			rootPath = "./";
 	}
 
 	public function getHeaderIncludes() {
 		var buf = new StringBuf();
 		for (inc in theme.headerIncludes) {
 			var path = new haxe.io.Path(inc);
-			var s = switch(path.ext) {
+			var s = switch (path.ext) {
 				case 'css': '<link href="$rootPath${path.file}.css" rel="stylesheet" />';
 				case 'js': '<script type="text/javascript" src="$rootPath${path.file}.js"></script>';
 				case 'ico': '<link rel="icon" href="$rootPath${path.file}.ico" type="image/x-icon"></link>';
@@ -82,7 +81,7 @@ private class Filter {
 	public var r(default, null):EReg;
 	public var isIncludeFilter(default, null):Bool;
 
-	public function new(pattern: String, isIncludeFilter:Bool) {
+	public function new(pattern:String, isIncludeFilter:Bool) {
 		r = new EReg(pattern, "");
 		this.isIncludeFilter = isIncludeFilter;
 	}

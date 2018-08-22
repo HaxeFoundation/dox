@@ -1,5 +1,7 @@
 package dox;
+
 import haxe.rtti.CType;
+
 using Lambda;
 
 /**
@@ -8,7 +10,6 @@ using Lambda;
 	An instance can be accessed as `api.infos` in templates.
 **/
 class Infos {
-
 	/**
 		A map of dot-paths to their corresponding `TypeInfos` objects.
 	**/
@@ -36,11 +37,11 @@ class Infos {
 
 	var packages:Map<String, Map<String, String>>;
 	var names:Map<String, String>;
-
 	var numProcessedTypes:Int;
 
 	function set_numGeneratedTypes(v) {
-		if (v & 16 == 0) Sys.print(".");
+		if (v & 16 == 0)
+			Sys.print(".");
 		return numGeneratedTypes = v;
 	}
 
@@ -65,24 +66,23 @@ class Infos {
 		return meta.exists(function(m) return m.name == ":dox" && parameterName == null || m.params.has(parameterName));
 	}
 
-	function resolveType(path:String, type:String)
-	{
+	function resolveType(path:String, type:String) {
 		// direct match
-		if (typeMap.exists(type)) return type;
+		if (typeMap.exists(type))
+			return type;
 
 		// same package
 		var parts = path.split('.');
 		parts.pop();
 		var pack = parts.join('.');
-		if (packages.exists(pack))
-		{
+		if (packages.exists(pack)) {
 			var types = packages.get(pack);
-			if (types.exists(type)) return types.get(type);
+			if (types.exists(type))
+				return types.get(type);
 		}
 
 		// last ditch attempt, by name (first match wins)
-		if (names.exists(type))
-		{
+		if (names.exists(type)) {
 			return names.get(type);
 		}
 
@@ -95,13 +95,17 @@ class Infos {
 		var name = parts.pop();
 		var pack = parts.join('.');
 
-		if (packages.exists(pack)) packages.get(pack).set(name, path);
-		else packages.set(pack, [name => path]);
+		if (packages.exists(pack))
+			packages.get(pack).set(name, path);
+		else
+			packages.set(pack, [name => path]);
 
-		if (!names.exists(name)) names.set(name, path);
+		if (!names.exists(name))
+			names.set(name, path);
 
 		typeMap.set(path, typeInfos);
 		numProcessedTypes++;
-		if (numProcessedTypes & 16 == 0) Sys.print(".");
+		if (numProcessedTypes & 16 == 0)
+			Sys.print(".");
 	}
 }

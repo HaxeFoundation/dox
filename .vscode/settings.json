@@ -4,5 +4,8 @@
 	],
 	"files.associations": {
 		"*.mtt": "xml"
+	},
+	"[haxe]": {
+		"editor.formatOnSave": true
 	}
 }

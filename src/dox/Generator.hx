@@ -1,14 +1,13 @@
 package dox;
 
 import haxe.rtti.CType;
+
 using Lambda;
 using StringTools;
 
 class Generator {
-
 	var api:Api;
 	var writer:Writer;
-
 	var tplNav:templo.Template;
 	var tplPackage:templo.Template;
 	var tplClass:templo.Template;
@@ -65,9 +64,10 @@ class Generator {
 
 	@:access(dox.Api.sanitizePath)
 	function generateTree(tree:TypeTree) {
-		switch(tree) {
+		switch (tree) {
 			case TPackage(name, full, subs):
-				if (name.charAt(0) == "_") return;
+				if (name.charAt(0) == "_")
+					return;
 				api.currentPageName = full == "" ? name : full;
 				api.config.setRootPath(full == '' ? full : full + ".pack");
 				api.currentPageUrl = fileUrl(full == '' ? 'index' : full + '.index');
@@ -129,8 +129,7 @@ class Generator {
 		return path.replace(".", "/").replace("<", "_").replace(">", "_") + '.html';
 	}
 
-	function write(fileUrl:String, content:String)
-	{
+	function write(fileUrl:String, content:String) {
 		writer.saveContent(fileUrl, content);
 	}
 }

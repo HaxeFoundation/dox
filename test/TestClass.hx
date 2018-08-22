@@ -24,8 +24,7 @@
  * 	var foo = bar;
  * ```
  */
-class TestClass
-{
+class TestClass {
 	static function main() {}
 
 	/**
@@ -47,47 +46,35 @@ class TestClass
 
 		@return The result of the `foo` test.
 	**/
-	public static function test(foo:String):String
-	{
+	public static function test(foo:String):String {
 		return "foo";
 	}
 
 	/**
 		Simple doc
 	**/
-	public static function haxe_doc_style()
-	{
-
-	}
+	public static function haxe_doc_style() {}
 
 	/**
 	 * Javadoc style
 	 *
 	 * Asterix on previous line should still be stripped (no trailing space)
 	 */
-	public static function java_doc_style()
-	{
-
-	}
+	public static function java_doc_style() {}
 
 	/**
 	 * Adds a child to this entity.
 	 * @param append Whether to add the entity to the end or beginning of the child list.
 	 * @returns This instance, for chaining.
 	 */
-	public static function java_doc_style_spaces()
-	{
-
-	}
+	public static function java_doc_style_spaces() {}
 
 	/**
 		Tests @returns without @param
 
 		@return A random String.
 	**/
-	public static function java_doc_return_without_param() {
-
-	}
+	public static function java_doc_return_without_param() {}
 
 	/**
 	 * Creates a FlxSprite at a specified position with a specified one-frame graphic.
@@ -103,16 +90,12 @@ class TestClass
 	 * @event   added           Dispatched when something is added.
 	 * @event   removed         Dispatched when something is removed.
 	 */
-	public static function java_doc_multiline_comments() {
-
-	}
+	public static function java_doc_multiline_comments() {}
 
 	/**
-	  @param x some documentation for parameters.
+		@param x some documentation for parameters.
 	**/
-	public function indentation_space_cadets(x:Int):Void
-	{
-	}
+	public function indentation_space_cadets(x:Int):Void {}
 
 	@:dox(hide) public var hiddenField:String;
 
@@ -129,28 +112,22 @@ class TestClass
 		- `?e:String`
 		- `?f:String`
 	**/
-	public static function defaultValues(a = 0x00FF00, ?b = "foo", c = true, ?d:String = null, e:String = null, ?f:String) { }
+	public static function defaultValues(a = 0x00FF00, ?b = "foo", c = true, ?d:String = null, e:String = null, ?f:String) {}
 
 	/**
 		There should not be a line break between `FlipX:Bool =` and `false`.
 	**/
-	public function add(Name:String, Frames:Array<Int>, FrameRate:Int = 30, Looped:Bool = true, FlipX:Bool = false, FlipY:Bool = false):Void
-	{
-	}
+	public function add(Name:String, Frames:Array<Int>, FrameRate:Int = 30, Looped:Bool = true, FlipX:Bool = false, FlipY:Bool = false):Void {}
 
 	/**
 		There should not be a line break between `?` and `NotifyCallback`.
 	**/
-	public static inline function collide(?ObjectOrGroup1:TestClass, ?ObjectOrGroup2:TestClass, ?NotifyCallback:Dynamic->Dynamic->Void):Void
-	{
-	}
+	public static inline function collide(?ObjectOrGroup1:TestClass, ?ObjectOrGroup2:TestClass, ?NotifyCallback:Dynamic->Dynamic->Void):Void {}
 
 	/**
 		There should not be a line break between `,` and `Looped`.
 	**/
-	public function addByIndices(Name:String, Prefix:String, Indices:Array<Int>, Postfix:String, VeryVeryVeryLongArgumentName:Int = 30, Looped:Bool = true):Void
-	{
-	}
+	public function addByIndices(Name:String, Prefix:String, Indices:Array<Int>, Postfix:String, VeryVeryVeryLongArgumentName:Int = 30, Looped:Bool = true):Void {}
 
 	/**
 		Should be in the "variables" section as `callback:String -> Int -> Void`.
@@ -161,23 +138,20 @@ class TestClass
 /**
 	Some *documentation*.
 **/
-typedef TestTypedef =
-{
+typedef TestTypedef = {
 	/**
 		Some description with a type reference `Foo`.
 
 		And a Second Line `"type":"ItemDetail"`
 	**/
 	var myField:String;
-
 	@:dox(hide) var hiddenField:Bool;
 }
 
 /**
 	Some *documentation*.
 **/
-enum TestEnum
-{
+enum TestEnum {
 	/**
 		Some *documentation*.
 	**/
@@ -200,14 +174,10 @@ enum TestEnum
 		var binding = new Flags(BindingFlags.Public) | BindingFlags.Static | BindingFlags.NonPublic;
 	```
 **/
-class TestCodeBlock
-{
-
-}
+class TestCodeBlock {}
 
 @:enum
-abstract TestEnumAbstract(Int)
-{
+abstract TestEnumAbstract(Int) {
 	/**
 		Expression shouldn't have a `cast`.
 	**/
@@ -217,23 +187,18 @@ abstract TestEnumAbstract(Int)
 /**
 	Properties should be sorted alphabetically.
 **/
-typedef TestTypedefOrder =
-{
+typedef TestTypedefOrder = {
 	var z:Int;
 	var a:Int;
 	var b:Int;
 	var q:Int;
 }
 
-class TestFieldVisibility
-{
+class TestFieldVisibility {
 	static public var staticVarPublic:Int;
-
 	static private var staticVarPrivate:Int;
-
 	@:dox(hide)
 	static public var staticVarPublicHiden:Int;
-
 	@:dox(show)
 	static private var staticVarPrivateShown:Int;
 
@@ -269,30 +234,28 @@ class TestFieldVisibility
 }
 
 /**
-	* `obj`
-	* `this.obj`, 
-	* `this.OBJ`
-	* `TestLinks.obj`
-	* `TestLinks.OBJ`
-	* `Std.int`
-	* `haxe.io.Eof.new`
-	* `true` or `false`
-	* `Type`
-	* `TestMetaData.RED`
-	* `TestEnum.VisibleConstructor`
-	* `this.obj + this.OBJ`
-	* `TestLinks.obj + TestLinks.OBJ`
+ * `obj`
+ * `this.obj`,
+ * `this.OBJ`
+ * `TestLinks.obj`
+ * `TestLinks.OBJ`
+ * `Std.int`
+ * `haxe.io.Eof.new`
+ * `true` or `false`
+ * `Type`
+ * `TestMetaData.RED`
+ * `TestEnum.VisibleConstructor`
+ * `this.obj + this.OBJ`
+ * `TestLinks.obj + TestLinks.OBJ`
 **/
 class TestLinks {
 	public var obj:Int;
-	
-	public var OBJ = { x: 10, y:10 };
+	public var OBJ = {x: 10, y: 10};
 }
 
 @:deprecated("Use newer class")
 @:generic
-class TestMetaData
-{
+class TestMetaData {
 	/**
 		Deprecated red color value
 	**/
@@ -300,29 +263,24 @@ class TestMetaData
 	@:deprecated("Use `red` instead")
 	@:metaWithoutParams
 	public static var deprecatedRed = 0xFF0000;
-	
 	@:meta
 	@:to
 	public static var red = 12;
 	public static var RED = 12;
-	
 }
 
 /**
 	This should not be visible on the index page.
 **/
-class Index
-{
-
-}
+class Index {}
 
 @:generic class GenericClass<T> {}
+
 class ChildOfGeneric extends GenericClass<String> {}
 
 /**
 	This interface shouldn't show compiler-generated get_ / set_ fields (#239).
 **/
-interface TestInterface
-{
+interface TestInterface {
 	public var active(get, set):Bool;
 }

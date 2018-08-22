@@ -1,11 +1,11 @@
 package dox;
 
 import haxe.rtti.CType;
+
 using Lambda;
 using StringTools;
 
 class Processor {
-
 	public var infos:Infos;
 
 	var tplDoc:templo.Template;
@@ -54,7 +54,7 @@ class Processor {
 			}
 		}
 		function filter(root, tree):Void {
-			return switch(tree) {
+			return switch (tree) {
 				case TPackage(name, full, subs):
 					var acc = [];
 					subs.iter(filter.bind(acc));
@@ -62,23 +62,19 @@ class Processor {
 				case TClassdecl(t):
 					t.fields = filterFields(t.fields);
 					t.statics = filterFields(t.statics);
-					if (!isTypeFiltered(t))
-					{
+					if (!isTypeFiltered(t)) {
 						root.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TEnumdecl(t):
-					if (!isTypeFiltered(t))
-					{
+					if (!isTypeFiltered(t)) {
 						t.constructors = filterEnumFields(t.constructors);
 						root.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TTypedecl(t):
-					if (!isTypeFiltered(t))
-					{
-						switch (t.type)
-						{
+					if (!isTypeFiltered(t)) {
+						switch (t.type) {
 							case CAnonymous(fields): t.type = CAnonymous(filterFields(fields));
 							default:
 						}
@@ -91,11 +87,14 @@ class Processor {
 						var statics = new Container<ClassField>();
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
-								if (cf.name == "_new") cf.name = "new";
-								else switch(cf.type) {
-									case CFunction(args,_): args.pop();
-									case _:
-								}
+								if (cf.name == "_new")
+									cf.name = "new";
+								else
+									switch (cf.type) {
+										case CFunction(args, _):
+											args.pop();
+										case _:
+									}
 								fields.push(cf);
 							} else {
 								statics.push(cf);
@@ -104,8 +103,7 @@ class Processor {
 						t.impl.fields = filterFields(fields);
 						t.impl.statics = filterFields(statics);
 					}
-					if (!isTypeFiltered(t))
-					{
+					if (!isTypeFiltered(t)) {
 						root.push(tree);
 						infos.addType(t.path, t);
 					}
@@ -133,21 +131,21 @@ class Processor {
 
 	function sort(root:TypeRoot) {
 		function getName(t:TypeTree) {
-			return switch(t) {
+			return switch (t) {
 				case TEnumdecl(t): t.path;
 				case TTypedecl(t): t.path;
 				case TClassdecl(t): t.path;
 				case TAbstractdecl(t): t.path;
-				case TPackage(n,_,_): n;
+				case TPackage(n, _, _): n;
 			}
 		}
 
-		function compare(t1,t2) {
+		function compare(t1, t2) {
 			return switch [t1, t2] {
-				case [TPackage(n1,_,_),TPackage(n2,_,_)]: n1 < n2 ? -1 : 1;
-				case [TPackage(_),_]: -1;
-				case [_,TPackage(_)]: 1;
-				case [t1,t2]:
+				case [TPackage(n1, _, _), TPackage(n2, _, _)]: n1 < n2 ? -1 : 1;
+				case [TPackage(_), _]: -1;
+				case [_, TPackage(_)]: 1;
+				case [t1, t2]:
 					getName(t1) < getName(t2) ? -1 : 1;
 			}
 		}
@@ -167,7 +165,7 @@ class Processor {
 		}
 
 		function sort(t:TypeTree) {
-			switch(t) {
+			switch (t) {
 				case TPackage(_, _, subs):
 					subs.sort(compare);
 					subs.iter(sort);
@@ -175,8 +173,7 @@ class Processor {
 					c.fields = sortFields(c.fields);
 					c.statics = sortFields(c.statics);
 				case TTypedecl(t):
-					switch(t.type)
-					{
+					switch (t.type) {
 						case CAnonymous(fields):
 							fields = sortFields(fields);
 							t.type = CAnonymous(fields);
@@ -189,9 +186,10 @@ class Processor {
 		root.iter(sort);
 	}
 
-	function processRoot(root:TypeRoot):TypeRoot
-	{
-		var newRoot = [TPackage(config.toplevelPackage == '' ? 'top level' : config.toplevelPackage, '', root)];
+	function processRoot(root:TypeRoot):TypeRoot {
+		var newRoot = [
+			TPackage(config.toplevelPackage == '' ? 'top level' : config.toplevelPackage, '', root)
+		];
 		newRoot.iter(processTree);
 		return newRoot;
 	}
@@ -201,10 +199,8 @@ class Processor {
 		t.file = path.replace(".", "/") + ".hx";
 	}
 
-	function processTree(tree:TypeTree)
-	{
-		switch (tree)
-		{
+	function processTree(tree:TypeTree) {
+		switch (tree) {
 			case TPackage(_, full, subs):
 				config.setRootPath(full + ".pack");
 				subs.iter(processTree);
@@ -217,8 +213,7 @@ class Processor {
 			case TTypedecl(t):
 				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
-				switch (t.type)
-				{
+				switch (t.type) {
 					case CAnonymous(fields): fields.iter(processClassField.bind(t.path));
 					default:
 				}
@@ -229,18 +224,21 @@ class Processor {
 				t.fields.iter(processClassField.bind(t.path));
 				t.statics.iter(processClassField.bind(t.path));
 				if (t.superClass != null) {
-					if (!infos.subClasses.exists(t.superClass.path)) infos.subClasses.set(t.superClass.path, [t]);
-					else infos.subClasses.get(t.superClass.path).push(t);
+					if (!infos.subClasses.exists(t.superClass.path))
+						infos.subClasses.set(t.superClass.path, [t]);
+					else
+						infos.subClasses.get(t.superClass.path).push(t);
 				}
 				for (i in t.interfaces) {
-					if (!infos.implementors.exists(i.path)) infos.implementors.set(i.path, [t]);
-					else infos.implementors.get(i.path).push(t);
+					if (!infos.implementors.exists(i.path))
+						infos.implementors.set(i.path, [t]);
+					else
+						infos.implementors.get(i.path).push(t);
 				}
 				makeFilePathRelative(t);
 			case TAbstractdecl(t):
 				config.setRootPath(t.path);
-				if (t.impl != null)
-				{
+				if (t.impl != null) {
 					t.impl.fields.iter(processClassField.bind(t.path));
 					t.impl.statics.iter(processClassField.bind(t.path));
 				}
@@ -249,42 +247,38 @@ class Processor {
 		}
 	}
 
-	function processClassField(path:String, field:ClassField)
-	{
+	function processClassField(path:String, field:ClassField) {
 		field.doc = processDoc(path, field.doc);
 		removeEnumAbstractCast(field);
 	}
 
-	function removeEnumAbstractCast(field:ClassField)
-	{
+	function removeEnumAbstractCast(field:ClassField) {
 		// remove `cast` from the expression of enum abstract values (#146)
-		if (field.type.match(CAbstract(_, _)) &&
-			hasMeta(field.meta, ":impl") && hasMeta(field.meta, ":enum") &&
-			field.get == RInline && field.set == RNo &&
-			field.expr != null && field.expr.startsWith("cast ")) {
+		if (field.type.match(CAbstract(_, _)) && hasMeta(field.meta, ":impl") && hasMeta(field.meta, ":enum") && field.get == RInline && field
+			.set == RNo && field.expr != null && field.expr.startsWith("cast ")) {
 			field.expr = field.expr.substr("cast ".length);
 		}
 	}
 
-	function hasMeta(meta:MetaData, name:String)
-	{
+	function hasMeta(meta:MetaData, name:String) {
 		return meta.exists(function(meta) return meta.name == name);
 	}
 
-	function processEnumField(path:String, field:EnumField)
-	{
+	function processEnumField(path:String, field:EnumField) {
 		field.doc = processDoc(path, field.doc);
 	}
 
-	function trimDoc(doc:String)
-	{
-		if (doc == null) return '';
+	function trimDoc(doc:String) {
+		if (doc == null)
+			return '';
 
 		// trim leading asterixes
-		while (doc.charAt(0) == '*') doc = doc.substr(1);
+		while (doc.charAt(0) == '*')
+			doc = doc.substr(1);
 
 		// trim trailing asterixes
-		while (doc.charAt(doc.length - 1) == '*') doc = doc.substr(0, doc.length - 1);
+		while (doc.charAt(doc.length - 1) == '*')
+			doc = doc.substr(0, doc.length - 1);
 
 		// trim additional whitespace
 		doc = doc.trim();
@@ -293,8 +287,7 @@ class Processor {
 		var ereg = ~/^([ \t]+(\* )?)[^\s\*]/m;
 		var matched = ereg.match(doc);
 
-		if (matched)
-		{
+		if (matched) {
 			var string = ereg.matched(1);
 
 			// escape asterix and allow one optional space after it
@@ -307,28 +300,31 @@ class Processor {
 		return doc;
 	}
 
-	function processDoc(path:String, doc:String)
-	{
+	function processDoc(path:String, doc:String) {
 		doc = trimDoc(doc);
-		if (doc == '') return '<p></p>';
+		if (doc == '')
+			return '<p></p>';
 		var info = javadocHandler.parse(path, doc);
-		return tplDoc.execute({ info:info });
+		return tplDoc.execute({info: info});
 	}
 
-	function isTypeFiltered(type:{path:Path, meta:MetaData, isPrivate:Bool})
-	{
-		if (Infos.hasDoxMetadata(type.meta, "show")) return false;
-		if (Infos.hasDoxMetadata(type.meta, "hide")) return true;
-		if (type.isPrivate) return true;
+	function isTypeFiltered(type:{path:Path, meta:MetaData, isPrivate:Bool}) {
+		if (Infos.hasDoxMetadata(type.meta, "show"))
+			return false;
+		if (Infos.hasDoxMetadata(type.meta, "hide"))
+			return true;
+		if (type.isPrivate)
+			return true;
 		return isPathFiltered(type.path);
 	}
 
-	function isPathFiltered(path:Path)
-	{
+	function isPathFiltered(path:Path) {
 		var hasInclusionFilter = false;
 		for (filter in config.pathFilters) {
-			if (filter.isIncludeFilter) hasInclusionFilter = true;
-			if (filter.r.match(path)) return !filter.isIncludeFilter;
+			if (filter.isIncludeFilter)
+				hasInclusionFilter = true;
+			if (filter.r.match(path))
+				return !filter.isIncludeFilter;
 		}
 		return hasInclusionFilter;
 	}
