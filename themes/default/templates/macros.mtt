@@ -12,8 +12,8 @@
 <macro name="getHexValue(value)">::value.split("0x").join("#")::</macro>
 
 <macro name="printPlatforms(platforms, useSeparator)">
+	::if (useSeparator)::<hr/>::end::
 	<p class="availability" ::cond (api.config.platforms.length>1)::>
-		::if (useSeparator)::<hr/>::end::
 		<em>
 		Available on 
 		::if platforms.length == api.config.platforms.length:: all platforms
@@ -68,9 +68,7 @@
 </macro>
 
 <macro name="printModule(module)">
-	<p ::cond module != null && module != "StdTypes"::>
-		<h4><small>import <a ::attr href api.pathToUrl(module)::>::module::</a></small></h4>
-	</p>
+	<h4 ::cond module != null && module != "StdTypes"::><small>import <a ::attr href api.pathToUrl(module)::>::module::</a></small></h4>
 </macro>
 
 <macro name="printFieldDeprecation(field)">

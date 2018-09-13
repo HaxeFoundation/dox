@@ -10,7 +10,7 @@
 	<p class="javadoc">Parameters:</p>
 		<table class="table table-bordered params">
 	::foreach param info.params::
-			<tr><th width="25%"><code>::param.value::</code></th><td>::raw param.doc::</td></tr>
+			<tr><th style="width:25%;"><code>::param.value::</code></th><td>::raw param.doc::</td></tr>
 	::end::
 	</table>
 ::end::
@@ -26,9 +26,7 @@
 	<p class="javadoc">Throws:</p>
 		<table class="table table-bordered params">
 	::foreach throws info.throws::
-		<div class="indent inline-content">
-			<tr><th width="25%"><code>::throws.value::</code></th><td>::raw throws.doc::</td></tr>
-		</div>
+			<tr class="indent"><th style="width:25%;"><code>::throws.value::</code></th><td>::raw throws.doc::</td></tr>
 	::end::
 	</table>
 ::end::
@@ -37,9 +35,7 @@
 	<p class="javadoc">Events:</p>
 		<table class="table table-bordered params">
 	::foreach event info.events::
-		<div class="indent inline-content">
-			<tr><th width="25%"><code>::event.value::</code></th><td>::raw event.doc::</td></tr>
-		</div>
+			<tr class="indent"><th style="width:25%;"><code>::event.value::</code></th><td>::raw event.doc::</td></tr>
 	::end::
 	</table>
 ::end::

@@ -5,7 +5,7 @@
 <table class="table table-condensed">
 	<tbody>
 		<tr ::cond full != ""::>
-			<th width="200">
+			<th style="width:200px;">
 				<i class="fa fa-folder-o"></i>
 				<a href="::api.packageToUrl(full.split(".").slice(0,-1).join("."))::" title="::full.split(".").slice(0,-1).join(".")::">..</a>
 			</th>
