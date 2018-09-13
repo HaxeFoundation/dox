@@ -21,7 +21,7 @@
 					<a href="::api.getTreeUrl(tree)::" title="::full::.::name::">::name::</a>
 				</td>
 				::else::
-				<td width="200">
+				<td style="width:200px;">
 					<a href="::api.getTreeUrl(tree)::" title="::full::.::name::">::name::</a>
 				</td>
 				<td>

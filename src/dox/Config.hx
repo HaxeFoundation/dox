@@ -67,8 +67,8 @@ class Config {
 			var path = new haxe.io.Path(inc);
 			var s = switch (path.ext) {
 				case 'css': '<link href="$rootPath${path.file}.css" rel="stylesheet" />';
-				case 'js': '<script type="text/javascript" src="$rootPath${path.file}.js"></script>';
-				case 'ico': '<link rel="icon" href="$rootPath${path.file}.ico" type="image/x-icon"></link>';
+				case 'js': '<script src="$rootPath${path.file}.js"></script>';
+				case 'ico': '<link rel="icon" href="$rootPath${path.file}.ico" type="image/x-icon" />';
 				case s: throw 'Unknown header include extension: $s';
 			}
 			buf.add(s);

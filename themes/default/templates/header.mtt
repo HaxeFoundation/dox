@@ -14,7 +14,7 @@
 	<link href="::api.config.rootPath::styles.css" rel="stylesheet" />
 	<link href="::api.config.rootPath::extra-styles.css" rel="stylesheet" />
 	<link href="::api.config.rootPath::haxe-nav.css" rel="stylesheet" />
-	<script type="text/javascript">var dox = {
+	<script>var dox = {
 		rootPath: "::api.config.rootPath::",
 		platforms: [
 			::foreach pf api.config.platforms::
@@ -23,9 +23,9 @@
 			::end::
 		]
 	};</script>
-	<script type="text/javascript" src="::api.config.rootPath::nav.js"></script>
-	<script type="text/javascript" src="::api.config.rootPath::index.js"></script>
-	<link rel="icon" href="::api.config.rootPath::favicon.ico" type="image/x-icon"></link>
+	<script src="::api.config.rootPath::nav.js"></script>
+	<script src="::api.config.rootPath::index.js"></script>
+	<link rel="icon" href="::api.config.rootPath::favicon.ico" type="image/x-icon"/>
 	<title>::api.currentPageName::::if api.config.pageTitle !=null:: - ::api.config.pageTitle::::end::</title>
 
 	::set description = api.getShortDesc(type)::
