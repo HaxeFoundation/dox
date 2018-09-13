@@ -13,7 +13,8 @@ haxe:
 
 matrix:
   allow_failures:
-    - haxe: development
+    # Nothing should fail on development
+    # - haxe: development
 
 install:
   - haxelib install hxcpp
