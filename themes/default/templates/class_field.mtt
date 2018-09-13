@@ -9,14 +9,13 @@
 
 	<a ::attr name field.name::></a>
 	
-	<h3>
-		<div class="anchor">$$printFieldSignature(::field::,::isStatic::,::type::)</div>
-		::if field.overloads != null::
-			::foreach field field.overloads::
-				<div class="anchor">$$printFieldSignature(::field::,::isStatic::,::type::)</div>
-			::end::
+	<h3 class="anchor">$$printFieldSignature(::field::,::isStatic::,::type::)</h3>
+	::if field.overloads != null::
+		::foreach field field.overloads::
+			<h3 class="anchor">$$printFieldSignature(::field::,::isStatic::,::type::)</h3>
 		::end::
-	</h3>
+	::end::
+
 	$$printFieldDeprecation(::field::)
 	
 	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
