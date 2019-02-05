@@ -15,7 +15,7 @@ class Dox {
 			while (hasInterpArg()) {
 				args.remove("--interp");
 			}
-			var haxeArgs = ["runInterp.hxml", "--"].concat(args);
+			var haxeArgs = ["runBase.hxml", "--run", "dox.Dox"].concat(args);
 			Sys.println("haxe " + haxeArgs.join(" "));
 			Sys.exit(Sys.command("haxe", haxeArgs));
 		}
