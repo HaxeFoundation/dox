@@ -21,6 +21,7 @@ install:
   - haxelib install hxcs
   - haxelib install hxjava
   - haxelib install run.hxml --always
+  - haxelib git hxparse https://github.com/Simn/hxparse
   - haxelib dev dox .
   - haxelib list
 

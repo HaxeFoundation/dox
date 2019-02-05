@@ -3,8 +3,14 @@ import haxe.macro.Context;
 // stolen from haxe/doc/ImportAll.hx
 class ImportAll {
 	static function isSysTarget() {
-		return Context.defined("neko") || Context.defined("php") || Context.defined("cpp") || Context.defined("java") || Context.defined("python") || Context
-			.defined("lua") || Context.defined("hl") || Context.defined("eval"); // TODO: have to add cs here, SPOD gets in the way at the moment
+		return Context.defined("neko") ||
+			Context.defined("php") ||
+			Context.defined("cpp") ||
+			Context.defined("java") ||
+			Context.defined("python") ||
+			Context.defined("lua") ||
+			Context.defined("hl") ||
+			Context.defined("eval"); // TODO: have to add cs here, SPOD gets in the way at the moment
 	}
 
 	public static function run(?pack) {

@@ -254,8 +254,12 @@ class Processor {
 
 	function removeEnumAbstractCast(field:ClassField) {
 		// remove `cast` from the expression of enum abstract values (#146)
-		if (field.type.match(CAbstract(_, _)) && hasMeta(field.meta, ":impl") && hasMeta(field.meta, ":enum") && field.get == RInline && field
-			.set == RNo && field.expr != null && field.expr.startsWith("cast ")) {
+		if (field.type.match(CAbstract(_, _)) &&
+			hasMeta(field.meta, ":impl") &&
+			hasMeta(field.meta, ":enum") &&
+			field.get == RInline &&
+			field.set == RNo &&
+			field.expr != null && field.expr.startsWith("cast ")) {
 			field.expr = field.expr.substr("cast ".length);
 		}
 	}
