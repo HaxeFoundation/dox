@@ -68,14 +68,19 @@ class Dox {
 			@doc("Set the theme name or path")
 			["-theme"] => function(name:String) cfg.loadTheme(owd, name),
 
-			@doc("Run dox using Haxe's macro interpreter (only with Haxe 4 and dox from source).")
-			["--interp"] => function() { /* handled above, just want the --help doc */ },
-
 			@doc("Defines key = value
-  Dox has some special defines:
-    -D version <version> : Version shown on the default theme's index.html
-    -D source-path <url> : The base URL used for 'View Source' buttons")
+  Available defines for the default theme:
+    -D version <version>  : Version shown on the default theme's index.html
+    -D source-path <url>  : The base URL used for 'View Source' buttons
+    -D themeColor <color> : Background color of header/footer - default value 0xFAFAFA
+    -D textColor <color>  : Text color of header/footer  - defaults to a contrasting color to the themeColor
+    -D website <url>      : URL to website for logo and footer
+    -D logo <path>        : Path to logo image for the header
+    -D description <text> : A paragraph at the landing page / toplevel package view")
 			["-D", "--define"] => function(key:String, value:String) cfg.defines[key] = value,
+
+			@doc("Run dox using Haxe's macro interpreter (requires dox from source)")
+			["--interp"] => function() { /* handled above, just want the --help doc */ },
 
 			@doc("Display this list of options")
 			["-help", "--help"] => function() help = true,
