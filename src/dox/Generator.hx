@@ -1,20 +1,18 @@
 package dox;
 
 import haxe.rtti.CType;
-
-using Lambda;
-using StringTools;
+import templo.Template;
 
 class Generator {
 	var api:Api;
 	var writer:Writer;
-	var tplNav:templo.Template;
-	var tplPackage:templo.Template;
-	var tplClass:templo.Template;
-	var tplEnum:templo.Template;
-	var tplTypedef:templo.Template;
-	var tplAbstract:templo.Template;
-	var tplError:templo.Template;
+	var tplNav:Template;
+	var tplPackage:Template;
+	var tplClass:Template;
+	var tplEnum:Template;
+	var tplTypedef:Template;
+	var tplAbstract:Template;
+	var tplError:Template;
 
 	public function new(api:Api, writer:Writer) {
 		this.api = api;

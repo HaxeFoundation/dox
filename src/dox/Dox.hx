@@ -1,6 +1,5 @@
 package dox;
 
-import haxe.io.Path;
 import sys.FileSystem;
 
 class Dox {
@@ -37,9 +36,6 @@ class Dox {
 		var cfg = new Config();
 		var help = false;
 
-		cfg.outputPath = "pages";
-		cfg.xmlPath = "xml";
-
 		// @formatter:off
 		var argHandler = hxargs.Args.generate([
 			["-r", "--document-root"] => function(path:String) throw 'The -r command is obsolete and can be omitted',
@@ -51,7 +47,7 @@ class Dox {
 			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
 
 			@doc("Add template directory")
-			["-t", "--template-path"] => function(path:String) loadTemplates(cfg, path),
+			["-t", "--template-path"] => function(path:String) cfg.loadTemplates(path),
 
 			@doc("Add a resource directory whose contents are copied to the output directory")
 			["-res", "--resource-path"] => function(dir:String) cfg.resourcePaths.push(dir),
@@ -72,31 +68,7 @@ class Dox {
 			["--no-markdown"] => function() cfg.useMarkdown = false,
 
 			@doc("Set the theme name or path")
-			["-theme"] => function(name:String) {
-				function setTheme(path:String) {
-					if (path.indexOf("/") == -1 && path.indexOf("\\") == -1) {
-						path = Path.normalize(Path.join([owd, "themes", path]));
-					}
-					var configPath = Path.join([path, "config.json"]);
-					var themeConfig = try
-						sys.io.File.getContent(configPath)
-					catch(e:Dynamic) {
-						Sys.println('Could not load $configPath');
-						Sys.exit(1);
-						null;
-					}
-					var theme:Theme = haxe.Json.parse(themeConfig);
-					if (theme.parentTheme != null) {
-						setTheme(theme.parentTheme);
-					}
-					var resourcesPath = Path.join([path, "resources"]);
-					if (FileSystem.exists(resourcesPath)) cfg.resourcePaths.push(resourcesPath);
-
-					loadTemplates(cfg, Path.join([path, "templates"]));
-					return theme;
-				}
-				cfg.theme = setTheme(name);
-			},
+			["-theme"] => function(name:String) cfg.loadTheme(owd, name),
 
 			@doc("Run dox using Haxe's macro interpreter (only with Haxe 4 and dox from source).")
 			["--interp"] => function() { /* handled above, just want the --help doc */ },
@@ -123,31 +95,13 @@ class Dox {
 			printHelp();
 		}
 
-		function sortArgs(args:Array<String>) {
-			var i = 0;
-			var args2 = [];
-			var hasThemeArgument = false;
-			while (i < args.length) {
-				if (args[i] == "-theme") {
-					hasThemeArgument = true;
-					args2.unshift(args[i + 1]);
-					args2.unshift(args[i]);
-					i += 2;
-				} else {
-					args2.push(args[i++]);
-				}
-			}
-
-			if (!hasThemeArgument) {
-				args2.unshift("default");
-				args2.unshift("-theme");
-			}
-			return args2;
-		}
-
-		argHandler.parse(sortArgs(args));
+		argHandler.parse(args);
 		if (help) {
 			printHelp();
+		}
+
+		if (cfg.theme == null) {
+			cfg.loadTheme(owd, "default");
 		}
 
 		var writer = new Writer(cfg);
@@ -174,7 +128,7 @@ class Dox {
 
 		if (FileSystem.isDirectory(cfg.xmlPath)) {
 			for (file in FileSystem.readDirectory(cfg.xmlPath)) {
-				if (!StringTools.endsWith(file, ".xml"))
+				if (!file.endsWith(".xml"))
 					continue;
 				parseFile(cfg.xmlPath + "/" + file);
 			}
@@ -211,18 +165,5 @@ class Dox {
 
 		var elapsed = Std.string(haxe.Timer.stamp() - tStart).substr(0, 5);
 		Sys.println('Done (${elapsed}s)');
-	}
-
-	static function loadTemplates(cfg:Config, path:String) {
-		cfg.addTemplatePath(path);
-		if (!FileSystem.exists(path)) {
-			return;
-		}
-		for (file in FileSystem.readDirectory(path)) {
-			var path = new Path(file);
-			if (path.ext == "mtt") {
-				cfg.loadTemplate(file);
-			}
-		}
 	}
 }

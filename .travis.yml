@@ -8,13 +8,8 @@ osx_image: xcode9.1
 dist: trusty
 
 haxe:
-  - "3.4.4"
+  - 3.4.7
   - development
-
-matrix:
-  allow_failures:
-    # Nothing should fail on development
-    # - haxe: development
 
 install:
   - haxelib install hxcpp

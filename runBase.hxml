@@ -5,3 +5,4 @@
 -cp src
 -main dox.Dox
 -dce no
+# --macro nullSafety("dox")

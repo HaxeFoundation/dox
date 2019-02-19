@@ -36,7 +36,7 @@ class MarkdownHandler {
 
 	@:access(dox.Infos.resolveType)
 	function processCode(path:String, source:String) {
-		source = StringTools.htmlEscape(source);
+		source = source.htmlEscape();
 
 		// this.field => #field
 		source = ~/this\.(\w+)/g.map(source, function(e) {
@@ -57,11 +57,12 @@ class MarkdownHandler {
 			var type2 = tmp2.pop();
 			var path2 = tmp2.join(".");
 
-			var possibleTypes = [
-				infos.resolveType(path, type),
-				infos.resolveType(type, field),
-				infos.resolveType(path, field),
-			];
+			var possibleTypes = [infos.resolveType(path, type)];
+			if (field != null) {
+				possibleTypes.push(infos.resolveType(type, field));
+				possibleTypes.push(infos.resolveType(path, field));
+			}
+
 			if (type2 != null)
 				possibleTypes.push(infos.resolveType(path, type2));
 			if (path2 != null)

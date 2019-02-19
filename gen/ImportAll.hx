@@ -1,16 +1,11 @@
 import haxe.macro.Context;
+import sys.FileSystem;
 
 // stolen from haxe/doc/ImportAll.hx
 class ImportAll {
 	static function isSysTarget() {
-		return Context.defined("neko") ||
-			Context.defined("php") ||
-			Context.defined("cpp") ||
-			Context.defined("java") ||
-			Context.defined("python") ||
-			Context.defined("lua") ||
-			Context.defined("hl") ||
-			Context.defined("eval"); // TODO: have to add cs here, SPOD gets in the way at the moment
+		return Context.defined("neko") || Context.defined("php") || Context.defined("cpp") || Context.defined("java") || Context.defined("python")
+			|| Context.defined("lua") || Context.defined("hl") || Context.defined("eval"); // TODO: have to add cs here, SPOD gets in the way at the moment
 	}
 
 	public static function run(?pack) {
@@ -73,18 +68,18 @@ class ImportAll {
 			if (p == "/")
 				continue;
 			// skip if we have a classpath to haxe
-			if (pack.length == 0 && sys.FileSystem.exists(p + "std"))
+			if (pack.length == 0 && FileSystem.exists(p + "std"))
 				continue;
 			var p = p + pack.split(".").join("/");
-			if (StringTools.endsWith(p, "/"))
+			if (p.endsWith("/"))
 				p = p.substr(0, -1);
-			if (!sys.FileSystem.exists(p) || !sys.FileSystem.isDirectory(p))
+			if (!FileSystem.exists(p) || !FileSystem.isDirectory(p))
 				continue;
-			for (file in sys.FileSystem.readDirectory(p)) {
+			for (file in FileSystem.readDirectory(p)) {
 				if (file == ".svn" || file == "_std" || file == "src")
 					continue;
 				var full = (pack == "") ? file : pack + "." + file;
-				if (StringTools.endsWith(file, ".hx") && file.substr(0, file.length - 3).indexOf(".") < 0) {
+				if (file.endsWith(".hx") && file.substr(0, file.length - 3).indexOf(".") < 0) {
 					var cl = full.substr(0, full.length - 3);
 					switch (cl) {
 						case "ImportAll", "neko.db.MacroManager":
@@ -115,7 +110,7 @@ class ImportAll {
 							continue; // temp hack (https://github.com/HaxeFoundation/haxe/issues/3321)
 					}
 					Context.getModule(cl);
-				} else if (sys.FileSystem.isDirectory(p + "/" + file))
+				} else if (FileSystem.isDirectory(p + "/" + file))
 					run(full);
 			}
 		}

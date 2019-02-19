@@ -3,9 +3,6 @@ package dox;
 import haxe.Json;
 import haxe.rtti.CType;
 
-using Lambda;
-using StringTools;
-
 /**
 	The Api class is the general interface to the Dox system which can be
 	accessed in templates from the global `api` instance.
@@ -27,12 +24,12 @@ class Api {
 		The current page name. For types this is the type name, for packages it
 		is `"package "` followed by the package name.
 	**/
-	public var currentPageName:String;
+	public var currentPageName:Null<String>;
 
 	/**
 		The current page relative url.
 	**/
-	public var currentPageUrl:String;
+	public var currentPageUrl:Null<String>;
 
 	/**
 	 * Expose Std for theme.
@@ -73,11 +70,11 @@ class Api {
 	**/
 	public function getTreeType(tree:TypeTree):String {
 		return switch (tree) {
-			case TPackage(_, path, _): "package";
-			case TClassdecl(t): "class";
-			case TEnumdecl(t): "enum";
-			case TTypedecl(t): "type";
-			case TAbstractdecl(t): "abstract";
+			case TPackage(_, _, _): "package";
+			case TClassdecl(_): "class";
+			case TEnumdecl(_): "enum";
+			case TTypedecl(_): "type";
+			case TAbstractdecl(_): "abstract";
 		}
 	}
 
@@ -112,7 +109,7 @@ class Api {
 		Returns the URL of `tree`, following the conventions of Dox.
 
 		For packages, the returned value is the slash-path of the package
-		followed by "/index.html".
+		followed by `"/index.html"`.
 
 		For types, `pathToUrl` is called with the type path.
 	**/
@@ -133,7 +130,7 @@ class Api {
 	**/
 	public function getTreeShortDesc(tree:TypeTree):String {
 		var infos:TypeInfos = switch (tree) {
-			case TPackage(_, full, _): null;
+			case TPackage(_, _, _): null;
 			case TClassdecl(t): t;
 			case TEnumdecl(t): t;
 			case TTypedecl(t): t;
@@ -148,14 +145,14 @@ class Api {
 		@todo: Document this properly.
 	**/
 	public function getShortDesc(infos:TypeInfos):String {
-		return infos == null ? "" : infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
+		return (infos == null || infos.doc == null) ? "" : infos.doc.substr(0, infos.doc.indexOf('</p>') + 4);
 	}
 
 	/**
 		Returns the first sentence of the documentation belonging to `infos`.
 	**/
 	public function getSentenceDesc(infos:TypeInfos):String {
-		if (infos == null) {
+		if (infos == null || infos.doc == null) {
 			return "";
 		}
 		var stripped = ~/<.+?>/g.replace(infos.doc, "").replace("\n", " ");
@@ -220,7 +217,8 @@ class Api {
 		Returns the last part of dot-path `path`.
 	**/
 	public function getPathName(path:Path):String {
-		return path.split(".").pop();
+		var name = path.split(".").pop();
+		return name == null ? "" : name;
 	}
 
 	/**
@@ -260,9 +258,9 @@ class Api {
 
 	/**
 		Returns the CSS class string corresponding to `platforms`. If
-		`platforms is empty, `null` is returned.
+		`platforms` is empty, `null` is returned.
 	**/
-	public function getPlatformClassString(platforms:List<String>):String {
+	public function getPlatformClassString(platforms:List<String>):Null<String> {
 		if (platforms.isEmpty())
 			return null;
 		return "platform " + platforms.map(function(p) {
@@ -279,7 +277,7 @@ class Api {
 
 	/**
 		Returns the value of `key` as defined by command line argument
-		`-D key value`. If no value is defined, null is returned.
+		`-D key value`. If no value is defined, `null` is returned.
 	**/
 	public function getValue(key:String):Null<String> {
 		return config.defines[key];
@@ -290,9 +288,13 @@ class Api {
 		`source-path` was defined from command line (`-D source-path url`) and
 		then appends the path of `type` to it.
 	**/
-	public function getSourceLink(type:TypeInfos) {
+	public function getSourceLink(type:TypeInfos):Null<String> {
+		var sourcePath = getValue("source-path");
+		if (sourcePath == null) {
+			return null;
+		}
 		var module = type.module != null ? type.module : type.path;
-		return haxe.io.Path.join([getValue("source-path"), module.replace(".", "/") + ".hx"]);
+		return haxe.io.Path.join([sourcePath, module.replace(".", "/") + ".hx"]);
 	}
 
 	/**

@@ -2,8 +2,8 @@ package dox;
 
 import haxe.zip.Entry;
 import haxe.io.Bytes;
-
-using StringTools;
+import sys.FileSystem;
+import sys.io.File;
 
 class Writer {
 	var config:Config;
@@ -13,8 +13,8 @@ class Writer {
 		this.config = config;
 		if (!config.outputPath.endsWith(".zip")) {
 			try {
-				if (!sys.FileSystem.exists(config.outputPath)) {
-					sys.FileSystem.createDirectory(config.outputPath);
+				if (!FileSystem.exists(config.outputPath)) {
+					FileSystem.createDirectory(config.outputPath);
 				}
 			} catch (e:Dynamic) {
 				Sys.println('Could not create output directory ${config.outputPath}');
@@ -28,32 +28,32 @@ class Writer {
 
 	public function saveContent(path:String, content:String) {
 		if (zipEntries == null) {
-			var path = haxe.io.Path.join([config.outputPath, path]);
-			var dir = new haxe.io.Path(path).dir;
+			var path = Path.join([config.outputPath, path]);
+			var dir = new Path(path).dir;
 			if (dir != null) {
-				sys.FileSystem.createDirectory(dir);
+				FileSystem.createDirectory(dir);
 			}
-			sys.io.File.saveContent(path, content);
+			File.saveContent(path, content);
 		} else {
-			makeEntry(path, Bytes.ofString(content));
+			zipEntries.push(makeEntry(path, Bytes.ofString(content)));
 		}
 	}
 
 	public function copyFrom(dir:String) {
 		function loop(rel) {
-			var dir = haxe.io.Path.join([dir, rel]);
-			for (file in sys.FileSystem.readDirectory(dir)) {
-				var path = haxe.io.Path.join([dir, file]);
-				if (sys.FileSystem.isDirectory(path)) {
-					var outDir = haxe.io.Path.join([config.outputPath, rel, file]);
-					if (zipEntries == null && !sys.FileSystem.exists(outDir))
-						sys.FileSystem.createDirectory(outDir);
-					loop(haxe.io.Path.join([rel, file]));
+			var dir = Path.join([dir, rel]);
+			for (file in FileSystem.readDirectory(dir)) {
+				var path = Path.join([dir, file]);
+				if (FileSystem.isDirectory(path)) {
+					var outDir = Path.join([config.outputPath, rel, file]);
+					if (zipEntries == null && !FileSystem.exists(outDir))
+						FileSystem.createDirectory(outDir);
+					loop(Path.join([rel, file]));
 				} else {
 					if (zipEntries != null) {
-						makeEntry(haxe.io.Path.join([rel, file]), sys.io.File.getBytes(path));
+						makeEntry(Path.join([rel, file]), File.getBytes(path));
 					} else {
-						sys.io.File.copy(path, haxe.io.Path.join([config.outputPath, rel, file]));
+						File.copy(path, Path.join([config.outputPath, rel, file]));
 					}
 				}
 			}
@@ -63,7 +63,7 @@ class Writer {
 
 	public function finalize() {
 		if (zipEntries != null) {
-			var output = sys.io.File.write(config.outputPath);
+			var output = File.write(config.outputPath);
 			var zip = new haxe.zip.Writer(output);
 			zip.write(zipEntries);
 		}
@@ -81,6 +81,6 @@ class Writer {
 			extraFields: null
 		};
 		haxe.zip.Tools.compress(entry, 1);
-		zipEntries.add(entry);
+		return entry;
 	}
 }

@@ -2,8 +2,6 @@ package dox;
 
 import haxe.rtti.CType;
 
-using Lambda;
-
 /**
 	Infos is a collection of information collected by Dox during processing.
 
@@ -28,7 +26,7 @@ class Infos {
 	/**
 		The number of generated types.
 	**/
-	public var numGeneratedTypes(default, set):Int;
+	public var numGeneratedTypes(default, set):Int = 0;
 
 	/**
 		The number of generated packages.
@@ -53,7 +51,6 @@ class Infos {
 		names = new Map();
 		numGeneratedPackages = 0;
 		numProcessedTypes = 0;
-		Reflect.setField(this, "numGeneratedTypes", 0);
 	}
 
 	/**
@@ -66,7 +63,7 @@ class Infos {
 		return meta.exists(function(m) return m.name == ":dox" && parameterName == null || m.params.has(parameterName));
 	}
 
-	function resolveType(path:String, type:String) {
+	function resolveType(path:String, type:String):Null<String> {
 		// direct match
 		if (typeMap.exists(type))
 			return type;
@@ -75,28 +72,26 @@ class Infos {
 		var parts = path.split('.');
 		parts.pop();
 		var pack = parts.join('.');
-		if (packages.exists(pack)) {
-			var types = packages.get(pack);
-			if (types.exists(type))
-				return types.get(type);
+		var types = packages[pack];
+		if (types != null && types[type] != null) {
+			return types[type];
 		}
 
 		// last ditch attempt, by name (first match wins)
-		if (names.exists(type)) {
-			return names.get(type);
-		}
-
-		return null;
+		return names[type];
 	}
 
 	@:allow(dox.Processor)
 	function addType(path:String, typeInfos:TypeInfos) {
 		var parts = path.split('.');
 		var name = parts.pop();
-		var pack = parts.join('.');
+		if (name == null)
+			return;
 
-		if (packages.exists(pack))
-			packages.get(pack).set(name, path);
+		var pack = parts.join('.');
+		var packMap = packages[pack];
+		if (packMap != null)
+			packMap.set(name, path);
 		else
 			packages.set(pack, [name => path]);
 

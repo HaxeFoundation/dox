@@ -2,9 +2,6 @@ package dox;
 
 import haxe.rtti.CType;
 
-using Lambda;
-using StringTools;
-
 class Processor {
 	public var infos:Infos;
 
@@ -224,16 +221,18 @@ class Processor {
 				t.fields.iter(processClassField.bind(t.path));
 				t.statics.iter(processClassField.bind(t.path));
 				if (t.superClass != null) {
-					if (!infos.subClasses.exists(t.superClass.path))
-						infos.subClasses.set(t.superClass.path, [t]);
+					var subClasses = infos.subClasses[t.superClass.path];
+					if (subClasses == null)
+						infos.subClasses[t.superClass.path] = [t];
 					else
-						infos.subClasses.get(t.superClass.path).push(t);
+						subClasses.push(t);
 				}
 				for (i in t.interfaces) {
-					if (!infos.implementors.exists(i.path))
-						infos.implementors.set(i.path, [t]);
+					var implementors = infos.implementors[i.path];
+					if (implementors == null)
+						infos.implementors[i.path] = [t];
 					else
-						infos.implementors.get(i.path).push(t);
+						implementors.push(t);
 				}
 				makeFilePathRelative(t);
 			case TAbstractdecl(t):
@@ -254,12 +253,8 @@ class Processor {
 
 	function removeEnumAbstractCast(field:ClassField) {
 		// remove `cast` from the expression of enum abstract values (#146)
-		if (field.type.match(CAbstract(_, _)) &&
-			hasMeta(field.meta, ":impl") &&
-			hasMeta(field.meta, ":enum") &&
-			field.get == RInline &&
-			field.set == RNo &&
-			field.expr != null && field.expr.startsWith("cast ")) {
+		if (field.type.match(CAbstract(_, _)) && hasMeta(field.meta, ":impl") && hasMeta(field.meta, ":enum") && field.get == RInline && field.set == RNo
+			&& field.expr != null && field.expr.startsWith("cast ")) {
 			field.expr = field.expr.substr("cast ".length);
 		}
 	}
@@ -273,9 +268,6 @@ class Processor {
 	}
 
 	function trimDoc(doc:String) {
-		if (doc == null)
-			return '';
-
 		// trim leading asterixes
 		while (doc.charAt(0) == '*')
 			doc = doc.substr(1);
@@ -304,10 +296,10 @@ class Processor {
 		return doc;
 	}
 
-	function processDoc(path:String, doc:String) {
-		doc = trimDoc(doc);
-		if (doc == '')
+	function processDoc(path:String, doc:Null<String>) {
+		if (doc == null)
 			return '<p></p>';
+		doc = trimDoc(doc);
 		var info = javadocHandler.parse(path, doc);
 		return tplDoc.execute({info: info});
 	}

@@ -19,7 +19,7 @@ class JavadocHandler {
 		doc = ereg.map(doc, function(e) {
 			var name = e.matched(1);
 			var doc = e.matched(2);
-			var value = null;
+			var value:Null<String> = null;
 
 			switch (name) {
 				case 'param', 'exception', 'throws', 'event':
@@ -31,7 +31,11 @@ class JavadocHandler {
 				default:
 			}
 			doc = trimDoc(doc);
-			tags.push({name: name, doc: config.useMarkdown ? markdown.markdownToHtml(path, doc) : doc, value: value});
+			tags.push({
+				name: name,
+				doc: config.useMarkdown ? markdown.markdownToHtml(path, doc) : doc,
+				value: value
+			});
 			return '';
 		});
 
@@ -92,5 +96,5 @@ typedef DocInfos = {
 typedef DocTag = {
 	name:String,
 	doc:String,
-	value:String
+	?value:String
 }
