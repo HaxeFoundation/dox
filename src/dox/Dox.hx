@@ -6,7 +6,7 @@ class Dox {
 	static public function main() {
 		var args = Sys.args();
 
-		#if !macro // doesn't get any more interp than this
+		#if (!macro && !eval) // doesn't get any more interp than this
 		function hasInterpArg()
 			return args.indexOf("--interp") != -1;
 

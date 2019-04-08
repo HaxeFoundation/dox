@@ -5,8 +5,7 @@
 			"name": "Interp",
 			"type": "haxe-eval",
 			"request": "launch",
-			"cwd": "${workspaceRoot}",
-			"hxml": "${workspaceRoot}/runInterp.hxml"
+			"args": ["runBase.hxml", "--interp"]
 		}
 	]
 }
