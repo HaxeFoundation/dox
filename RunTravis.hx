@@ -3,8 +3,8 @@ import sys.io.File;
 using StringTools;
 
 class RunTravis {
-	static var DryRun = false;
-	static var BaseHxml = "runBase.hxml";
+	static inline var DryRun = false;
+	static inline var BaseHxml = "runBase.hxml";
 	static var exitCode = 0;
 
 	static function command(commandLine:String) {
@@ -13,7 +13,9 @@ class RunTravis {
 
 		Sys.println(commandLine);
 		if (!DryRun) {
-			exitCode = Sys.command(cmd, args);
+			if (Sys.command(cmd, args) != 0) {
+				exitCode = 1;
+			}
 		}
 	}
 
