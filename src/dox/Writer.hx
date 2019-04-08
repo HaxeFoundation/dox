@@ -30,7 +30,7 @@ class Writer {
 		if (zipEntries == null) {
 			var path = Path.join([config.outputPath, path]);
 			var dir = new Path(path).dir;
-			if (dir != null) {
+			if (dir != null && !FileSystem.exists(dir)) {
 				FileSystem.createDirectory(dir);
 			}
 			File.saveContent(path, content);
