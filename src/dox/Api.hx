@@ -445,7 +445,7 @@ class Api {
 	}
 
 	private function sanitizePath(path:String) {
-		return ~/Index$/.replace(path, "$Index");
+		return ~/Index$/.replace(path, "$$Index");
 	}
 }
 
