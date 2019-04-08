@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
     - php
+    - php7.0-mbstring
 
 haxe:
   - 3.4.7

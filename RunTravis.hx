@@ -70,13 +70,11 @@ class RunTravis {
 		});
 		#end
 
-		#if false
 		target("PHP", function() {
 			var out = 'bin/php';
 			compile('-php $out');
 			run('php $out/index.php');
 		});
-		#end
 
 		target("Interp", function() {
 			// hack for 3.4.7
