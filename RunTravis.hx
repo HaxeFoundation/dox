@@ -68,6 +68,12 @@ class RunTravis {
 			compile('-python $out');
 			run('python3 $out');
 		});
+
+		target("JVM", function() {
+			var out = 'bin/jvm';
+			compile('-java $out -D jvm');
+			run('java -jar $out/Dox.jar');
+		});
 		#end
 
 		target("PHP", function() {
