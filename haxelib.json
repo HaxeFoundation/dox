@@ -6,6 +6,6 @@
 	"description": "Haxe documentation generator.",
 	"version": "1.2.0",
 	"releasenote": "Bug fixes and improvements. Binary only distribution.",
-	"contributors": ["dpeek", "Simn", "markknol", "Gama11"],
+	"contributors": ["dpeek", "Simn", "HaxeFoundation"],
 	"dependencies": {}
 }
