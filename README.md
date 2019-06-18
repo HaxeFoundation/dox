@@ -16,7 +16,7 @@ A Haxe documentation generator used by many popular projects such as:
 
 Install the library via [haxelib](http://lib.haxe.org/p/dox):
 ``` 
-haxelib git dox https://github.com/HaxeFoundation/dox
+haxelib install dox
 ```
 
 ### Usage

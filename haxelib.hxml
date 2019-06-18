@@ -1,1 +1,1 @@
--cmd zip bin/haxelib.zip -r run.n themes haxelib.json
+-cmd 7z a -i!run.n -i!themes -i!haxelib.json -i!README.md -i!LICENSE.md bin/haxelib.zip
