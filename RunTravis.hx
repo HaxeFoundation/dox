@@ -56,11 +56,12 @@ class RunTravis {
 			run('node $out');
 		});
 
-		target("CPP", function() {
+		// https://github.com/HaxeFoundation/dox/issues/256
+		/* target("CPP", function() {
 			var out = 'bin/cpp';
 			compile('-cpp $out -D HXCPP_SILENT');
 			run('./$out/Dox');
-		});
+		}); */
 
 		#if haxe4
 		target("Python", function() {
