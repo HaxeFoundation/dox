@@ -41,7 +41,9 @@ class RunTravis {
 		target("Neko", function() {
 			haxe("run.hxml");
 			haxe("gen-test.hxml");
+			#if !haxe4
 			haxe("pages.hxml");
+			#end
 		});
 
 		target("Java", function() {
@@ -61,7 +63,7 @@ class RunTravis {
 			var out = 'bin/cpp';
 			compile('-cpp $out -D HXCPP_SILENT');
 			run('./$out/Dox');
-		}); */
+		});*/
 
 		#if haxe4
 		target("Python", function() {
