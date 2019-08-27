@@ -48,10 +48,10 @@
 	::case::$$printLinkedPath(::args[0]::,::args[1]::)
 	::case::
 		::if args[0].length == 0::
-			$$printLinkedPath(::"Void"::,::[]::)&nbsp;&#8209;&gt;&nbsp;
+			$$printLinkedPath(::"Void"::,::[]::)&#8209;&gt;
 		::else::
 			::foreach arg args[0]::
-				$$printLinkedType(::arg.t::)&nbsp;&#8209;&gt;&nbsp;
+				$$printLinkedType(::arg.t::)&#8209;&gt;
 			::end::
 		::end::
 		$$printLinkedType(::args[1]::)
@@ -145,7 +145,7 @@
 
 	::case 2::
 		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>
-		$$printTypeParams(::field.params::) (
+		$$printTypeParams(::field.params::)(
 		::foreach arg args[0]::
 			<span style="white-space:nowrap">
 				::if arg.opt && (arg.value == null || arg.value == "null")::?::end::
