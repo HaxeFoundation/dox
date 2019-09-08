@@ -1,5 +1,5 @@
 {
-	"haxe.displayConfigurations": [
+	"haxe.configurations": [
 		["run.hxml"]
 	],
 	"files.associations": {
