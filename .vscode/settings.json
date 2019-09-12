@@ -6,6 +6,7 @@
 		"*.mtt": "xml"
 	},
 	"[haxe]": {
-		"editor.formatOnSave": true
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": true
 	}
 }
