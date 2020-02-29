@@ -50,6 +50,7 @@
 
 .nav-list a {
     overflow: hidden;
+    text-overflow: ellipsis;
     font-size: 14px;
     text-shadow: none !important;
 }
