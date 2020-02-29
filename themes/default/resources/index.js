@@ -116,11 +116,59 @@ $(document).ready(function () {
 		}
 		return true;
 	});
+	function getItems() {
+		return $("#search-results-list a").toArray();
+	}
 	$("#search").bind("keyup", function (e) {
-		if (e.keyCode == 27) { // escape
-			searchQuery("");
-			$("#search").val("")
-			$("#search").blur();
+		switch (e.keyCode) {
+			case 27: // escape
+				searchQuery("");
+				$("#search").val("")
+				$("#search").blur();
+				return false;
+
+			case 13: // enter
+				var items = getItems();
+				for (i = 0; i < items.length; i++) {
+					var item = $(items[i]);
+					if (item.hasClass("selected")) {
+						window.location = items[i].href;
+						break;
+					}
+				}
+				return false;
+		}
+	});
+	$("#search").bind("keydown", function (e) {
+		function mod(a, b) {
+			var r = a % b;
+			return r < 0 ? r + b : r;
+		}
+		function changeSelection(amount) {
+			var previousSelection = null;
+			var items = getItems();
+			for (i = 0; i < items.length; i++) {
+				var item = $(items[i]);
+				if (item.hasClass("selected")) {
+					item.removeClass("selected");
+					previousSelection = i;
+					break;
+				}
+			}
+			var newSelection = mod(previousSelection + amount, items.length);
+			$(items[newSelection]).addClass("selected");
+		}
+		switch (e.keyCode) {
+			case 38: // up
+				changeSelection(-1);
+				return false;
+
+			case 40: // down
+				changeSelection(1);
+				return false;
+
+			case 13: // enter
+				return false;
 		}
 	});
 
@@ -193,6 +241,9 @@ function searchQuery(query) {
 	}
 	listItems.sort(function (x, y) { return x.score - y.score; }); // put in order
 	$("#search-results-list").css("display", "block").html(listItems.map(function (x) { return x.item; }).join(""));
+	// pre-select the first item
+	$("#search-results-list a").removeClass("selected");
+	$("#search-results-list a:first").addClass("selected");
 }
 
 function match(textParts, query) {

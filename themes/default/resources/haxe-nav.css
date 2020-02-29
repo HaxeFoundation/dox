@@ -91,6 +91,11 @@ nav .navbar .nav>li>.dropdown-menu:after {
     border-bottom-color: #2c2722;
 }
 
+.nav>li>a.selected,
+.nav>li>a:hover {
+    background-color: #00000010;
+}
+
 /** MEDIA Q **/
 
 @media (max-width: 979px) {
