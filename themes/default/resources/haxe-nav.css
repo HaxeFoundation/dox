@@ -13,9 +13,10 @@ body nav * {
     line-height: 20px;
 }
 
-nav .navbar-inverse .navbar-inner {
+nav .navbar-inner {
     background: #13110f;
     border: 0;
+    border-radius: 0;
 }
 
 nav .navbar .nav {
