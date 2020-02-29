@@ -21,6 +21,12 @@ nav .navbar-inner {
 
 nav .navbar .nav {
     margin: 0;
+
+}
+
+.sidebar-nav {
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 nav .dropdown-menu {

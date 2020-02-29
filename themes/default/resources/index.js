@@ -157,6 +157,7 @@ $(document).ready(function () {
 			}
 			var newSelection = mod(previousSelection + amount, items.length);
 			$(items[newSelection]).addClass("selected");
+			items[newSelection].scrollIntoView(false);
 		}
 		switch (e.keyCode) {
 			case 38: // up
