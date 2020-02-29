@@ -2,9 +2,6 @@
 	"haxe.configurations": [
 		["run.hxml"]
 	],
-	"files.associations": {
-		"*.mtt": "xml"
-	},
 	"[haxe]": {
 		"editor.formatOnSave": true,
 		"editor.formatOnPaste": true
