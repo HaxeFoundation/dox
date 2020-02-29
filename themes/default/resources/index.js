@@ -108,11 +108,25 @@ $(document).ready(function(){
 	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
 	//setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
 
-	$("#search").on("input", function(e){
+	$("#search").on("input", function(e) {
 		searchQuery(e.target.value);
 	});
+	$(document).bind("keyup keydown", function(e) {
+		if(e.ctrlKey && e.keyCode == 80) { // ctrl + p
+			$("#search").focus();
+			return false;
+		}
+		return true;
+	});
+	$("#search").bind("keyup", function(e) {
+		if (e.keyCode == 27) { // escape
+			searchQuery("");
+			$("#search").val("")
+			$("#search").blur();
+		}
+	});
 	
-	$("#select-platform").selectpicker().on("change", function(e){
+	$("#select-platform").selectpicker().on("change", function(e) {
 		var value = $(":selected", this).val();
 		setPlatform(value);
 	});
