@@ -8,5 +8,9 @@
 	"[haxe]": {
 		"editor.formatOnSave": true,
 		"editor.formatOnPaste": true
+	},
+	"[css]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "HookyQR.beautify"
 	}
 }
