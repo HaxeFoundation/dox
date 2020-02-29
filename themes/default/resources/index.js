@@ -14,7 +14,7 @@ function toggleInherited(el) {
 	} else {
 		$("i", toggle).addClass("fa-arrow-circle-right").removeClass("fa-arrow-circle-down");
 	}
-    return false;
+	return false;
 }
 
 function toggleCollapsed(el) {
@@ -27,12 +27,12 @@ function toggleCollapsed(el) {
 		$(toggle).find("i").first().addClass("fa-arrow-circle-right").removeClass("fa-arrow-circle-down");
 	}
 	updateTreeState();
-    return false;
+	return false;
 }
 
-function updateTreeState(){
+function updateTreeState() {
 	var states = [];
-	$("#nav .expando").each(function(i, e){
+	$("#nav .expando").each(function (i, e) {
 		states.push($(e).hasClass("expanded") ? 1 : 0);
 	});
 	var treeState = JSON.stringify(states);
@@ -57,13 +57,12 @@ function setPlatform(platform) {
 	for (var i = 0; i < platforms.length; i++) {
 		var p = platforms[i];
 		if (platform == "sys") {
-			if (p != "flash" && p != "js")	{
+			if (p != "flash" && p != "js") {
 				styles += ".platform-" + p + " { display:inherit } ";
 			}
 		}
-		else
-		{
-			if (platform == "all" || p == platform)	{
+		else {
+			if (platform == "all" || p == platform) {
 				styles += ".platform-" + p + " { display:inherit } ";
 			}
 		}
@@ -81,22 +80,21 @@ function setVersion(version) {
 }
 */
 
-$(document).ready(function(){
+$(document).ready(function () {
 	$("#nav").html(navContent);
 	var treeState = readCookie("treeState");
 
-	$("#nav .expando").each(function(i, e){
+	$("#nav .expando").each(function (i, e) {
 		$("i", e).first().addClass("fa-arrow-circle-right").removeClass("fa-arrow-circle-down");
 	});
 
-	$(".treeLink").each(function() {
+	$(".treeLink").each(function () {
 		this.href = this.href.replace("::rootPath::", dox.rootPath);
 	});
 
-	if (treeState != null)
-	{
+	if (treeState != null) {
 		var states = JSON.parse(treeState);
-		$("#nav .expando").each(function(i, e){
+		$("#nav .expando").each(function (i, e) {
 			if (states[i]) {
 				$(e).addClass("expanded");
 				$("i", e).first().removeClass("fa-arrow-circle-right").addClass("fa-arrow-circle-down");
@@ -108,25 +106,25 @@ $(document).ready(function(){
 	setPlatform(readCookie("platform") == null ? "all" : readCookie("platform"));
 	//setVersion(readCookie("version") == null ? "3_0" : readCookie("version"));
 
-	$("#search").on("input", function(e) {
+	$("#search").on("input", function (e) {
 		searchQuery(e.target.value);
 	});
-	$(document).bind("keyup keydown", function(e) {
-		if(e.ctrlKey && e.keyCode == 80) { // ctrl + p
+	$(document).bind("keyup keydown", function (e) {
+		if (e.ctrlKey && e.keyCode == 80) { // ctrl + p
 			$("#search").focus();
 			return false;
 		}
 		return true;
 	});
-	$("#search").bind("keyup", function(e) {
+	$("#search").bind("keyup", function (e) {
 		if (e.keyCode == 27) { // escape
 			searchQuery("");
 			$("#search").val("")
 			$("#search").blur();
 		}
 	});
-	
-	$("#select-platform").selectpicker().on("change", function(e) {
+
+	$("#select-platform").selectpicker().on("change", function (e) {
 		var value = $(":selected", this).val();
 		setPlatform(value);
 	});
@@ -141,8 +139,8 @@ $(document).ready(function(){
 		var container = $(this).parent().next();
 		container.toggle();
 		$("i", this).removeClass("fa-arrow-circle-down")
-				.removeClass("fa-arrow-circle-right")
-				.addClass(container.is(":visible") ? "fa-arrow-circle-down" : "fa-arrow-circle-right");
+			.removeClass("fa-arrow-circle-right")
+			.addClass(container.is(":visible") ? "fa-arrow-circle-down" : "fa-arrow-circle-right");
 		return false;
 	});
 
@@ -153,9 +151,9 @@ $(document).ready(function(){
 function searchQuery(query) {
 	$("#searchForm").removeAttr("action");
 	query = query.replace(/[&<>"']/g, "");
-	if (!query || query.length<2) {
+	if (!query || query.length < 2) {
 		$("#nav").removeClass("searching");
-		$("#nav li").each(function(index, element){
+		$("#nav li").each(function (index, element) {
 			var e = $(element);
 			e.css("display", "");
 		});
@@ -167,8 +165,8 @@ function searchQuery(query) {
 	var listItems = [];
 	var bestMatch = 200;
 	$("#nav").addClass("searching");
-	$("#nav ul:first-child").css("display","none");
-	$("#nav li").each(function(index, element) {
+	$("#nav ul:first-child").css("display", "none");
+	$("#nav li").each(function (index, element) {
 		var e = $(element);
 		if (!e.hasClass("expando")) {
 			var content = e.attr("data_path");
@@ -177,7 +175,7 @@ function searchQuery(query) {
 				if (score < bestMatch) {
 					var url = dox.rootPath + e.attr("data_path").split(".").join("/") + ".html";
 					$("#searchForm").attr("action", url);
-					 // best match will be form action
+					// best match will be form action
 					bestMatch = score;
 				}
 
@@ -185,7 +183,7 @@ function searchQuery(query) {
 				// highlight matched parts
 				var elLinkContent = elLink.text().replace(new RegExp("(" + queryParts.join("|").split(".").join("|") + ")", "ig"), "<strong>$1</strong>");
 				var liStyle = (score == 0) ? ("font-weight:bold") : "";
-				listItems.push({score: score, item: "<li style='" + liStyle + "'><a href='"+elLink.attr("href")+"'>" + elLinkContent + "</a></li>"});
+				listItems.push({ score: score, item: "<li style='" + liStyle + "'><a href='" + elLink.attr("href") + "'>" + elLinkContent + "</a></li>" });
 			}
 		}
 	});
@@ -193,8 +191,8 @@ function searchQuery(query) {
 		// append to nav
 		$("#nav").parent().append("<ul id='search-results-list' class='nav nav-list'></ul>");
 	}
-	listItems.sort(function(x, y) { return x.score - y.score; }); // put in order
-	$("#search-results-list").css("display","block").html(listItems.map(function(x) { return x.item; }).join(""));
+	listItems.sort(function (x, y) { return x.score - y.score; }); // put in order
+	$("#search-results-list").css("display", "block").html(listItems.map(function (x) { return x.item; }).join(""));
 }
 
 function match(textParts, query) {
@@ -248,15 +246,15 @@ function searchMatch(text, queryParts) {
 
 function errorSearch() {
 	var errorURL = "";
-	if(!!window.location.pathname) {
+	if (!!window.location.pathname) {
 		errorURL = window.location.pathname;
-	}else if(!!window.location.href) {
+	} else if (!!window.location.href) {
 		errorURL = window.location.href;
 	}
-	if(!!errorURL) {
+	if (!!errorURL) {
 		var searchTerm = errorURL.split("/").pop();
-		if(searchTerm.indexOf(".html") > -1) { searchTerm = searchTerm.split(".html").join(""); }
-		if(!!searchTerm) {
+		if (searchTerm.indexOf(".html") > -1) { searchTerm = searchTerm.split(".html").join(""); }
+		if (!!searchTerm) {
 			// update filter with search term
 			$("#search").val(searchTerm);
 			searchQuery(searchTerm);

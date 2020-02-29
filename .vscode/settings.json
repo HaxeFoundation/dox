@@ -12,5 +12,9 @@
 	"[css]": {
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "HookyQR.beautify"
+	},
+	"[javascript]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "vscode.typescript-language-features"
 	}
 }
