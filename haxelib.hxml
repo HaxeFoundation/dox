@@ -1,1 +1,1 @@
--cmd 7z a -i!run.n -i!themes -i!haxelib.json -i!README.md -i!LICENSE.md bin/haxelib.zip
+-cmd 7z a -i!run.n -i!themes -i!haxelib.json -i!README.md -i!LICENSE.md -i!CHANGELOG.md bin/haxelib.zip
