@@ -116,7 +116,7 @@ class Processor {
 			var show = Infos.hasDoxMetadata(cf.meta, "show");
 			var compilerGenerated = cf.meta.exists(function(struct) return struct.name == ":compilerGenerated");
 
-			return (cf.isPublic && !hide && !compilerGenerated) || show;
+			return ((cf.isPublic || config.includePrivate) && !hide && !compilerGenerated) || show;
 		});
 	}
 
@@ -310,7 +310,7 @@ class Processor {
 		if (Infos.hasDoxMetadata(type.meta, "hide"))
 			return true;
 		if (type.isPrivate)
-			return true;
+			return !config.includePrivate;
 		return isPathFiltered(type.path);
 	}
 

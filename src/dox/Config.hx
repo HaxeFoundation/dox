@@ -10,6 +10,7 @@ class Config {
 	public var rootPath:String;
 	public var toplevelPackage:String;
 	public var useMarkdown:Bool;
+	public var includePrivate:Bool;
 	public var date:Date;
 	public var outputPath(default, set):String = "pages";
 	public var xmlPath(default, set):String = "xml";
@@ -34,6 +35,7 @@ class Config {
 		resourcePaths = [];
 		toplevelPackage = "";
 		useMarkdown = true;
+		includePrivate = false;
 		defines = new Map();
 		pathFilters = new GenericStack<Filter>();
 		templatePaths = new GenericStack<String>();
