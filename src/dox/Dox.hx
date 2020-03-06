@@ -65,8 +65,8 @@ class Dox {
 			@doc("Disable markdown rendering")
 			["--no-markdown"] => function() cfg.useMarkdown = false,
 
-			@doc("Show private fields")
-			["--private"] => function() cfg.showPrivate = true,
+			@doc("Include private fields and types")
+			["--include-private"] => function() cfg.showPrivate = true,
 
 			@doc("Set the theme name or path")
 			["-theme"] => function(name:String) cfg.loadTheme(owd, name),
