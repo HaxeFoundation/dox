@@ -1,5 +1,6 @@
-language: haxe
-
+language: node_js
+node_js:
+  - "10"
 dist: xenial
 
 addons:
@@ -8,22 +9,15 @@ addons:
     - php
     - php7.0-mbstring
 
-haxe:
-  - 3.4.7
-  - development
+env:
+  - HAXE_VERSION=haxerc
+  - HAXE_VERSION=nightly
 
 install:
-  - haxelib install hxjava
-  - haxelib install hxnodejs
-  - haxelib install hxcpp
-  - haxelib install hxcs
-  - haxelib install hxargs
-  - haxelib git hxparse https://github.com/Simn/hxparse
-  - haxelib git hxtemplo https://github.com/Simn/hxtemplo
-  - haxelib git markdown https://github.com/dpeek/haxe-markdown
-  - haxelib dev dox .
-  - haxelib list
+  - npm install
+  - if [[ "$HAXE_VERSION" == "nightly" ]]; then npx lix install haxe nightly; fi
+  - npx lix dev dox .
+  - npx haxelib list
 
 script:
-  - haxe --run RunTravis
-
+  - npx haxe --run RunTravis

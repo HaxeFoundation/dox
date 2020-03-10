@@ -1,4 +1,4 @@
--cmd haxe gen-test.hxml
--cmd haxe pages.hxml
+-cmd npx haxe gen-test.hxml
+-cmd npx haxe pages.hxml
 -cmd cd bin/pages
 -cmd nekotools server

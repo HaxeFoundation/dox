@@ -1,7 +1,3 @@
-import sys.io.File;
-
-using StringTools;
-
 class RunTravis {
 	static inline var DryRun = false;
 	static inline var BaseHxml = "runBase.hxml";
@@ -20,7 +16,7 @@ class RunTravis {
 	}
 
 	static function haxe(cmd:String) {
-		command('haxe $cmd');
+		command('npx haxe $cmd');
 	}
 
 	static function compile(args:String) {
@@ -41,9 +37,6 @@ class RunTravis {
 		target("Neko", function() {
 			haxe("run.hxml");
 			haxe("gen-test.hxml");
-			#if !haxe4
-			haxe("pages.hxml");
-			#end
 		});
 
 		target("Java", function() {
@@ -64,7 +57,6 @@ class RunTravis {
 			run('./$out/Dox');
 		});
 
-		#if haxe4
 		target("Python", function() {
 			var out = 'bin/dox.py';
 			compile('-python $out');
@@ -76,7 +68,6 @@ class RunTravis {
 			compile('-java $out -D jvm');
 			run('java -jar $out/Dox.jar');
 		});
-		#end
 
 		target("PHP", function() {
 			var out = 'bin/php';
@@ -85,9 +76,7 @@ class RunTravis {
 		});
 
 		target("Interp", function() {
-			// hack for 3.4.7
-			File.saveContent(BaseHxml, File.getContent(BaseHxml).replace("-main dox.Dox", ""));
-			run('haxe $BaseHxml --run dox.Dox');
+			haxe('$BaseHxml --run dox.Dox');
 		});
 
 		Sys.exit(exitCode);

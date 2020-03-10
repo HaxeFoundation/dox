@@ -1,0 +1,3 @@
+# @install: lix --silent download "haxelib:/hxparse#4.0.1" into hxparse/4.0.1/haxelib
+-cp ${HAXE_LIBCACHE}/hxparse/4.0.1/haxelib/src
+-D hxparse=4.0.1
