@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": ["documentation"],
 	"description": "Haxe documentation generator.",
-	"version": "1.2.0",
-	"releasenote": "Major improvements and bug fixes.",
+	"version": "1.3.0",
+	"releasenote": "Keyboard shortcuts for the filter textbox, --include-private argument and theme fixes.",
 	"contributors": ["HaxeFoundation", "dpeek", "Simn"],
 	"dependencies": {}
 }
