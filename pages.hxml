@@ -1,1 +1,1 @@
--cmd npx haxelib run dox -o bin/pages -i bin/xml
+-cmd npx lix run dox -o bin/pages -i bin/xml
