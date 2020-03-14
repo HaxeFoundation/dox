@@ -76,7 +76,7 @@ class RunTravis {
 		});
 
 		target("Interp", function() {
-			haxe('$BaseHxml --run dox.Dox');
+			run('npx haxe $BaseHxml --run dox.Dox');
 		});
 
 		Sys.exit(exitCode);
