@@ -16,7 +16,6 @@ env:
 install:
   - npm install
   - if [[ "$HAXE_VERSION" == "nightly" ]]; then npx lix install haxe nightly; fi
-  - npx lix dev dox .
   - npx haxelib list
 
 script:
