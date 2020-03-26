@@ -171,6 +171,42 @@
 
 <macro name="printClassBody(type)">
 	::set showSection = false::
+	::foreach field type.statics::
+		::if !api.isMethod(field)::
+			::eval showSection = true::
+		::end::
+	::end::
+	::if showSection::
+		<h3 class="section">Static variables</h3>
+		<div class="fields">
+			::foreach field type.statics::
+				::set isStatic = true::
+				::if !api.isMethod(field)::
+					::use "class_field.mtt"::::end::
+				::end::
+			::end::
+		</div>
+	::end::
+	
+	::set showSection = false::
+	::foreach field type.statics::
+		::if api.isMethod(field)::
+			::eval showSection = true::
+		::end::
+	::end::
+	::if showSection::
+		<h3 class="section">Static methods</h3>
+		<div class="fields">
+			::foreach field type.statics::
+				::set isStatic = true::
+				::if api.isMethod(field)::
+					::use "class_field.mtt"::::end::
+				::end::
+			::end::
+		</div>
+	::end::
+
+	::set showSection = false::
 	::foreach field type.fields::
 		::if field.name == "new" && api.isMethod(field)::
 			::eval showSection = true::
@@ -218,42 +254,6 @@
 			::foreach field type.fields::
 				::set isStatic = false::
 				::if field.name != "new" && api.isMethod(field)::
-					::use "class_field.mtt"::::end::
-				::end::
-			::end::
-		</div>
-	::end::
-	
-	::set showSection = false::
-	::foreach field type.statics::
-		::if !api.isMethod(field)::
-			::eval showSection = true::
-		::end::
-	::end::
-	::if showSection::
-		<h3 class="section">Static variables</h3>
-		<div class="fields">
-			::foreach field type.statics::
-				::set isStatic = true::
-				::if !api.isMethod(field)::
-					::use "class_field.mtt"::::end::
-				::end::
-			::end::
-		</div>
-	::end::
-	
-	::set showSection = false::
-	::foreach field type.statics::
-		::if api.isMethod(field)::
-			::eval showSection = true::
-		::end::
-	::end::
-	::if showSection::
-		<h3 class="section">Static methods</h3>
-		<div class="fields">
-			::foreach field type.statics::
-				::set isStatic = true::
-				::if api.isMethod(field)::
 					::use "class_field.mtt"::::end::
 				::end::
 			::end::

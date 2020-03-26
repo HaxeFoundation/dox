@@ -1,3 +1,7 @@
+### 1.3.1 (to be released)
+
+- changed the order in which fields are shown (first static, then instance fields)
+
 ### 1.3.0 (March 11, 2020)
 
 - added keyboard shortcuts to the filter textbox (ctrl+p, up, down, enter, escape)
