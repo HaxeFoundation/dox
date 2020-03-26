@@ -1,6 +1,6 @@
 ::use 'main.mtt'::
 	<div class="page-header">
-		<span ::cond api.isDefined("source-path"):: class="viewsource">
+		<span ::cond api.hasSourceLink():: class="viewsource">
 			<a href="::api.getSourceLink(type)::" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a>
 		</span>
 

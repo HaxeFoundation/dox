@@ -298,6 +298,13 @@ class Api {
 	}
 
 	/**
+		Whether the "View Source" button should be shown.
+	**/
+	public function hasSourceLink():Bool {
+		return isDefined("source-path");
+	}
+
+	/**
 		Returns additional field information which is not available on the
 		`ClassField` type. See `FieldInfo` for more information.
 	**/
