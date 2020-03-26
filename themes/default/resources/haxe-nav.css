@@ -24,11 +24,6 @@ nav .navbar .nav {
 
 }
 
-.sidebar-nav {
-    max-height: 70vh;
-    overflow-y: auto;
-}
-
 nav .dropdown-menu {
     background: #2c2722;
     font-size: 14px;
