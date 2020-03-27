@@ -6,13 +6,13 @@ jobs:
   build:
     strategy:
       matrix:
-        HAXE_VERSION: [nightly, haxerc]
+        haxe-version: [nightly, haxerc]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1.1.0
     - run: npm install
-    - if: env.HAXE_VERSION == 'nightly'
+    - if: matrix.haxe-version == 'nightly'
       run: npx lix install haxe nightly
     - run: npx haxe --run RunCI
