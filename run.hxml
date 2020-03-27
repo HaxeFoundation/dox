@@ -1,2 +1,10 @@
 runBase.hxml
+
+--each
+
 -neko run.n
+
+--next
+
+-lib hxnodejs
+-js run.js

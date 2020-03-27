@@ -5,3 +5,4 @@ bin/pages/
 bin/
 dump/
 node_modules/
+run.js

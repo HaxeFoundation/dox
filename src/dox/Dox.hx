@@ -6,6 +6,19 @@ class Dox {
 	static function main() {
 		var args = Sys.args();
 
+		#if neko
+		// use the faster JS version if possible
+		try {
+			var process = new sys.io.Process("node", ["-v"]);
+			var nodeExists = process.exitCode() == 0;
+			process.close();
+			if (nodeExists && FileSystem.exists("run.js")) {
+				var exitCode = Sys.command("node", ["run.js"].concat(args));
+				Sys.exit(exitCode);
+			}
+		} catch (e:Any) {}
+		#end
+
 		var owd = Sys.getCwd();
 		owd = Path.addTrailingSlash(owd);
 
