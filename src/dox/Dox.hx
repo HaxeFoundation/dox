@@ -6,20 +6,6 @@ class Dox {
 	static function main() {
 		var args = Sys.args();
 
-		#if (!macro && !eval) // doesn't get any more interp than this
-		function hasInterpArg()
-			return args.indexOf("--interp") != -1;
-
-		if (hasInterpArg()) {
-			while (hasInterpArg()) {
-				args.remove("--interp");
-			}
-			var haxeArgs = ["runBase.hxml", "--run", "dox.Dox"].concat(args);
-			Sys.println("haxe " + haxeArgs.join(" "));
-			Sys.exit(Sys.command("haxe", haxeArgs));
-		}
-		#end
-
 		var owd = Sys.getCwd();
 		owd = Path.addTrailingSlash(owd);
 
@@ -81,9 +67,6 @@ class Dox {
     -D logo <path>        : Path to logo image for the header
     -D description <text> : A paragraph at the landing page / toplevel package view")
 			["-D", "--define"] => function(key:String, value:String) cfg.defines[key] = value,
-
-			@doc("Run dox using Haxe's macro interpreter (requires dox from source)")
-			["--interp"] => function() { /* handled above, just want the --help doc */ },
 
 			@doc("Display this list of options")
 			["-help", "--help"] => function() help = true,
