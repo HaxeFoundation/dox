@@ -32,7 +32,7 @@
 				</select>
 			</div>
 		</div>
-			<div class="well sidebar-nav">
+			<div class="well sidebar-nav" id="explorer">
 				<div id="nav"></div>
 			</div>
 		</div>
