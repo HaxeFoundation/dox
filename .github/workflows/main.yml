@@ -1,0 +1,17 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        HAXE_VERSION: [nightly, haxerc]
+      fail-fast: true
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1.1.0
+    - run: npm install
+    - run: if [[ "$HAXE_VERSION" == "nightly" ]]; then npx lix install haxe nightly; fi
+    - run: npx haxe --run RunCI

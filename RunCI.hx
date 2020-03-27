@@ -1,4 +1,4 @@
-class RunTravis {
+class RunCI {
 	static inline var DryRun = false;
 	static inline var BaseHxml = "runBase.hxml";
 	static var exitCode = 0;

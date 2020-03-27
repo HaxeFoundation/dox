@@ -1,5 +1,5 @@
 # Dox
-[![Build Status](https://travis-ci.org/HaxeFoundation/dox.svg?branch=master)](https://travis-ci.org/HaxeFoundation/dox)
+![CI](https://github.com/HaxeFoundation/dox/workflows/CI/badge.svg)
 
 A Haxe documentation generator used by many popular projects such as:
 

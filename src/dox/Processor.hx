@@ -30,7 +30,7 @@ class Processor {
 			var found = false;
 			function filter(toplevelFilter:String, tree) {
 				switch (tree) {
-					case TPackage(name, full, subs):
+					case TPackage(name, _, subs):
 						var split = toplevelFilter.split(".");
 						if (split[0] != name) {
 							return;
@@ -55,7 +55,9 @@ class Processor {
 				case TPackage(name, full, subs):
 					var acc = [];
 					subs.iter(filter.bind(acc));
-					if (acc.length > 0 || !isPathFiltered(full)) root.push(TPackage(name, full, acc));
+					if (acc.length > 0 || !isPathFiltered(full)) {
+						root.push(TPackage(name, full, acc));
+					}
 				case TClassdecl(t):
 					t.fields = filterFields(t.fields);
 					t.statics = filterFields(t.statics);
@@ -72,7 +74,8 @@ class Processor {
 				case TTypedecl(t):
 					if (!isTypeFiltered(t)) {
 						switch (t.type) {
-							case CAnonymous(fields): t.type = CAnonymous(filterFields(fields));
+							case CAnonymous(fields):
+								t.type = CAnonymous(filterFields(fields));
 							default:
 						}
 						root.push(tree);
