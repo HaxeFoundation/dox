@@ -60,7 +60,7 @@ class Infos {
 		equal to `parameterName`.
 	**/
 	static public function hasDoxMetadata(meta:MetaData, ?parameterName:String):Bool {
-		return meta.exists(function(m) return m.name == ":dox" && parameterName == null || m.params.has(parameterName));
+		return meta.exists(m -> m.name == ":dox" && parameterName == null || m.params.has(parameterName));
 	}
 
 	function resolveType(path:String, type:String):Null<String> {

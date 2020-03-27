@@ -83,8 +83,8 @@ class Processor {
 					}
 				case TAbstractdecl(t):
 					if (t.impl != null) {
-						var fields = new Container<ClassField>();
-						var statics = new Container<ClassField>();
+						var fields = new Array<ClassField>();
+						var statics = new Array<ClassField>();
 						t.impl.statics.iter(function(cf) {
 							if (cf.meta.exists(function(m) return m.name == ":impl")) {
 								if (cf.name == "_new")
@@ -113,17 +113,17 @@ class Processor {
 		return newRoot;
 	}
 
-	function filterFields(fields:Container<ClassField>) {
+	function filterFields(fields:Array<ClassField>) {
 		return fields.filter(function(cf) {
 			var hide = Infos.hasDoxMetadata(cf.meta, "hide");
 			var show = Infos.hasDoxMetadata(cf.meta, "show");
-			var compilerGenerated = cf.meta.exists(function(struct) return struct.name == ":compilerGenerated");
+			var compilerGenerated = cf.meta.exists(struct -> struct.name == ":compilerGenerated");
 
 			return ((cf.isPublic || config.includePrivate) && !hide && !compilerGenerated) || show;
 		});
 	}
 
-	function filterEnumFields(fields:Container<EnumField>) {
+	function filterEnumFields(fields:Array<EnumField>) {
 		return fields.filter(function(cf) {
 			return !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
 		});
@@ -160,7 +160,7 @@ class Processor {
 					cf1.name < cf2.name ? -1 : 1;
 			}
 
-		inline function sortFields(fields:Container<ClassField>) {
+		inline function sortFields(fields:Array<ClassField>) {
 			return fields.sort(compareFields);
 		}
 
@@ -170,12 +170,12 @@ class Processor {
 					subs.sort(compare);
 					subs.iter(sort);
 				case TClassdecl(c) | TAbstractdecl({impl: c}) if (c != null):
-					c.fields = sortFields(c.fields);
-					c.statics = sortFields(c.statics);
+					sortFields(c.fields);
+					sortFields(c.statics);
 				case TTypedecl(t):
 					switch (t.type) {
 						case CAnonymous(fields):
-							fields = sortFields(fields);
+							sortFields(fields);
 							t.type = CAnonymous(fields);
 						default:
 					}
@@ -263,7 +263,7 @@ class Processor {
 	}
 
 	function hasMeta(meta:MetaData, name:String) {
-		return meta.exists(function(meta) return meta.name == name);
+		return meta.exists(meta -> meta.name == name);
 	}
 
 	function processEnumField(path:String, field:EnumField) {

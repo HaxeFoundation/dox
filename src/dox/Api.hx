@@ -181,14 +181,14 @@ class Api {
 		Checks if `t` corresponds to a core type.
 	**/
 	public function isCoreType(t:TypeInfos):Bool {
-		return t.meta.exists(function(m) return m.name == ":coreType");
+		return t.meta.exists(m -> m.name == ":coreType");
 	}
 
 	/**
 		Checks if `t` corresponds to an enum abstract.
 	**/
 	public function isEnumAbstract(t:TypeInfos):Bool {
-		return t.meta.exists(function(m) return m.name == ":enum");
+		return t.meta.exists(m -> m.name == ":enum");
 	}
 
 	/**
@@ -260,7 +260,7 @@ class Api {
 		in the original definition.
 	**/
 	public function isAbstractImplementationField(field:ClassField):Bool {
-		return field.meta.exists(function(m) return m.name == ":impl");
+		return field.meta.exists(m -> m.name == ":impl");
 	}
 
 	/**
@@ -270,9 +270,7 @@ class Api {
 	public function getPlatformClassString(platforms:List<String>):Null<String> {
 		if (platforms.isEmpty())
 			return null;
-		return "platform " + platforms.map(function(p) {
-			return "platform-" + p;
-		}).join(" ");
+		return "platform " + platforms.map(p -> "platform-" + p).join(" ");
 	}
 
 	/**
@@ -403,7 +401,7 @@ class Api {
 			}
 		}
 		loop(c);
-		allFields.sort(function(f1, f2) return Reflect.compare(f1.field.name, f2.field.name));
+		allFields.sort((f1, f2) -> Reflect.compare(f1.field.name, f2.field.name));
 		return allFields;
 	}
 
@@ -453,10 +451,10 @@ class Api {
 				addFieldTo(f, inheritedFields.fields);
 		}
 		for (fields in inheritedFields.methods) {
-			fields.sort(function(f1, f2) return Reflect.compare(f1.name, f2.name));
+			fields.sort((f1, f2) -> Reflect.compare(f1.name, f2.name));
 		}
 		for (fields in inheritedFields.fields) {
-			fields.sort(function(f1, f2) return Reflect.compare(f1.name, f2.name));
+			fields.sort((f1, f2) -> Reflect.compare(f1.name, f2.name));
 		}
 
 		return inheritedFields;
@@ -501,7 +499,7 @@ enum FieldKind {
 	/**
 		Field is a method with arguments `args` and return type `ret`.
 	**/
-	Method(args:Container<FunctionArgument>, ret:CType);
+	Method(args:Array<FunctionArgument>, ret:CType);
 }
 
 /**
