@@ -1,3 +1,5 @@
+package dox;
+
 /**
  * <p>A node in the entity hierarchy, and a collection of components.</p>
  *
@@ -25,8 +27,6 @@
  * ```
  */
 class TestClass {
-	static function main() {}
-
 	/**
 		The value of something.
 

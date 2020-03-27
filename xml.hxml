@@ -1,6 +1,6 @@
 --no-output
 -cp test
--main TestClass
+dox
 -D doc-gen
 
 --each
