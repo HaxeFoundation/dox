@@ -88,7 +88,7 @@ class Dox {
 		]);
 		// @formatter:on
 		function printHelp() {
-			Sys.println("Dox 1.3.0");
+			Sys.println("Dox 1.4.0");
 			Sys.println(argHandler.getDoc());
 			Sys.exit(0);
 		}

@@ -1,8 +1,13 @@
-### 1.4.0 (to be released)
+### 1.4.0 (March 27, 2020)
 
 - added support for using dox as an API via `dox.Dox.run()` and `-lib dox`
+- added support for automatically using a much faster JS version when `node` is available
 - changed the order in which fields are shown (first static, then instance fields)
+- changed metadata rendering to only show specific ones (instead of hiding specific ones)
+- improved how enum abstracts as well as final and optional fields are rendered
+- improved various things in the default theme
 - fixed last argument of abstract methods being removed instead of implicit `this` ([#266](https://github.com/HaxeFoundation/dox/pull/266))
+- removed support for `--interp`
 
 ### 1.3.0 (March 11, 2020)
 
