@@ -8,14 +8,6 @@
 				"kind": "build",
 				"isDefault": true
 			}
-		},
-		{
-			"type": "hxml",
-			"file": "test.hxml",
-			"group": {
-				"kind": "test",
-				"isDefault": true
-			}
 		}
 	]
 }
