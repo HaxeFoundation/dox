@@ -19,9 +19,7 @@
 
 	<div class="body">
 		<div class="doc doc-main" ::cond type.doc != null::>
-			<div class="indent">
-				::raw type.doc::
-			</div>
+			::raw type.doc::
 		</div>
 
 		::set showSection = false::
