@@ -185,7 +185,7 @@ class Api {
 	}
 
 	/**
-		Checks if `t` corresponds to a core type.
+		Checks if `t` corresponds to an enum abstract.
 	**/
 	public function isEnumAbstract(t:TypeInfos):Bool {
 		return t.meta.exists(function(m) return m.name == ":enum");
@@ -318,7 +318,9 @@ class Api {
 	public function getFieldInfo(cf:ClassField):FieldInfo {
 		var modifiers = {
 			isInline: false,
-			isDynamic: false
+			isDynamic: false,
+			isOptional: false,
+			isFinal: false
 		}
 		var isMethod = false;
 		var get = "default";
@@ -347,6 +349,8 @@ class Api {
 				modifiers.isInline = true;
 			default:
 		}
+		modifiers.isOptional = cf.meta.exists(m -> m.name == ":optional");
+		modifiers.isFinal = cf.isFinal;
 		function varOrProperty() {
 			return if (get == "default" && set == "default") {
 				Variable;
@@ -504,15 +508,10 @@ enum FieldKind {
 	The modifiers of a field.
 **/
 typedef FieldModifiers = {
-	/**
-		`true` if the field is `inline`, `false` otherwise
-	**/
 	isInline:Bool,
-
-	/**
-		`true` if the field is `dynamic`, `false` otherwise
-	**/
 	isDynamic:Bool,
+	isOptional:Bool,
+	isFinal:Bool
 }
 
 typedef MemberField = {

@@ -134,6 +134,12 @@ class TestClass {
 		Should be in the "variables" section as `callback:String -> Int -> Void`.
 	**/
 	public var callback:String->Int->Void;
+
+	extern public function externFunction();
+
+	public final finalVar = "";
+
+	public final function finalFunction() {}
 }
 
 /**
@@ -148,6 +154,8 @@ typedef TestTypedef = {
 	var myField:String;
 
 	@:dox(hide) var hiddenField:Bool;
+
+	var ?optionalField:String;
 }
 
 /**

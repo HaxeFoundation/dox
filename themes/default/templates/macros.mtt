@@ -123,6 +123,14 @@
 
 	::set fieldInfo = api.getFieldInfo(field)::
 
+	::if fieldInfo.modifiers.isOptional::
+		<span class="label label-extern">optional</span>
+	::end::
+
+	::if fieldInfo.modifiers.isFinal::
+		<span class="label label-final">final</span>
+	::end::
+
 	::if fieldInfo.modifiers.isDynamic::
 		<span class="label label-dynamic">dynamic</span>
 	::end::
