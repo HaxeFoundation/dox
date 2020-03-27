@@ -24,7 +24,6 @@
  * 	var foo = bar;
  * ```
  */
-
 class TestClass {
 	static function main() {}
 
@@ -147,6 +146,7 @@ typedef TestTypedef = {
 		And a Second Line `"type":"ItemDetail"`
 	**/
 	var myField:String;
+
 	@:dox(hide) var hiddenField:Bool;
 }
 
@@ -184,6 +184,13 @@ abstract TestEnumAbstract(Int) {
 		Expression shouldn't have a `cast`.
 	**/
 	var value = 0;
+}
+
+abstract TestAbstract(Int) {
+	/**
+		Method should have `a:Int` and `b:String` arguments, but the implicit `this` argument shouldn't show up.
+	**/
+	public function foo(a:Int, b:String) {}
 }
 
 /**
@@ -265,6 +272,7 @@ class TestMetaData {
 	@:deprecated("Use `red` instead")
 	@:metaWithoutParams
 	public static var deprecatedRed = 0xFF0000;
+
 	@:meta
 	@:to
 	public static var red = 12;
@@ -275,6 +283,7 @@ class TestMetaData {
 	This should not be visible on the index page.
 **/
 class Index {}
+
 @:generic class GenericClass<T> {}
 class ChildOfGeneric extends GenericClass<String> {}
 

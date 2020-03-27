@@ -89,7 +89,7 @@ class Processor {
 								else
 									switch (cf.type) {
 										case CFunction(args, _):
-											args.pop();
+											args.shift();
 										case _:
 									}
 								fields.push(cf);

@@ -1,6 +1,7 @@
 ### 1.3.1 (to be released)
 
 - changed the order in which fields are shown (first static, then instance fields)
+- fixed last argument of abstract methods being removed instead of implicit `this` ([#266](https://github.com/HaxeFoundation/dox/pull/266))
 
 ### 1.3.0 (March 11, 2020)
 
