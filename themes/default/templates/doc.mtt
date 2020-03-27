@@ -47,8 +47,10 @@
 ::end::
 
 ::if info.sees.length > 0::
-	<p class="javadoc">See:</p>
-	::foreach see info.sees::
-		<div class="indent inline-content">::raw see.doc::</div>
-	::end::
+	<p class="javadoc">See also:</p>
+	<ul>
+		::foreach see info.sees::
+			<li><div class="inline-content">::raw see.doc::</div></li>
+		::end::
+	</ul>
 ::end::
