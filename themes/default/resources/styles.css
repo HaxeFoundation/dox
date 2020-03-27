@@ -62,6 +62,11 @@
     color: #fff;
 }
 
+.nav>li>a.selected,
+.nav>li>a:hover {
+    background-color: #00000010;
+}
+
 .nav-list li i.fa {
     height: 16px;
     width: 16px;
