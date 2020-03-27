@@ -39,11 +39,12 @@ class RunCI {
 			haxe("xml.hxml");
 		});
 
-		target("Java", function() {
+		// Hm... https://github.com/HaxeFoundation/dox/commit/2230b4bed9fe37dd891693fe939b770c4c477842
+		/* target("Java", function() {
 			var out = 'bin/java';
 			compile('-java $out');
 			run('java -jar $out/Dox.jar');
-		});
+		}); */
 
 		target("JavaScript", function() {
 			var out = 'bin/dox.js';
