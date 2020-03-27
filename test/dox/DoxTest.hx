@@ -154,7 +154,6 @@ typedef TestTypedef = {
 	var myField:String;
 
 	@:dox(hide) var hiddenField:Bool;
-
 	var ?optionalField:String;
 }
 
@@ -179,9 +178,9 @@ enum TestEnum {
 	Use this type to have access to the bitwise operators of C# enums that have a `cs.system.FlagsAttribute` attribute.
 
 	```haxe
-		import cs.system.reflection.BindingFlags;
+	import cs.system.reflection.BindingFlags;
 
-		var binding = new Flags(BindingFlags.Public) | BindingFlags.Static | BindingFlags.NonPublic;
+	var binding = new Flags(BindingFlags.Public) | BindingFlags.Static | BindingFlags.NonPublic;
 	```
 **/
 class TestCodeBlock {}
@@ -199,6 +198,18 @@ abstract TestAbstract(Int) {
 		Method should have `a:Int` and `b:String` arguments, but the implicit `this` argument shouldn't show up.
 	**/
 	public function foo(a:Int, b:String) {}
+
+	@:from public static function from(i:Int):TestAbstract {
+		return cast i;
+	}
+
+	@:to public function to():String {
+		return Std.string(this);
+	}
+
+	@:op(A + B) public function add(b:Int):Int {
+		return this + b;
+	}
 }
 
 /**
