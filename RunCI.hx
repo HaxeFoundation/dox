@@ -36,7 +36,7 @@ class RunCI {
 	static function main() {
 		target("Neko", function() {
 			haxe("run.hxml");
-			haxe("gen-test.hxml");
+			haxe("xml.hxml");
 		});
 
 		target("Java", function() {
