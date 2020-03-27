@@ -3,7 +3,7 @@ package dox;
 import sys.FileSystem;
 
 class Dox {
-	static public function main() {
+	static function main() {
 		var args = Sys.args();
 
 		#if (!macro && !eval) // doesn't get any more interp than this
@@ -42,7 +42,7 @@ class Dox {
 			["-o", "--output-path"] => function(path:String) cfg.outputPath = path,
 
 			@doc("Set the xml input path (file names correspond to platform names)")
-			["-i", "--input-path"] => function(path:String) cfg.xmlPath = path,
+			["-i", "--input-path"] => function(path:String) cfg.inputPath = path,
 
 			@doc("Add template directory")
 			["-t", "--template-path"] => function(path:String) cfg.loadTemplates(path),
@@ -110,10 +110,18 @@ class Dox {
 			cfg.loadTheme(owd, "default");
 		}
 
+		run(cfg, Api.new);
+	}
+
+	public static function run(cfg:Config, createApi:Config->Infos->Api) {
+		if (cfg.theme == null) {
+			throw "cfg does not have a theme";
+		}
+
 		var writer = new Writer(cfg);
 
-		if (!FileSystem.exists(cfg.xmlPath)) {
-			Sys.println('Could not read input path ${cfg.xmlPath}');
+		if (!FileSystem.exists(cfg.inputPath)) {
+			Sys.println('Could not read input path ${cfg.inputPath}');
 			Sys.exit(1);
 		}
 		var parser = new haxe.rtti.XmlParser();
@@ -132,21 +140,21 @@ class Dox {
 			cfg.platforms.push(name);
 		}
 
-		if (FileSystem.isDirectory(cfg.xmlPath)) {
-			for (file in FileSystem.readDirectory(cfg.xmlPath)) {
+		if (FileSystem.isDirectory(cfg.inputPath)) {
+			for (file in FileSystem.readDirectory(cfg.inputPath)) {
 				if (!file.endsWith(".xml"))
 					continue;
-				parseFile(cfg.xmlPath + "/" + file);
+				parseFile(cfg.inputPath + "/" + file);
 			}
 		} else {
-			parseFile(cfg.xmlPath);
+			parseFile(cfg.inputPath);
 		}
 
 		Sys.println("Processing types");
 		var proc = new Processor(cfg);
 		var root = proc.process(parser.root);
 
-		var api = new Api(cfg, proc.infos);
+		var api = createApi(cfg, proc.infos);
 		var gen = new Generator(api, writer);
 
 		Sys.println("");

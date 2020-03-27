@@ -1,5 +1,6 @@
-### 1.3.1 (to be released)
+### 1.4.0 (to be released)
 
+- added support for using dox as an API via `dox.Dox.run()` and `-lib dox`
 - changed the order in which fields are shown (first static, then instance fields)
 - fixed last argument of abstract methods being removed instead of implicit `this` ([#266](https://github.com/HaxeFoundation/dox/pull/266))
 
