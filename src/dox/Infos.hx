@@ -38,7 +38,8 @@ class Infos {
 	var numProcessedTypes:Int;
 
 	function set_numGeneratedTypes(v) {
-		progress(v);
+		if (v & 16 == 0)
+			Sys.print(".");
 		return numGeneratedTypes = v;
 	}
 
@@ -99,10 +100,7 @@ class Infos {
 
 		typeMap.set(path, typeInfos);
 		numProcessedTypes++;
-		progress(numProcessedTypes);
-	}
-
-	function progress(n:Int) {
-		Sys.print("\r" + [for (_ in 0...6) " "].join(" ") + "\r" + n);
+		if (numProcessedTypes & 16 == 0)
+			Sys.print(".");
 	}
 }

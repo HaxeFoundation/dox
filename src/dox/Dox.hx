@@ -150,7 +150,7 @@ class Dox {
 			parseFile(cfg.inputPath);
 		}
 
-		Sys.println("Processing types...");
+		Sys.println("Processing types");
 		var proc = new Processor(cfg);
 		var root = proc.process(parser.root);
 
@@ -164,7 +164,7 @@ class Dox {
 		Sys.println("Generating 404 page");
 		gen.generateErrorPage(root);
 
-		Sys.println('Generating to ${cfg.outputPath}...');
+		Sys.println('Generating to ${cfg.outputPath}');
 		gen.generate(root);
 
 		Sys.println("");
