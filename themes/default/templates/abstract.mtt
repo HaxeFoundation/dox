@@ -3,7 +3,7 @@
 		<span ::cond api.hasSourceLink():: class="viewsource">
 			<a href="::api.getSourceLink(type)::" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a>
 		</span>
-		<h1><small>abstract</small> ::api.getPathName(type.path)::$$printTypeParams(::type.params::)::if !api.isCoreType(type)::($$printLinkedType(::type.athis::))::end::</h1>
+		<h1><small>::if api.isEnumAbstract(type)::enum ::end::abstract</small> ::api.getPathName(type.path)::$$printTypeParams(::type.params::)::if !api.isCoreType(type)::($$printLinkedType(::type.athis::))::end::</h1>
 		$$printPackage(::type::)
 		<h4 ::cond (type.from != null || type.to != null)::>
 			::foreach t type.from::
