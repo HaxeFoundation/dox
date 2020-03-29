@@ -1,5 +1,5 @@
 # Dox
-![CI](https://github.com/HaxeFoundation/dox/workflows/CI/badge.svg)
+[![CI](https://img.shields.io/github/workflow/status/HaxeFoundation/dox/CI.svg?logo=github)](https://github.com/HaxeFoundation/dox/actions?query=workflow%3ACI)
 
 A Haxe documentation generator used by many popular projects such as:
 
