@@ -1,3 +1,7 @@
+### 1.4.1 (to be released)
+
+- only switch to the JS version if the node version is supported (>= 8.10.0)
+
 ### 1.4.0 (March 27, 2020)
 
 - added support for using dox as an API via `dox.Dox.run()` and `-lib dox`

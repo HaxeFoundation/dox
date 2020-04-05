@@ -10,9 +10,17 @@ class Dox {
 		// use the faster JS version if possible
 		try {
 			var process = new sys.io.Process("node", ["-v"]);
-			var nodeExists = process.exitCode() == 0;
+			var isValidNode = false;
+			if (process.exitCode() == 0) {
+				var output = process.stdout.readAll().toString();
+				output = output.substr(1); // remove leading "v"
+				var parts = output.split(".").map(Std.parseInt);
+				// min supported node version is 8.10.0 due to usage of regex dotall flag
+				isValidNode = parts[0] >= 8 && parts[1] >= 10;
+			}
 			process.close();
-			if (nodeExists && FileSystem.exists("run.js")) {
+			if (isValidNode && FileSystem.exists("run.js")) {
+				Sys.println("Using Node.js version of dox...");
 				var exitCode = Sys.command("node", ["run.js"].concat(args));
 				Sys.exit(exitCode);
 			}
