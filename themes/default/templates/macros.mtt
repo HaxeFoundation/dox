@@ -124,7 +124,7 @@
 	::set fieldInfo = api.getFieldInfo(field)::
 
 	::if fieldInfo.modifiers.isOptional::
-		<span class="label label-extern">optional</span>
+		<span class="label label-optional">optional</span>
 	::end::
 
 	::if fieldInfo.modifiers.isFinal::
