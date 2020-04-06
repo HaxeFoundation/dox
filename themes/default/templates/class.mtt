@@ -5,7 +5,7 @@
 		</span>
 
 		<h1>
-			<small>::if type.isInterface::interface::else::class::end::</small> ::api.getPathName(type.path)::$$printTypeParams(::type.params::)
+			<small>::if type.isFinal::final ::end::::if type.isInterface::interface::else::class::end::</small> ::api.getPathName(type.path)::$$printTypeParams(::type.params::)
 		</h1>
 		$$printPackage(::type::)
 		::if type.superClass != null::

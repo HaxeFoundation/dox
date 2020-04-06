@@ -312,3 +312,6 @@ class ChildOfGeneric extends GenericClass<String> {}
 interface TestInterface {
 	public var active(get, set):Bool;
 }
+
+final class FinalClass {}
+final interface FinalInterface {}
