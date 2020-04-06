@@ -307,11 +307,26 @@ class Index {}
 class ChildOfGeneric extends GenericClass<String> {}
 
 /**
-	This interface shouldn't show compiler-generated get_ / set_ fields (#239).
+	This interface shouldn't show compiler-generated `get_` / `set_` fields (#239).
 **/
 interface TestInterface {
 	public var active(get, set):Bool;
 }
 
+class ClassWithImplements implements TestInterface {
+	public var active(get, set):Bool;
+
+	inline function get_active()
+		return false;
+
+	inline function set_active(active)
+		return false;
+}
+
 final class FinalClass {}
 final interface FinalInterface {}
+
+// #260
+interface MultiExtends extends A extends B {}
+interface A {}
+interface B {}
