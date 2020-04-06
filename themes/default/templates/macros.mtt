@@ -149,7 +149,7 @@
 			<span class="label">write only</span>
 		::end::
 
-	<a href="::api.pathToUrl(type.path)::#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
+	<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
 
 	::case 2::
 		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>

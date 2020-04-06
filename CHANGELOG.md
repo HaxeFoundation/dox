@@ -2,9 +2,10 @@
 
 - added a "final" prefix for final classes and interfaces
 - added support for deprecation messages on types ([#261](https://github.com/HaxeFoundation/dox/issues/261))
-- only switch to the JS version if the node version is supported (>= 8.10.0)
+- fixed JS version being used if the node version is not supported (< 8.10.0)
 - fixed interfaces with multiple `extends` only showing the first one ([#260](https://github.com/HaxeFoundation/dox/issues/260))
 - fixed overloads not being filtered by visibility / metadata ([#272](https://github.com/HaxeFoundation/dox/issues/272))
+- fixed anchor links of variables in abstracts ([#215](https://github.com/HaxeFoundation/dox/issues/215))
 
 ### 1.4.0 (March 27, 2020)
 
