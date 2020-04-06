@@ -16,7 +16,7 @@
 		::end::
 	::end::
 
-	$$printFieldDeprecation(::field::)
+	$$printDeprecation(::field::)
 	
 	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
 		$$printPlatforms(::field.platforms::,::false::)

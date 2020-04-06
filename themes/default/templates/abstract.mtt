@@ -18,6 +18,8 @@
 			::end::
 		</h4>
 		$$printModule(::type.module::)
+		$$printMeta(::type::)
+		$$printDeprecation(::type::)
 		$$printPlatforms(::type.platforms::,::true::)
 	</div>
 	

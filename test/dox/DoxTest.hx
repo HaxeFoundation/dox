@@ -281,8 +281,6 @@ class TestLinks {
 	public var OBJ = {x: 10, y: 10};
 }
 
-@:deprecated("Use newer class")
-@:generic
 class TestMetaData {
 	/**
 		Deprecated red color value
@@ -330,3 +328,15 @@ final interface FinalInterface {}
 interface MultiExtends extends A extends B {}
 interface A {}
 interface B {}
+
+@:deprecated("This class is deprecated in favor of something else")
+class DeprecatedClass {}
+
+@:deprecated("This enum is deprecated in favor of something else")
+enum DeprecatedEnum {}
+
+@:deprecated("This abstract is deprecated in favor of something else")
+abstract DeprecatedAbstract(Int) {}
+
+@:deprecated("This typedef is deprecated in favor of something else")
+typedef DeprecatedTypedef = {}

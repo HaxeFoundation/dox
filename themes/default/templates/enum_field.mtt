@@ -10,7 +10,7 @@
 			::end::
 		</code>
 	</h3>
-	$$printFieldDeprecation(::ctor::)
+	$$printDeprecation(::ctor::)
 	
 	<div class="doc" ::cond ctor.doc != null::>
 		::raw ctor.doc::

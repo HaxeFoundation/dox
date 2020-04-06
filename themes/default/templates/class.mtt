@@ -51,8 +51,9 @@
 			::use "related_types.mtt"::::end::
 			</small>
 		</h4>
-		
+
 		$$printMeta(::type::)
+		$$printDeprecation(::type::)
 
 		$$printPlatforms(::type.platforms::,::true::)
 	</div>

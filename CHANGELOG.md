@@ -1,6 +1,7 @@
 ### 1.4.1 (to be released)
 
 - added a "final" prefix for final classes and interfaces
+- added support for deprecation messages on types ([#261](https://github.com/HaxeFoundation/dox/issues/261))
 - only switch to the JS version if the node version is supported (>= 8.10.0)
 - fixed interfaces with multiple `extends` only showing the first one ([#260](https://github.com/HaxeFoundation/dox/issues/260))
 
