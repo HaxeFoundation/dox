@@ -115,6 +115,9 @@ class Processor {
 
 	function filterFields(fields:Array<ClassField>) {
 		return fields.filter(function(cf) {
+			if (cf.overloads != null) {
+				cf.overloads = filterFields(cf.overloads);
+			}
 			var hide = Infos.hasDoxMetadata(cf.meta, "hide");
 			var show = Infos.hasDoxMetadata(cf.meta, "show");
 			var compilerGenerated = cf.meta.exists(struct -> struct.name == ":compilerGenerated");

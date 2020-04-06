@@ -340,3 +340,13 @@ abstract DeprecatedAbstract(Int) {}
 
 @:deprecated("This typedef is deprecated in favor of something else")
 typedef DeprecatedTypedef = {}
+
+class Overloads {
+	#if cs
+	/** only this constructor overload should show up **/
+	@:overload public function new() {}
+
+	/** this one shouldn't **/
+	@:overload private function new(i:Int) {}
+	#end
+}
