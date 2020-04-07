@@ -338,6 +338,6 @@ class Processor {
 	}
 
 	function hasHideMetadata(meta:MetaData):Bool {
-		return hasDoxMetadata(meta, "hide") || hasMeta(meta, ":compilerGenerated");
+		return hasDoxMetadata(meta, "hide") || hasMeta(meta, ":compilerGenerated") || hasMeta(meta, ":noCompletion");
 	}
 }

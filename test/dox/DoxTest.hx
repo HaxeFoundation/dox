@@ -366,3 +366,11 @@ class FunctionType {
 	var e:(i:Int, s:String) -> Void;
 	var f:(Int, s:String) -> Void;
 }
+
+class NoCompletion {
+	@:noCompletion public var noCompletion:Int;
+	@:noCompletion @:dox(show) public var noCompletionButDoxShow:Int;
+}
+
+@:noCompletion class NoCompletionType {}
+@:noCompletion @:dox(show) class NoCompletionButDoxShowType {}
