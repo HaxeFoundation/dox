@@ -8,6 +8,7 @@
 - fixed overloads not being filtered by visibility / metadata ([#272](https://github.com/HaxeFoundation/dox/issues/272))
 - fixed anchor links of variables in abstracts ([#215](https://github.com/HaxeFoundation/dox/issues/215))
 - fixed `@author` tags showing up in package overview ([#228](https://github.com/HaxeFoundation/dox/issues/228))
+- fixed "View Source" being shown for types not defined in .hx files ([#224](https://github.com/HaxeFoundation/dox/issues/224))
 
 ### 1.4.0 (March 27, 2020)
 

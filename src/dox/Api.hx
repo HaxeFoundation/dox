@@ -305,8 +305,8 @@ class Api {
 	/**
 		Whether the "View Source" button should be shown.
 	**/
-	public function hasSourceLink():Bool {
-		return isDefined("source-path");
+	public function hasSourceLink(type:TypeInfos):Bool {
+		return isDefined("source-path") && type.file != null && type.file.endsWith(".hx");
 	}
 
 	/**

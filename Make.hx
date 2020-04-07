@@ -13,7 +13,7 @@ class Make {
 					Sys.command("npx haxe xml.hxml");
 
 				case "pages":
-					Sys.command("npx lix run dox -o bin/pages -i bin/xml --include dox");
+					Sys.command("npx lix run dox -o bin/pages -i bin/xml --include dox -D source-path https://github.com/HaxeFoundation/dox/tree/master/test");
 
 				case "server":
 					Sys.setCwd("bin/pages");

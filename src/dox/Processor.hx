@@ -198,8 +198,10 @@ class Processor {
 	}
 
 	function makeFilePathRelative(t:TypeInfos) {
-		var path = t.module == null ? t.path : t.module;
-		t.file = path.replace(".", "/") + ".hx";
+		if (t.file != null && t.file.endsWith(".hx")) {
+			var path = t.module == null ? t.path : t.module;
+			t.file = path.replace(".", "/") + ".hx";
+		}
 	}
 
 	function processTree(tree:TypeTree) {
