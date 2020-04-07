@@ -1,6 +1,6 @@
 {
 	"haxe.configurations": [
-		["run.hxml"]
+		["runBase.hxml"]
 	],
 	"[haxe]": {
 		"editor.formatOnSave": true,
