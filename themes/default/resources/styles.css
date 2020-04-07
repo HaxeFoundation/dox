@@ -213,9 +213,16 @@ h3 span.label,
     display: none;
 }
 
+.label-meta-callable,
+.label-meta-commutative,
 .label-meta-op,
+.label-meta-arrayAccess,
+.label-meta-resolve,
 .label-meta-to,
-.label-meta-from {
+.label-meta-from,
+.label-meta-using,
+.label-meta-forward,
+.label-meta-forwardStatics {
     display: inline;
 }
 

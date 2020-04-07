@@ -281,6 +281,7 @@ class TestLinks {
 	public var OBJ = {x: 10, y: 10};
 }
 
+@:using(StringTools)
 class TestMetaData {
 	/**
 		Deprecated red color value
