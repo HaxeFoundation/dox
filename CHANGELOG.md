@@ -2,6 +2,7 @@
 
 - added a "final" prefix for final classes and interfaces
 - added support for deprecation messages on types ([#261](https://github.com/HaxeFoundation/dox/issues/261))
+- improved function type printing to use Haxe 4 syntax ([#273](https://github.com/HaxeFoundation/dox/issues/273))
 - fixed JS version being used if the node version is not supported (< 8.10.0)
 - fixed interfaces with multiple `extends` only showing the first one ([#260](https://github.com/HaxeFoundation/dox/issues/260))
 - fixed overloads not being filtered by visibility / metadata ([#272](https://github.com/HaxeFoundation/dox/issues/272))

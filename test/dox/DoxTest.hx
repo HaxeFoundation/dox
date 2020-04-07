@@ -356,3 +356,13 @@ class Overloads {
 	@author some guy
 **/
 class JavaDocTag {}
+
+@:publicFields
+class FunctionType {
+	var a:() -> Void;
+	var b:Void->Void;
+	var c:Int->Void;
+	var d:(i:Int) -> Void;
+	var e:(i:Int, s:String) -> Void;
+	var f:(Int, s:String) -> Void;
+}
