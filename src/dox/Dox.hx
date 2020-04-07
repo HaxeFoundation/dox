@@ -75,6 +75,9 @@ class Dox {
 			@doc("Include private fields and types")
 			["--include-private"] => function() cfg.includePrivate = true,
 
+			@doc("Don't sort fields alphabetically")
+			["--keep-field-order"] => function() cfg.keepFieldOrder = true,
+
 			@doc("Set the theme name or path")
 			["-theme"] => function(name:String) cfg.loadTheme(owd, name),
 

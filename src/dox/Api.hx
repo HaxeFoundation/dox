@@ -32,8 +32,8 @@ class Api {
 	public var currentPageUrl:Null<String>;
 
 	/**
-	 * Expose Std for theme.
-	 */
+		Expose Std for theme.
+	**/
 	public var std = Std;
 
 	public function new(cfg:Config, infos:Infos) {
@@ -380,8 +380,7 @@ class Api {
 	}
 
 	/**
-		Returns an array of all member fields of `c` respecting the inheritance
-		chain.
+		Returns an array of all member fields of `c` respecting the inheritance chain.
 	**/
 	public function getAllFields(c:Classdef):Array<MemberField> {
 		var allFields = [];
@@ -401,7 +400,9 @@ class Api {
 			}
 		}
 		loop(c);
-		allFields.sort((f1, f2) -> Reflect.compare(f1.field.name, f2.field.name));
+		if (!config.keepFieldOrder) {
+			allFields.sort((f1, f2) -> Reflect.compare(f1.field.name, f2.field.name));
+		}
 		return allFields;
 	}
 
@@ -450,11 +451,14 @@ class Api {
 			else
 				addFieldTo(f, inheritedFields.fields);
 		}
-		for (fields in inheritedFields.methods) {
-			fields.sort((f1, f2) -> Reflect.compare(f1.name, f2.name));
-		}
-		for (fields in inheritedFields.fields) {
-			fields.sort((f1, f2) -> Reflect.compare(f1.name, f2.name));
+
+		if (!config.keepFieldOrder) {
+			for (fields in inheritedFields.methods) {
+				fields.sort((f1, f2) -> Reflect.compare(f1.name, f2.name));
+			}
+			for (fields in inheritedFields.fields) {
+				fields.sort((f1, f2) -> Reflect.compare(f1.name, f2.name));
+			}
 		}
 
 		return inheritedFields;
@@ -472,12 +476,12 @@ typedef FieldInfo = {
 	/**
 		The kind of the field. See `FieldKind`.
 	**/
-	kind:FieldKind,
+	var kind:FieldKind;
 
 	/**
 		The field modifiers. See `FieldModifiers`.
 	**/
-	modifiers:FieldModifiers
+	var modifiers:FieldModifiers;
 }
 
 /**

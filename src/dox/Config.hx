@@ -21,6 +21,7 @@ class Config {
 	public var toplevelPackage:String;
 	public var useMarkdown:Bool;
 	public var includePrivate:Bool;
+	public var keepFieldOrder:Bool;
 	public var date:Date;
 	public var outputPath(default, set):String = "pages";
 	public var inputPath(default, set):String = "xml";
@@ -46,6 +47,7 @@ class Config {
 		toplevelPackage = "";
 		useMarkdown = true;
 		includePrivate = false;
+		keepFieldOrder = false;
 		defines = new Map();
 		pathFilters = new GenericStack<Filter>();
 		templatePaths = new GenericStack<String>();

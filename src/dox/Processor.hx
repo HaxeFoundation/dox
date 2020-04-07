@@ -160,7 +160,9 @@ class Processor {
 			}
 
 		inline function sortFields(fields:Array<ClassField>) {
-			return fields.sort(compareFields);
+			if (!config.keepFieldOrder) {
+				fields.sort(compareFields);
+			}
 		}
 
 		function sort(t:TypeTree) {
