@@ -350,3 +350,8 @@ class Overloads {
 	@:overload private function new(i:Int) {}
 	#end
 }
+
+/**
+	@author some guy
+**/
+class JavaDocTag {}

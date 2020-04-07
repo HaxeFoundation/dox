@@ -14,7 +14,7 @@ class JavadocHandler {
 	public function parse(path:String, doc:String):DocInfos {
 		var tags = [];
 		// TODO: need to parse this better as haxe source might have this sort of meta
-		var ereg = ~/^@(param|default|exception|throws|deprecated|return|returns|since|see|event)\s+([^@]+)/gm;
+		var ereg = ~/^@(param|default|exception|throws|deprecated|return|returns|since|see|event|author)\s+([^@]+)/gm;
 
 		doc = ereg.map(doc, function(e) {
 			var name = e.matched(1);

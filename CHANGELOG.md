@@ -6,6 +6,7 @@
 - fixed interfaces with multiple `extends` only showing the first one ([#260](https://github.com/HaxeFoundation/dox/issues/260))
 - fixed overloads not being filtered by visibility / metadata ([#272](https://github.com/HaxeFoundation/dox/issues/272))
 - fixed anchor links of variables in abstracts ([#215](https://github.com/HaxeFoundation/dox/issues/215))
+- fixed `@author` tags showing up in package overview ([#228](https://github.com/HaxeFoundation/dox/issues/228))
 
 ### 1.4.0 (March 27, 2020)
 
