@@ -5,27 +5,6 @@ dox
 
 --each
 
--neko all.n
--xml bin/xml/neko.xml
-
---next
-
--js all.js
--xml bin/xml/js.xml
-
---next
-
--swf all9.swf
--xml bin/xml/flash.xml
--swf-version 11.4
-
---next
-
--php all_php
--xml bin/xml/php.xml
-
---next
-
 -cpp all_cpp
 -xml bin/xml/cpp.xml
 -D HXCPP_MULTI_THREADED
