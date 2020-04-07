@@ -98,7 +98,7 @@
 			::if (meta.name != ":deprecated")::::if false::<!--skip deprecation meta, see printDeprecation -->::end::
 				::set metaName = meta.name.substr(1)::
 				::set displayMetaName = "@" + meta.name::
-				<span class="label label-meta label-meta-::metaName::" title="::displayMetaName:: metadata">::displayMetaName::
+				<span class="label label-meta label-meta-::metaName::" title="::api.getMetaDesc(meta.name)::">::displayMetaName::
 				::if (meta.params != null && meta.params.length > 0)::(
 					::foreach param meta.params::
 						$$printMetaParam(::param::)

@@ -4,6 +4,7 @@
 - added support for deprecation messages on types ([#261](https://github.com/HaxeFoundation/dox/issues/261))
 - added support for `@:noCompletion` implying `@:dox(hide)` ([#250](https://github.com/HaxeFoundation/dox/issues/250))
 - added a `--keep-field-order` argument ([#258](https://github.com/HaxeFoundation/dox/issues/258))
+- added tooltips with descriptions for compiler metadata ([#240](https://github.com/HaxeFoundation/dox/issues/240))
 - improved function type printing to use Haxe 4 syntax ([#273](https://github.com/HaxeFoundation/dox/issues/273))
 - fixed JS version being used if the node version is not supported (< 8.10.0)
 - fixed interfaces with multiple `extends` only showing the first one ([#260](https://github.com/HaxeFoundation/dox/issues/260))

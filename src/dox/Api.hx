@@ -1,5 +1,6 @@
 package dox;
 
+import haxe.Resource;
 import haxe.Json;
 import haxe.rtti.CType;
 
@@ -36,9 +37,16 @@ class Api {
 	**/
 	public var std = Std;
 
+	/**
+		Information about compiler metadata by name.
+	**/
+	public var metas:Map<String, Dynamic>;
+
 	public function new(cfg:Config, infos:Infos) {
 		this.config = cfg;
 		this.infos = infos;
+		var metas:Array<{metadata:String}> = Json.parse(Resource.getString("resources/meta.json"));
+		this.metas = [for (meta in metas) meta.metadata => meta];
 	}
 
 	/**
@@ -158,6 +166,14 @@ class Api {
 		var stripped = ~/<.+?>/g.replace(infos.doc, "").replace("\n", " ");
 		var sentence = ~/^(.*?[.?!]+)/;
 		return sentence.match(stripped) ? sentence.matched(1) : "";
+	}
+
+	public function getMetaDesc(meta:String):String {
+		if (!metas.exists(meta)) {
+			return "";
+		}
+		var doc = metas[meta].doc;
+		return if (doc == null) "" else doc;
 	}
 
 	/**

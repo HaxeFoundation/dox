@@ -10,7 +10,7 @@ A Haxe documentation generator used by many popular projects such as:
 - [HaxePunk](http://haxepunk.com/documentation/api/)
 - [Kha](http://api.kha.tech/)
 
-![image](images/screenshot.png)
+![image](resources/screenshot.png)
 
 ### Installation
 
