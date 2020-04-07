@@ -86,7 +86,7 @@ class Processor {
 						var fields = new Array<ClassField>();
 						var statics = new Array<ClassField>();
 						t.impl.statics.iter(function(cf) {
-							if (cf.meta.exists(function(m) return m.name == ":impl")) {
+							if (hasMeta(cf.meta, ":impl")) {
 								if (cf.name == "_new")
 									cf.name = "new";
 								else
@@ -118,18 +118,14 @@ class Processor {
 			if (cf.overloads != null) {
 				cf.overloads = filterFields(cf.overloads);
 			}
-			var hide = Infos.hasDoxMetadata(cf.meta, "hide");
-			var show = Infos.hasDoxMetadata(cf.meta, "show");
-			var compilerGenerated = cf.meta.exists(struct -> struct.name == ":compilerGenerated");
-
-			return ((cf.isPublic || config.includePrivate) && !hide && !compilerGenerated) || show;
+			var hide = hasHideMetadata(cf.meta);
+			var show = hasShowMetadata(cf.meta);
+			return ((cf.isPublic || config.includePrivate) && !hide) || show;
 		});
 	}
 
 	function filterEnumFields(fields:Array<EnumField>) {
-		return fields.filter(function(cf) {
-			return !Infos.hasDoxMetadata(cf.meta, "hide") || Infos.hasDoxMetadata(cf.meta, "show");
-		});
+		return fields.filter(ef -> !hasHideMetadata(ef.meta) || hasShowMetadata(ef.meta));
 	}
 
 	function sort(root:TypeRoot) {
@@ -267,10 +263,6 @@ class Processor {
 		}
 	}
 
-	function hasMeta(meta:MetaData, name:String) {
-		return meta.exists(meta -> meta.name == name);
-	}
-
 	function processEnumField(path:String, field:EnumField) {
 		field.doc = processDoc(path, field.doc);
 	}
@@ -313,9 +305,9 @@ class Processor {
 	}
 
 	function isTypeFiltered(type:{path:Path, meta:MetaData, isPrivate:Bool}) {
-		if (Infos.hasDoxMetadata(type.meta, "show"))
+		if (hasShowMetadata(type.meta))
 			return false;
-		if (Infos.hasDoxMetadata(type.meta, "hide"))
+		if (hasHideMetadata(type.meta))
 			return true;
 		if (type.isPrivate)
 			return !config.includePrivate;
@@ -331,5 +323,21 @@ class Processor {
 				return !filter.isIncludeFilter;
 		}
 		return hasInclusionFilter;
+	}
+
+	function hasMeta(meta:MetaData, name:String) {
+		return meta.exists(meta -> meta.name == name);
+	}
+
+	function hasDoxMetadata(meta:MetaData, ?parameterName:String):Bool {
+		return meta.exists(m -> m.name == ":dox" && parameterName == null || m.params.has(parameterName));
+	}
+
+	function hasShowMetadata(meta:MetaData):Bool {
+		return hasDoxMetadata(meta, "show");
+	}
+
+	function hasHideMetadata(meta:MetaData):Bool {
+		return hasDoxMetadata(meta, "hide") || hasMeta(meta, ":compilerGenerated");
 	}
 }
