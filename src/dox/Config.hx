@@ -16,6 +16,7 @@ import sys.FileSystem;
 
 @:keep
 class Config {
+	public final doxPath:String;
 	public var theme:Null<Theme>;
 	public var rootPath:String;
 	public var toplevelPackage:String;
@@ -40,7 +41,8 @@ class Config {
 		return inputPath = Path.removeTrailingSlashes(v);
 	}
 
-	public function new() {
+	public function new(doxPath:String) {
+		this.doxPath = doxPath;
 		rootPath = "";
 		platforms = [];
 		resourcePaths = [];
@@ -83,7 +85,7 @@ class Config {
 		throw "Could not resolve template: " + name;
 	}
 
-	public function loadTheme(doxPath:String, path:String) {
+	public function loadTheme(path:String) {
 		if (path.indexOf("/") == -1 && path.indexOf("\\") == -1) {
 			path = Path.normalize(Path.join([doxPath, "themes", path]));
 		}
@@ -93,7 +95,7 @@ class Config {
 		}
 		var theme:Theme = haxe.Json.parse(themeConfig);
 		if (theme.parentTheme != null) {
-			loadTheme(doxPath, theme.parentTheme);
+			loadTheme(theme.parentTheme);
 		}
 		var resourcesPath = Path.join([path, "resources"]);
 		if (FileSystem.exists(resourcesPath))

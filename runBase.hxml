@@ -5,5 +5,4 @@
 -cp src
 -main dox.Dox
 -dce no
---resource resources/meta.json
 # --macro nullSafety("dox")

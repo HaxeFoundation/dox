@@ -1,6 +1,6 @@
 package dox;
 
-import haxe.Resource;
+import sys.io.File;
 import haxe.Json;
 import haxe.rtti.CType;
 
@@ -50,7 +50,8 @@ class Api {
 	public function new(cfg:Config, infos:Infos) {
 		this.config = cfg;
 		this.infos = infos;
-		var metas:Array<{metadata:String}> = Json.parse(Resource.getString("resources/meta.json"));
+		var metaJson = File.getContent(haxe.io.Path.join([cfg.doxPath, "resources/meta.json"]));
+		var metas:Array<{metadata:String}> = Json.parse(metaJson);
 		this.metas = [for (meta in metas) meta.metadata => meta];
 	}
 

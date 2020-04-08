@@ -40,7 +40,7 @@ class Dox {
 			}
 		}
 
-		var cfg = new Config();
+		var cfg = new Config(owd);
 		var help = false;
 
 		// @formatter:off
@@ -79,7 +79,7 @@ class Dox {
 			["--keep-field-order"] => function() cfg.keepFieldOrder = true,
 
 			@doc("Set the theme name or path")
-			["-theme"] => function(name:String) cfg.loadTheme(owd, name),
+			["-theme"] => function(name:String) cfg.loadTheme(name),
 
 			@doc("Defines key = value
   Available defines for the default theme:
@@ -114,7 +114,7 @@ class Dox {
 		}
 
 		if (cfg.theme == null) {
-			cfg.loadTheme(owd, "default");
+			cfg.loadTheme("default");
 		}
 
 		run(cfg, Api.new);
