@@ -24,49 +24,55 @@
 	</p>
 </macro>
 
-<macro name="printLinkedPath(path, params)">
+<macro name="printLinkedPath(path, params, qualified)">
 	::if api.isKnownType(path)::
-		<a class="type" title="::api.getSentenceDesc(api.resolveType(path))::" ::attr href api.pathToUrl(path)::>::api.getPathName(path)::</a>
+		<a class="type" title="::api.getSentenceDesc(api.resolveType(path))::" ::attr href api.pathToUrl(path)::>
+			::if qualified::
+				::path::
+			::else::
+				::api.getPathName(path)::
+			::end::
+		</a>
 	::else::
 		<span class="type">::api.getPathName(path)::</span>
 	::end::
 	::if params != null && params.length > 0::
 		&lt;
 		::foreach param params::
-			$$printLinkedType(::param::)
+			$$printLinkedType(::param::,::qualified::)
 			::if !repeat.param.last::, ::end::
 		::end::
 		&gt;
 	::end::
 </macro>
 
-<macro name="printLinkedType(ctype)">
+<macro name="printLinkedType(ctype, qualified)">
 	::switch ctype::
 	::case::Unknown
-	::case::$$printLinkedPath(::args[0]::,::args[1]::)
-	::case::$$printLinkedPath(::args[0]::,::args[1]::)
-	::case::$$printLinkedPath(::args[0]::,::args[1]::)
+	::case::$$printLinkedPath(::args[0]::,::args[1]::,::qualified::)
+	::case::$$printLinkedPath(::args[0]::,::args[1]::,::qualified::)
+	::case::$$printLinkedPath(::args[0]::,::args[1]::,::qualified::)
 	::case::
 		::if args[0].length != 1 || args[0][0].name != ""::(::end::
 		::foreach arg args[0]::
 			::if arg.name != ""::
 				::arg.name:::
 			::end::
-			$$printLinkedType(::arg.t::)
+			$$printLinkedType(::arg.t::,::qualified::)
 			::if !repeat.arg.last::, ::end::
 		::end::
 		::if args[0].length != 1 || args[0][0].name != ""::)::end::
 		&nbsp;&#8209;&gt;&nbsp;
-		$$printLinkedType(::args[1]::)
+		$$printLinkedType(::args[1]::,::qualified::)
 	::case::
 	{
 		::foreach field args[0]::
-			::field.name:::$$printLinkedType(::field.type::)
+			::field.name:::$$printLinkedType(::field.type::,::qualified::)
 			::if !repeat.field.last::, ::end::
 		::end::
 	}
-	::case::$$printLinkedPath(::"Dynamic"::,::null::)::if args[0] != null::&lt;$$printLinkedType(::args[0]::)&gt;::end::
-	::case::$$printLinkedPath(::args[0]::,::args[1]::)
+	::case::$$printLinkedPath(::"Dynamic"::,::null::,::qualified::)::if args[0] != null::&lt;$$printLinkedType(::args[0]::,::qualified::)&gt;::end::
+	::case::$$printLinkedPath(::args[0]::,::args[1]::,::qualified::)
 	::end::
 </macro>
 
@@ -152,7 +158,7 @@
 			<span class="label">write only</span>
 		::end::
 
-	<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::)$$printInitExpr(::field.expr::)
+	<a href="#::field.name::"><span class="identifier">::field.name::</span></a>:$$printLinkedType(::field.type::,::false::)$$printInitExpr(::field.expr::)
 
 	::case 2::
 		<a href="#::field.name::"><span class="identifier">::field.name::</span></a>
@@ -160,7 +166,7 @@
 		::foreach arg args[0]::
 			<span style="white-space:nowrap">
 				::if arg.opt && (arg.value == null || arg.value == "null")::?::end::
-				::arg.name:::$$printLinkedType(::arg.t::)
+				::arg.name:::$$printLinkedType(::arg.t::,::false::)
 				::if arg.value != null && arg.value != "null":: = ::arg.value::::end::
 				::if !repeat.arg.last::,::end::
 			</span>
@@ -168,7 +174,7 @@
 		::end::
 		)
 		::if field.name != "new"::
-			:$$printLinkedType(::args[1]::)
+			:$$printLinkedType(::args[1]::,::false::)
 		::end::
 	::end::
 	</code>
@@ -283,7 +289,7 @@
 		<div class="fields" ::cond hasFields::>
 			::set fields=inheritedFields.fields::
 			::foreach cl inheritedFields.types::
-				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::)</h4>
+				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::,::false::)</h4>
 				<div style="display:none">
 				::foreach field fields.get(cl)::
 					::set isStatic = false::
@@ -298,7 +304,7 @@
 		<div class="fields" ::cond hasMethods::>
 			::set fields=inheritedFields.methods::
 			::foreach cl inheritedFields.types::
-				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::)</h4>
+				<h4 ::cond fields.get(cl).length>0::><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by $$printLinkedPath(::cl.path::,::null::,::false::)</h4>
 				<div style="display:none">
 				::foreach field fields.get(cl)::
 				::set isStatic = false::

@@ -374,3 +374,18 @@ class NoCompletion {
 
 @:noCompletion class NoCompletionType {}
 @:noCompletion @:dox(show) class NoCompletionButDoxShowType {}
+
+/**
+	This typedef has different implementations per target.
+**/
+typedef PlatformConditionalized = #if cpp {
+	/**
+		It a int
+	**/
+	var i:Int;
+
+	/**
+		It a string
+	**/
+	var s:String;
+} #elseif cs(a:String, b:Int) -> Void #elseif neko Array<Int> #else {} #end;

@@ -126,11 +126,6 @@ footer {
     padding-top: 4px;
 }
 
-/* .availability { margin-left:14px; color:#93a1a1; } */
-/* .doc { margin-left:14px; } */
-
-
-
 /* #nav li { list-style-type: none; } */
 #nav .expando>ul {
     display: none;
@@ -186,6 +181,10 @@ footer {
 .availability {
     color: #e48931;
     font-size: 90%;
+}
+
+.section-availability {
+    color: #e48931;
 }
 
 h3 code {

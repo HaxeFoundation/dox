@@ -38,6 +38,11 @@ class Api {
 	public var std = Std;
 
 	/**
+		Expose Lambda for theme.
+	**/
+	public var lambda = Lambda;
+
+	/**
 		Information about compiler metadata by name.
 	**/
 	public var metas:Map<String, Dynamic>;
@@ -157,15 +162,16 @@ class Api {
 	}
 
 	/**
-		Returns the first sentence of the documentation belonging to `infos`.
+		Returns the first sentence of the documentation belonging to `infos` as well as its dot path.
 	**/
 	public function getSentenceDesc(infos:TypeInfos):String {
+		var path = infos.path;
 		if (infos == null || infos.doc == null) {
-			return "";
+			return path;
 		}
 		var stripped = ~/<.+?>/g.replace(infos.doc, "").replace("\n", " ");
 		var sentence = ~/^(.*?[.?!]+)/;
-		return sentence.match(stripped) ? sentence.matched(1) : "";
+		return sentence.match(stripped) ? path + " - " + sentence.matched(1) : path;
 	}
 
 	public function getMetaDesc(meta:String):String {

@@ -4,7 +4,6 @@ dox
 -D doc-gen
 
 --each
-
 -cpp all_cpp
 -xml bin/xml/cpp.xml
 -D HXCPP_MULTI_THREADED
@@ -17,3 +16,7 @@ dox
 -cs all_cs
 -D unsafe
 -xml bin/xml/cs.xml
+
+--next
+-neko all_neko
+-xml bin/xml/neko.xml

@@ -1,5 +1,6 @@
 package dox;
 
+import haxe.Serializer;
 import haxe.rtti.CType;
 
 class Processor {
@@ -213,14 +214,40 @@ class Processor {
 				t.doc = processDoc(t.path, t.doc);
 				t.constructors.iter(processEnumField.bind(t.path));
 				makeFilePathRelative(t);
+
 			case TTypedecl(t):
 				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
-				switch (t.type) {
-					case CAnonymous(fields): fields.iter(processClassField.bind(t.path));
-					default:
+
+				var mergedTypes = new Map<String, CType>();
+				for (platform => typeA in t.types) {
+					var found = false;
+					for (platforms => typeB in mergedTypes) {
+						if (Serializer.run(typeA) == Serializer.run(typeB)) {
+							mergedTypes.remove(platforms);
+							mergedTypes[platforms + ", " + platform] = typeB;
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						mergedTypes[platform] = typeA;
+					}
 				}
+				t.types = mergedTypes;
+
+				function processFields(type:CType) {
+					switch (t.type) {
+						case CAnonymous(fields):
+							fields.iter(processClassField.bind(t.path));
+						default:
+					}
+				}
+				processFields(t.type);
+				t.types.iter(processFields);
+
 				makeFilePathRelative(t);
+
 			case TClassdecl(t):
 				config.setRootPath(t.path);
 				t.doc = processDoc(t.path, t.doc);
@@ -241,6 +268,7 @@ class Processor {
 						implementors.push(t);
 				}
 				makeFilePathRelative(t);
+
 			case TAbstractdecl(t):
 				config.setRootPath(t.path);
 				if (t.impl != null) {

@@ -14,10 +14,10 @@
 			<small>extends 
 				::if (inheritedFields.types.length>0)::
 					::foreach t inheritedFields.types::
-					$$printLinkedPath(::t.path::,::null::)::if ((inheritedFields.types.length!=1)&&(repeat.t.index<(inheritedFields.types.length-1))):: &rsaquo; ::end::
+					$$printLinkedPath(::t.path::,::null::,::false::)::if ((inheritedFields.types.length!=1)&&(repeat.t.index<(inheritedFields.types.length-1))):: &rsaquo; ::end::
 					::end::
 				::else::
-					$$printLinkedPath(::type.superClass.path::,::null::)
+					$$printLinkedPath(::type.superClass.path::,::null::,::false::)
 				::end::
 			</small>
 		</h4>
@@ -26,7 +26,7 @@
 		<h4 ::cond (type.interfaces.length>0)::>
 		<small>::if type.isInterface::extends::else::implements::end:: 
 		::foreach i type.interfaces::
-			$$printLinkedPath(::i.path::,::i.params::)::if ((type.interfaces.length!=1)&&(repeat.i.index<(type.interfaces.length-1)))::, ::end::
+			$$printLinkedPath(::i.path::,::i.params::,::false::)::if ((type.interfaces.length!=1)&&(repeat.i.index<(type.interfaces.length-1)))::, ::end::
 		::end::
 		</small>
 		</h4>

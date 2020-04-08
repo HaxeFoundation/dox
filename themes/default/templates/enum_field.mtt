@@ -6,7 +6,7 @@
 				<span class="identifier">::ctor.name::</span>
 			</a>
 			::if ctor.args != null::
-				(::foreach arg ctor.args::::arg.name:::$$printLinkedType(::arg.t::)::if !repeat.arg.last::, ::end::::end::)
+				(::foreach arg ctor.args::::arg.name:::$$printLinkedType(::arg.t::,::false::)::if !repeat.arg.last::, ::end::::end::)
 			::end::
 		</code>
 	</h3>

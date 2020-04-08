@@ -5,14 +5,6 @@
 		</span>
 		<h1><small>typedef</small> ::api.getPathName(type.path)::$$printTypeParams(::type.params::)</h1>
 		$$printPackage(::type::)
-
-		::switch type.type::
-		<h4>
-			<small>alias for $$printLinkedType(::type.type::)</small>
-		</h4>
-		::case 5::
-		::end::
-
 		$$printModule(::type.module::)
 		$$printMeta(::type::)
 		$$printDeprecation(::type::)
@@ -24,23 +16,32 @@
 			::raw type.doc::
 		</div>
 
-		::set showSection = false::
-		::switch type.type::
-		::case 5::
-			::foreach field args[0]::
-				::eval showSection = true::
+		::set multiplePlatforms = api.lambda.array(type.types).length > 1::
+		::foreach platform type.types.keys()::
+			::set platformType = type.types.get(platform)::
+			::if multiplePlatforms::
+				<h4 class="section section-availability">::platform::</h4>
 			::end::
-		::end::
-		::if showSection::
-			<h3 class="section">Properties</h3>
-			<div class="fields">
-				::switch type.type::
-				::case 5::
-					::foreach field args[0]::
-						::use "class_field.mtt"::::end::
+			::switch platformType::
+				<div class="fields">
+					<div class="field">
+						<em>alias for </em><code>$$printLinkedType(::platformType::,::true::)</code>
+					</div>
+				</div>
+			::case 5::
+				<div class="fields">
+					::switch platformType::
+					::case 5::
+						::if args[0].length == 0::
+							<em>empty structure</em>
+						::else::
+							::foreach field args[0]::
+								::use "class_field.mtt"::::end::
+							::end::
+						::end::
 					::end::
-				::end::
-			</div>
+				</div>
+			::end::
 		::end::
 	</div>
 ::end::

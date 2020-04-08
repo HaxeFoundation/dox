@@ -1,10 +1,12 @@
-### 1.4.1 (to be released)
+### 1.5.0 (to be released)
 
 - added a "final" prefix for final classes and interfaces
 - added support for deprecation messages on types ([#261](https://github.com/HaxeFoundation/dox/issues/261))
 - added support for `@:noCompletion` implying `@:dox(hide)` ([#250](https://github.com/HaxeFoundation/dox/issues/250))
+- added support for typedefs that are conditionalized by platform ([#257](https://github.com/HaxeFoundation/dox/issues/257))
 - added a `--keep-field-order` argument ([#258](https://github.com/HaxeFoundation/dox/issues/258))
 - added tooltips with descriptions for compiler metadata ([#240](https://github.com/HaxeFoundation/dox/issues/240))
+- added the fully qualified path of types to tooltips
 - improved function type printing to use Haxe 4 syntax ([#273](https://github.com/HaxeFoundation/dox/issues/273))
 - fixed JS version being used if the node version is not supported (< 8.10.0)
 - fixed interfaces with multiple `extends` only showing the first one ([#260](https://github.com/HaxeFoundation/dox/issues/260))
