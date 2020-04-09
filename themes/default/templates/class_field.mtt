@@ -17,10 +17,7 @@
 	::end::
 
 	$$printDeprecation(::field::)
-	
-	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
-		$$printPlatforms(::field.platforms::,::false::)
-	::end::
+	$$printFieldPlatforms(::field::)
 	
 	::if field.doc != null::
 		<div class="doc">::raw field.doc::</div>

@@ -11,6 +11,7 @@
 		</code>
 	</h3>
 	$$printDeprecation(::ctor::)
+	$$printFieldPlatforms(::ctor::)
 	
 	<div class="doc" ::cond ctor.doc != null::>
 		::raw ctor.doc::

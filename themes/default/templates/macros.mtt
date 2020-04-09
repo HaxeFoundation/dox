@@ -24,6 +24,12 @@
 	</p>
 </macro>
 
+<macro name="printFieldPlatforms(field)">
+	::if field.platforms.length != type.platforms.length && field.platforms.length > 0 && field.platforms.length < api.config.platforms.length::
+		$$printPlatforms(::field.platforms::,::false::)
+	::end::
+</macro>
+
 <macro name="printLinkedPath(path, params, qualified)">
 	::if api.isKnownType(path)::
 		<a class="type" title="::api.getSentenceDesc(api.resolveType(path))::" ::attr href api.pathToUrl(path)::>

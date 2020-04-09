@@ -7,6 +7,7 @@
 - added a `--keep-field-order` argument ([#258](https://github.com/HaxeFoundation/dox/issues/258))
 - added tooltips with descriptions for compiler metadata ([#240](https://github.com/HaxeFoundation/dox/issues/240))
 - added the fully qualified path of types to tooltips
+- added support for platform-specific enum constructors ([haxe#3583](https://github.com/HaxeFoundation/haxe/issues/3583))
 - improved function type printing to use Haxe 4 syntax ([#273](https://github.com/HaxeFoundation/dox/issues/273))
 - fixed JS version being used if the node version is not supported (< 8.10.0)
 - fixed interfaces with multiple `extends` only showing the first one ([#260](https://github.com/HaxeFoundation/dox/issues/260))

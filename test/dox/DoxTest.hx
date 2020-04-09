@@ -140,6 +140,10 @@ class TestClass {
 	public final finalVar = "";
 
 	public final function finalFunction() {}
+
+	#if cs
+	public var platformSpecificField:Int;
+	#end
 }
 
 /**
@@ -170,6 +174,10 @@ enum TestEnum {
 		Some *documentation*.
 	**/
 	VisibleConstructor;
+
+	#if cs
+	PlatformSpecificConstructor;
+	#end
 }
 
 @:dox(hide) enum TestHiddenEnum {}
