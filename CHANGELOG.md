@@ -9,6 +9,7 @@
 - added the fully qualified path of types to tooltips
 - added support for platform-specific enum constructors ([haxe#3583](https://github.com/HaxeFoundation/haxe/issues/3583))
 - improved function type printing to use Haxe 4 syntax ([#273](https://github.com/HaxeFoundation/dox/issues/273))
+- improved filtering to show type names first so they're always visible
 - fixed JS version being used if the node version is not supported (< 8.10.0)
 - fixed interfaces with multiple `extends` only showing the first one ([#260](https://github.com/HaxeFoundation/dox/issues/260))
 - fixed overloads not being filtered by visibility / metadata ([#272](https://github.com/HaxeFoundation/dox/issues/272))

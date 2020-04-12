@@ -259,7 +259,7 @@ class Api {
 	public function getPathPack(path:Path):String {
 		var parts = path.split(".");
 		parts.pop();
-		return parts.length == 0 ? "" : parts.join(".") + ".";
+		return parts.length == 0 ? "" : parts.join(".");
 	}
 
 	/**
