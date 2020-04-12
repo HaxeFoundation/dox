@@ -20,7 +20,7 @@ class Make {
 					Sys.command("nekotools server");
 
 				case "package":
-					Sys.command("7z a -i!run.n -i!run.js -i!images -i!themes -i!src -i!haxelib.json -i!README.md -i!LICENSE.md -i!CHANGELOG.md bin/haxelib.zip");
+					Sys.command("7z a -i!run.n -i!run.js -i!resources -i!themes -i!src -i!haxelib.json -i!README.md -i!LICENSE.md -i!CHANGELOG.md bin/haxelib.zip");
 			}
 		}
 	}

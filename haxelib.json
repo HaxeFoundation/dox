@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": ["documentation"],
 	"description": "Haxe documentation generator.",
-	"version": "1.4.0",
-	"releasenote": "Node version for better performance, now usable as an API, improved Haxe 4 support.",
+	"version": "1.5.0",
+	"releasenote": "Improved support for conditional compilation, metadata and Haxe 4, various bugfixes.",
 	"contributors": ["HaxeFoundation", "dpeek", "Simn"],
 	"dependencies": {},
 	"classPath": "src"

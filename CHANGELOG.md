@@ -1,4 +1,4 @@
-### 1.5.0 (to be released)
+### 1.5.0 (April 12, 2020)
 
 - added a "final" prefix for final classes and interfaces
 - added support for deprecation messages on types ([#261](https://github.com/HaxeFoundation/dox/issues/261))
