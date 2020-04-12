@@ -23,12 +23,14 @@
 				<h4 class="section section-availability">::platform::</h4>
 			::end::
 			::switch platformType::
+				::if !multiplePlatforms::<h3 class="section">Alias</h3>::end::
 				<div class="fields">
 					<div class="field">
 						<em>alias for </em><code>$$printLinkedType(::platformType::,::true::)</code>
 					</div>
 				</div>
 			::case 5::
+				::if !multiplePlatforms::<h3 class="section">Fields</h3>::end::
 				<div class="fields">
 					::switch platformType::
 					::case 5::

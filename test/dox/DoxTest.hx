@@ -397,3 +397,10 @@ typedef PlatformConditionalized = #if cpp {
 	**/
 	var s:String;
 } #elseif cs(a:String, b:Int) -> Void #elseif neko Array<Int> #else {} #end;
+
+/**
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
+	dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+	ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+**/
+typedef Alias = (a:String, b:Int) -> Void;
