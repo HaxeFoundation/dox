@@ -1,5 +1,9 @@
 # Dox
-[![Haxelib Version](https://img.shields.io/github/tag/HaxeFoundation/dox.svg?label=haxelib)](http://lib.haxe.org/p/dox) [![CI](https://img.shields.io/github/workflow/status/HaxeFoundation/dox/CI.svg?logo=github)](https://github.com/HaxeFoundation/dox/actions?query=workflow%3ACI)
+[![CI](https://img.shields.io/github/workflow/status/HaxeFoundation/dox/CI.svg?logo=github)](https://github.com/HaxeFoundation/dox/actions?query=workflow%3ACI)
+[![Haxelib Version](https://badgen.net/haxelib/v/dox)](https://lib.haxe.org/p/hxnodejs)
+[![Haxelib Downloads](https://badgen.net/haxelib/d/dox?color=blue)](https://lib.haxe.org/p/hxnodejs)
+[![Haxelib License](https://badgen.net/haxelib/license/dox)](LICENSE)
+
 
 A Haxe documentation generator used by many popular projects such as:
 
