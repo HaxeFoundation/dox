@@ -1,6 +1,6 @@
 {
 	"devDependencies": {
-		"lix": "^15.8.9"
+		"lix": "^15.9.0"
 	},
 	"scripts": {
 		"postinstall": "lix download"
