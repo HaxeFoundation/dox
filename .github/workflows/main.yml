@@ -17,5 +17,8 @@ jobs:
     - uses: actions/checkout@v2
     - run: npm install
     - if: matrix.haxe-version == 'nightly'
-      run: npx lix install haxe nightly
+      run: |
+        npx lix install haxe nightly
+        npx lix install https://github.com/HaxeFoundation/hxcpp
+        echo y | npx lix run hxcpp
     - run: npx haxe -cp .github/workflows --run RunCI
