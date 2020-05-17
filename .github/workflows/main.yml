@@ -21,4 +21,5 @@ jobs:
         npx lix install haxe nightly
         npx lix install https://github.com/HaxeFoundation/hxcpp
         echo y | npx lix run hxcpp
+      continue-on-error: true
     - run: npx haxe -cp .github/workflows --run RunCI
