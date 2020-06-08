@@ -1,3 +1,7 @@
+### 1.5.1 (to be released)
+
+- fixed packages that only contain hidden types showing up ([#276](https://github.com/HaxeFoundation/dox/issues/276))
+
 ### 1.5.0 (April 12, 2020)
 
 - added a "final" prefix for final classes and interfaces
