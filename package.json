@@ -3,6 +3,12 @@
 		"lix": "^15.9.0"
 	},
 	"scripts": {
+		"build": "haxe --run Make dox xml pages",
+		"serve": "haxe --run Make server",
+		"dox": "haxe --run Make dox",
+		"xml": "haxe --run Make xml",
+		"pages": "haxe --run Make pages",
+		"package": "haxe --run Make package",
 		"postinstall": "lix download"
 	}
 }
