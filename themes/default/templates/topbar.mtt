@@ -12,6 +12,7 @@
 			<div class="container">
 				<a ::cond api.isDefined("logo"):: ::attr href if(api.isDefined("website")) api.getValue("website") else api.config.rootPath:: class="brand"><img alt="" ::attr src api.getValue("logo"):: /></a>
 				<a ::attr href api.config.rootPath:: class="brand" style="color:$$getHexValue(::textColor::)">::if api.config.pageTitle!=null::::api.config.pageTitle::::else::API Documentation::end::</a>
+				<a href="#" id="theme-toggle" class="brand" style="color:$$getHexValue(::textColor::)" onclick="toggleTheme()"><i class="fa fa-moon-o"></i></a>
 			</div>
 		</div>
 	</div>
