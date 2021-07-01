@@ -84,6 +84,10 @@
   background-color: #333;
 }
 
+.dark-theme .nav-list>.active>a {
+  background-color: #444;
+}
+
 .dark-theme .nav-list>.active>a.treeLink,
 .dark-theme .nav-list>.active>a.treeLink:hover,
 .dark-theme .nav-list>.active>a.treeLink:focus {
@@ -273,6 +277,13 @@
 }
 
 
+/* Types without links */
+
+.dark-theme code .type {
+  color: #29e;
+}
+
+
 /* dark code examples (from try-haxe) */
 
 .dark-theme code,
@@ -281,7 +292,7 @@
 }
 
 .dark-theme code a {
-  color: #08c
+  color: #29e
 }
 
 .dark-theme pre .type {
