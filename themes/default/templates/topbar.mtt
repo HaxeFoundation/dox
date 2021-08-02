@@ -4,6 +4,7 @@
 	display: inline-block;
 	float: none;
 	text-shadow: 0 0 0 transparent;
+}
 "::
 </style>
 <nav class="nav">
