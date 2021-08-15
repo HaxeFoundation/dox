@@ -1,5 +1,6 @@
-### 1.5.1 (to be released)
+### 1.6.0 (August 15, 2021)
 
+- added a dark mode to the default theme ([#287](https://github.com/HaxeFoundation/dox/issues/287))
 - fixed packages that only contain hidden types showing up ([#276](https://github.com/HaxeFoundation/dox/issues/276))
 
 ### 1.5.0 (April 12, 2020)

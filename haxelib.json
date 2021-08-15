@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": ["documentation"],
 	"description": "Haxe documentation generator.",
-	"version": "1.5.0",
-	"releasenote": "Improved support for conditional compilation, metadata and Haxe 4, various bugfixes.",
+	"version": "1.6.0",
+	"releasenote": "Added a dark mode to the default theme.",
 	"contributors": ["HaxeFoundation", "dpeek", "Simn"],
 	"dependencies": {},
 	"classPath": "src"
