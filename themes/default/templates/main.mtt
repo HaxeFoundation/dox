@@ -14,7 +14,8 @@
 <body>
 <script>
 	/* Here to prevent flash of unstyled content */
-	if(localStorage.theme == "dark") {
+	let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {
 		document.body.style.backgroundColor = "#111";
 		document.body.style.opacity = "0";
 		document.addEventListener("DOMContentLoaded", function(event) {
