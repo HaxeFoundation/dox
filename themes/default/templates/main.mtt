@@ -12,6 +12,18 @@
 
 ::use "header.mtt"::::end::
 <body>
+<script>
+	/* Here to prevent flash of unstyled content */
+	if(localStorage.theme == "dark") {
+		document.body.style.backgroundColor = "#111";
+		document.body.style.opacity = "0";
+		document.addEventListener("DOMContentLoaded", function(event) {
+			toggleTheme();
+			document.body.style.backgroundColor = "";
+			document.body.style.opacity = "";
+		});
+	}
+</script>
 ::use "topbar.mtt"::::end::
 <div class="container main-content">
 	<div class="row-fluid">
@@ -19,10 +31,10 @@
 		<div class="well sidebar-nav">
 			<form class="form-search" id="searchForm">
 			<div class="input-prepend input-block-level">
-				<span class="add-on"><i class="icon-search"></i></span>
+				<span class="add-on"><i class="fa fa-search"></i></span>
 				<input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/>
 			</div>
-			</form>		
+			</form>
 			<div class="dropdown" ::cond (api.config.platforms.length>1)::>
 				<select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%">
 					<option value="all" selected="selected">All Platforms</option>
@@ -45,13 +57,13 @@
 
 <script src="::api.config.rootPath::/highlighter.js"></script>
 <link href="::api.config.rootPath::highlighter.css" rel="stylesheet" />
-	
+
 ::if (api.isDefined("googleAnalytics"))::
 ::set trackingID=api.getValue("googleAnalytics")::
 <script async="async" src="https://www.googletagmanager.com/gtag/js?id=::trackingID::"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);} 
+function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '::trackingID::');
 </script>
