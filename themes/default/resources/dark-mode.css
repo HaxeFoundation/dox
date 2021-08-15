@@ -5,6 +5,7 @@
 .dark-theme {
   background-color: #111 !important;
   color: #ccc;
+  color-scheme: dark;
 }
 
 .dark-theme body {
