@@ -8,7 +8,7 @@
 	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400' rel='stylesheet' type='text/css'/>
 	<link href='https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css' rel='stylesheet' type='text/css' />
 
-	<script src="::api.config.rootPath::jquery-1.9.1.min.js"></script>
+	<script src="::api.config.rootPath::jquery-3.6.0.min.js"></script>
 	<script src="::api.config.rootPath::bootstrap/js/bootstrap.min.js"></script>
 	<script src="::api.config.rootPath::bootstrap/js/bootstrap-select.min.js"></script>
 	<link href="::api.config.rootPath::styles.css" rel="stylesheet" />
