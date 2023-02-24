@@ -1,8 +1,40 @@
-Thumbs.db
-bin/pages/
-*.hxproj
-/bin/haxelib*
 bin/
-dump/
 node_modules/
 run.js
+
+# Eclipse
+.settings/
+.project
+**/.*.md.html
+
+# Eclipse Theia
+.theia
+
+# IntelliJ
+.idea
+*.iml
+*.ipr
+*.iws
+
+# HaxeDevelop/FlashDevelop
+*.hxproj
+
+# Visual Studio Code
+.vscode
+
+# OSX
+.DS_Store
+
+# Vim
+*.swo
+*.swp
+
+# Temp files
+.history
+*.tmp
+*.bak
+/dump
+Thumbs.db
+
+# Local work folder that is not checked in
+_LOCAL/
