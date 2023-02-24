@@ -16,14 +16,16 @@ A Haxe documentation generator used by many popular projects such as:
 
 ![image](resources/screenshot.png)
 
-### Installation
+
+## Installation
 
 Install the library via [haxelib](http://lib.haxe.org/p/dox):
-```
+```sh
 haxelib install dox
 ```
 
-### Usage
+
+## Usage
 
 > **Note:** Dox requires Haxe 3.1 or higher due to some minor changes in
 abstract rtti xml generation. You'll also need an up-to-date haxelib
@@ -34,12 +36,13 @@ abstract rtti xml generation. You'll also need an up-to-date haxelib
 
 **:clipboard: For more details, custom theme creation and options [check out the Dox wiki](https://github.com/HaxeFoundation/dox/wiki/)**
 
-### Local development
 
-To test Dox locally, clone the git, run `npm install` in root of directory. This installs the correct Haxe version using Lix and installs the required dependencies.
+## Local development
+
+To test Dox locally, clone the git repo, run `npm install` in root directory. This installs the correct Haxe version using lix and all required dependencies.
 
 After that you can run:
-```
+```sh
 npx haxe --run Make dox xml pages server
 ```
-This compiles Dox, creates xml's, generates the pages and starts a local dev server at <http://localhost:2000>.
+This compiles Dox, creates XML's, generates the pages and starts a local dev server at <http://localhost:2000>.
