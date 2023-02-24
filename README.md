@@ -1,5 +1,5 @@
 # Dox
-[![CI](https://img.shields.io/github/workflow/status/HaxeFoundation/dox/CI.svg?logo=github)](https://github.com/HaxeFoundation/dox/actions?query=workflow%3ACI)
+[![Build Status](https://github.com/HaxeFoundation/dox/workflows/CI/badge.svg "GitHub Actions")](https://github.com/HaxeFoundation/dox/actions?query=workflow%3ACI)
 [![Haxelib Version](https://badgen.net/haxelib/v/dox)](https://lib.haxe.org/p/dox)
 [![Haxelib Downloads](https://badgen.net/haxelib/d/dox?color=blue)](https://lib.haxe.org/p/dox)
 [![Haxelib License](https://badgen.net/haxelib/license/dox)](LICENSE.md)
@@ -19,14 +19,14 @@ A Haxe documentation generator used by many popular projects such as:
 ### Installation
 
 Install the library via [haxelib](http://lib.haxe.org/p/dox):
-``` 
+```
 haxelib install dox
 ```
 
 ### Usage
 
-> **Note:** Dox requires Haxe 3.1 or higher due to some minor changes in 
-abstract rtti xml generation. You'll also need an up-to-date haxelib 
+> **Note:** Dox requires Haxe 3.1 or higher due to some minor changes in
+abstract rtti xml generation. You'll also need an up-to-date haxelib
 (requires support for `classPath` in _haxelib.json_)
 
 1. Compile all relevant code with Haxe using `haxe -xml docs/doc.xml -D doc-gen`.
