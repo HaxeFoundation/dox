@@ -1,23 +1,125 @@
+# https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
 name: CI
 
 on:
   push:
+    branches:    # build all branches
+    - '**'
+    tags-ignore: # but don't build tags
+    - '**'
+    paths-ignore:
+    - '**/*.md'
+    - '.github/*.yml'
   pull_request:
+  workflow_dispatch:
+    # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
     strategy:
       matrix:
-        haxe-version: [nightly, haxerc]
+        haxe-version:
+        - nightly
+        - haxerc # use the version specified in .haxerc
+        os:
+        - ubuntu-latest
+        - windows-latest
       fail-fast: false
-    runs-on: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+
+    - name: Setup [node]
+      uses: actions/setup-node@v3 # https://github.com/marketplace/actions/setup-node-js-environment
+      with:
+        node-version: 18
+
     - run: npm install
-    - if: matrix.haxe-version == 'nightly'
+
+    - name: Generate XMLs
+      run: npx haxe xml.hxml
+
+    - name: Test [eval]
+      run: npx haxe -D eval-stack runBase.hxml --run dox.Dox --help
+
+    - name: Test [neko]
       run: |
+        set -eux
+        npx haxe runBase.hxml -neko run.n
+        npx neko run.n --help
+
+    - name: Setup [python]
+      uses: actions/setup-python@v4 # https://github.com/actions/setup-python
+      with:
+        python-version: 3.11
+
+    - name: Test [python]
+      run: |
+        set -eux
+        npx haxe runBase.hxml -python bin/dox.py
+        python bin/dox.py --help
+
+    - name: Setup [php]
+      uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+      env:
+        runner: ${{ env.ACT && 'self-hosted' || 'github' }}
+      with:
+        php-version: 7.4
+        extensions: mbstring, xml
+
+    - name: Test [php]
+      run: |
+        set -eux
+        npx haxe runBase.hxml -php bin/dox
+        php bin/dox/index.php --help
+
+    - name: Setup [java]
+      uses: actions/setup-java@v3 # https://github.com/marketplace/actions/setup-java-jdk
+      with:
+        distribution: 'temurin'
+        java-version: 11
+
+    - name: Test [java]
+      run: |
+        set -eux
+        npx haxe runBase.hxml -java bin/java
+        java -jar bin/java/Dox.jar
+
+    - name: Test [jvm]
+      run: |
+        set -eux
+        npx haxe runBase.hxml -java bin/jvm
+        java -jar bin/jvm/Dox.jar
+
+    - name: Test [node]
+      run: |
+        set -eux
+        npx haxe runBase.hxml -lib hxnodejs -js bin/dox.js
+        node bin/dox.js
+
+    - name: Install hxcpp development version
+      if: matrix.haxe-version == 'nightly'
+      run: |
+        set -eux
         npx lix install haxe nightly
-        npx lix install https://github.com/HaxeFoundation/hxcpp
-        echo y | npx lix run hxcpp
-      continue-on-error: true
-    - run: npx haxe -cp .github/workflows --run RunCI
+
+        #npx lix install https://github.com/HaxeFoundation/hxcpp
+        #echo y | npx lix run hxcpp
+        #--> does not work, so we do instead:
+        npx haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp
+        pushd $(npx haxelib config)/hxcpp/git/tools/hxcpp
+        echo y | npx haxe compile.hxml
+        popd
+        npx lix dev hxcpp $(npx haxelib config)/hxcpp/git
+
+    - name: Test [cpp]
+      run: |
+        set -eux
+        npx haxe runBase.hxml -cpp bin/cpp -D HXCPP_SILENT
+        bin/cpp/Dox

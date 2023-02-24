@@ -135,7 +135,7 @@ class TestClass {
 	**/
 	public var callback:String->Int->Void;
 
-	extern public function externFunction();
+	extern public function externFunction():Void;
 
 	public final finalVar = "";
 
