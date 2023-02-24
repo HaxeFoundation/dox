@@ -1,4 +1,4 @@
-# @install: lix --silent download "gh://github.com/simn/hxtemplo#4b9ec0c07e9ec619c7c414c3a72af4be63d820cc" into hxtemplo/3.0.0/github/4b9ec0c07e9ec619c7c414c3a72af4be63d820cc
+# @install: lix --silent download "gh://github.com/Simn/hxtemplo#4b9ec0c07e9ec619c7c414c3a72af4be63d820cc" into hxtemplo/3.0.0/github/4b9ec0c07e9ec619c7c414c3a72af4be63d820cc
 -lib hxparse
 -cp ${HAXE_LIBCACHE}/hxtemplo/3.0.0/github/4b9ec0c07e9ec619c7c414c3a72af4be63d820cc/src
--D hxtemplo=3.0.0
+-D hxtemplo=3.3.0-dev
