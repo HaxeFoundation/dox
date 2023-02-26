@@ -1,5 +1,5 @@
 # Dox
-[![CI](https://img.shields.io/github/workflow/status/HaxeFoundation/dox/CI.svg?logo=github)](https://github.com/HaxeFoundation/dox/actions?query=workflow%3ACI)
+[![Build Status](https://github.com/HaxeFoundation/dox/workflows/CI/badge.svg "GitHub Actions")](https://github.com/HaxeFoundation/dox/actions?query=workflow%3ACI)
 [![Haxelib Version](https://badgen.net/haxelib/v/dox)](https://lib.haxe.org/p/dox)
 [![Haxelib Downloads](https://badgen.net/haxelib/d/dox?color=blue)](https://lib.haxe.org/p/dox)
 [![Haxelib License](https://badgen.net/haxelib/license/dox)](LICENSE.md)
@@ -16,17 +16,19 @@ A Haxe documentation generator used by many popular projects such as:
 
 ![image](resources/screenshot.png)
 
-### Installation
+
+## Installation
 
 Install the library via [haxelib](http://lib.haxe.org/p/dox):
-``` 
+```sh
 haxelib install dox
 ```
 
-### Usage
 
-> **Note:** Dox requires Haxe 3.1 or higher due to some minor changes in 
-abstract rtti xml generation. You'll also need an up-to-date haxelib 
+## Usage
+
+> **Note:** Dox requires Haxe 3.1 or higher due to some minor changes in
+abstract rtti xml generation. You'll also need an up-to-date haxelib
 (requires support for `classPath` in _haxelib.json_)
 
 1. Compile all relevant code with Haxe using `haxe -xml docs/doc.xml -D doc-gen`.
@@ -34,12 +36,24 @@ abstract rtti xml generation. You'll also need an up-to-date haxelib
 
 **:clipboard: For more details, custom theme creation and options [check out the Dox wiki](https://github.com/HaxeFoundation/dox/wiki/)**
 
-### Local development
 
-To test Dox locally, clone the git, run `npm install` in root of directory. This installs the correct Haxe version using Lix and installs the required dependencies.
+## Local development
+
+To test Dox locally, clone the git repo, run `npm install` in root directory. This installs the correct Haxe version using lix and all required dependencies.
 
 After that you can run:
-```
+```sh
 npx haxe --run Make dox xml pages server
 ```
-This compiles Dox, creates xml's, generates the pages and starts a local dev server at <http://localhost:2000>.
+This compiles Dox, creates XML's, generates the pages and starts a local dev server at <http://localhost:2000>.
+
+
+## Local development - testing with nektos/act
+
+The GitHub workflow can be run locally using Nekto's [act](https://github.com/nektos/act) command-line tool. To use it:
+
+1. Install docker
+1. Install [act](https://github.com/nektos/act)
+1. Navigate into the root of your project (where the .github folder is located)
+1. Run the command `act`
+1. On subsequent re-runs you can use `act -r` to reuse previous container which avoids re-installation of components and thus greatly reduces build time.
