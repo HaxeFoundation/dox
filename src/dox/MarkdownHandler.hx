@@ -19,7 +19,7 @@ class MarkdownHandler {
 		document.inlineSyntaxes.push(new MagicCodeSyntax(processCode.bind(path)));
 
 		// replace windows line endings with unix, and split
-		var lines = ~/\n\r/g.replace(markdown, '\n').split("\n");
+		var lines = markdown.replace("\r\n", "\n").split("\n");
 
 		// parse ref links
 		document.parseRefLinks(lines);
