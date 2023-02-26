@@ -42,13 +42,16 @@ jobs:
 
     - run: npm install
 
-    - name: Generate XMLs
+    - name: Run unit tests
+      run: npx haxe tests.hxml
+
+    - name: Test generation of XML files
       run: npx haxe xml.hxml
 
-    - name: Test [eval]
+    - name: Test cli [eval]
       run: npx haxe -D eval-stack runBase.hxml --run dox.Dox --help
 
-    - name: Test [neko]
+    - name: Test cli [neko]
       run: |
         set -eux
         npx haxe runBase.hxml -neko run.n
@@ -59,7 +62,7 @@ jobs:
       with:
         python-version: 3.11
 
-    - name: Test [python]
+    - name: Test cli [python]
       run: |
         set -eux
         npx haxe runBase.hxml -python bin/dox.py
@@ -73,7 +76,7 @@ jobs:
         php-version: 7.4
         extensions: mbstring, xml
 
-    - name: Test [php]
+    - name: Test cli [php]
       run: |
         set -eux
         npx haxe runBase.hxml -php bin/dox
@@ -85,19 +88,19 @@ jobs:
         distribution: 'temurin'
         java-version: 11
 
-    - name: Test [java]
+    - name: Test cli [java]
       run: |
         set -eux
         npx haxe runBase.hxml -java bin/java
         java -jar bin/java/Dox.jar
 
-    - name: Test [jvm]
+    - name: Test cli [jvm]
       run: |
         set -eux
         npx haxe runBase.hxml -java bin/jvm
         java -jar bin/jvm/Dox.jar
 
-    - name: Test [node]
+    - name: Test cli [node]
       run: |
         set -eux
         npx haxe runBase.hxml -lib hxnodejs -js bin/dox.js
@@ -118,7 +121,7 @@ jobs:
         popd
         npx lix dev hxcpp $(npx haxelib config)/hxcpp/git
 
-    - name: Test [cpp]
+    - name: Test cli [cpp]
       run: |
         set -eux
         npx haxe runBase.hxml -cpp bin/cpp -D HXCPP_SILENT

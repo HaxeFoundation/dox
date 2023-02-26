@@ -3,6 +3,7 @@ package dox;
 import haxe.Serializer;
 import haxe.rtti.CType;
 
+@:allow(dox.test)
 class Processor {
 	public var infos:Infos;
 
@@ -51,25 +52,25 @@ class Processor {
 				throw 'Could not find toplevel package ${config.toplevelPackage}';
 			}
 		}
-		function filter(root, tree):Void {
+		function filter(parent:Array<TypeTree>, tree:TypeTree):Void {
 			return switch (tree) {
 				case TPackage(name, full, subs):
 					var acc = [];
 					subs.iter(filter.bind(acc));
 					if (acc.length > 0 && !isPathFiltered(full)) {
-						root.push(TPackage(name, full, acc));
+						parent.push(TPackage(name, full, acc));
 					}
 				case TClassdecl(t):
 					t.fields = filterFields(t.fields);
 					t.statics = filterFields(t.statics);
 					if (!isTypeFiltered(t)) {
-						root.push(tree);
+						parent.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TEnumdecl(t):
 					if (!isTypeFiltered(t)) {
 						t.constructors = filterEnumFields(t.constructors);
-						root.push(tree);
+						parent.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TTypedecl(t):
@@ -79,39 +80,158 @@ class Processor {
 								t.type = CAnonymous(filterFields(fields));
 							default:
 						}
-						root.push(tree);
+						parent.push(tree);
 						infos.addType(t.path, t);
 					}
 				case TAbstractdecl(t):
 					if (t.impl != null) {
-						var fields = new Array<ClassField>();
-						var statics = new Array<ClassField>();
-						t.impl.statics.iter(function(cf) {
-							if (hasMeta(cf.meta, ":impl")) {
-								if (cf.name == "_new")
-									cf.name = "new";
-								else
-									switch (cf.type) {
-										case CFunction(args, _):
-											args.shift();
-										case _:
-									}
-								fields.push(cf);
-							} else {
-								statics.push(cf);
-							}
-						});
-						t.impl.fields = filterFields(fields);
-						t.impl.statics = filterFields(statics);
+						populateFieldsOfAbstract(t, root);
 					}
 					if (!isTypeFiltered(t)) {
-						root.push(tree);
+						parent.push(tree);
 						infos.addType(t.path, t);
 					}
 			}
 		}
 		root.iter(filter.bind(newRoot));
 		return newRoot;
+	}
+
+	function populateFieldsOfAbstract(theAbstract:Abstractdef, root:TypeRoot) {
+		if (hasDoxMetadata(theAbstract.impl.meta, "is-populated")) {
+			return; // nothing to do
+		}
+
+		var statics = new Array<ClassField>();
+		var fields = new Array<ClassField>();
+
+	 	// collect direct members
+		for (cf in theAbstract.impl.statics) {
+			switch (cf.type) {
+				// handling functions
+				case CFunction(args, _):
+					if (cf.name == "_new") { // constructor
+						cf.name = "new";
+						// the Haxe compiler automatically adds a ":noCompletion"
+						// so we remove the first auto-generated occurrence
+						var noCompletionMeta = cf.meta.find(m ->  m.name == ":noCompletion");
+						if (noCompletionMeta != null) cf.meta.remove(noCompletionMeta);
+						fields.push(cf);
+					} else if (args.length == 0 || args[0].name != "this") {
+						statics.push(cf);
+					} else
+						fields.push(cf);
+				// handling variables (declared with get and/or set accessor)
+				case CAbstract(name, params):
+					var isStatic = true;
+					switch(cf.get) {
+						case RCall("accessor"):
+							final accessor = theAbstract.impl.statics.find(f -> f.name == "get_" + cf.name);
+							if (accessor != null) {
+								switch (accessor.type) {
+									case CFunction(args, _):
+										if (args.length > 0 && args[0].name == "this")
+											isStatic = false;
+									case _:
+								}
+							}
+						case _:
+							switch(cf.set) {
+								case RCall("accessor"):
+									final accessor = theAbstract.impl.statics.find(f -> f.name == "set_" + cf.name);
+									if (accessor != null) { 
+										switch (accessor.type) {
+											case CFunction(args, _):
+												if (args.length > 0 && args[0].name == "this")
+													isStatic = false;
+											case _:
+										}
+									}
+								case _:
+							}
+					}
+					if (isStatic)
+						statics.push(cf);
+					else {
+						fields.push(cf);
+						}
+				case _:
+					statics.push(cf);
+			}
+		}
+
+		// collect forwarded static fields
+		final forwardStaticsMeta = findMeta(theAbstract.meta, ":forwardStatics");
+		if (forwardStaticsMeta != null) {
+			switch (theAbstract.athis) {
+				case CClass(name, params):
+					switch (findInTrees(name, root)) {
+						case TClassdecl(realType):
+							if (forwardStaticsMeta.params == null || forwardStaticsMeta.params.length == 0) {
+								statics = statics.concat(realType.statics);
+							} else {
+								for (classStatic in realType.statics) {
+									if (forwardStaticsMeta.params.contains(classStatic.name))
+										statics.push(classStatic);
+								}
+							}
+						case _:
+					}
+				case CAbstract(name, _):
+					switch (findInTrees(name, root)) {
+						case TAbstractdecl(realType):
+							populateFieldsOfAbstract(realType, root);
+							if (forwardStaticsMeta.params == null || forwardStaticsMeta.params.length == 0) {
+								statics = statics.concat(realType.impl.statics);
+							} else {
+								for (classStatic in realType.impl.statics) {
+									if (forwardStaticsMeta.params.contains(classStatic.name))
+										statics.push(classStatic);
+								}
+							}
+						case _:
+					}
+				case _:
+			}
+		}
+
+		// collect forwarded instance fields
+		final forwardMeta = findMeta(theAbstract.meta, ":forward");
+		if (forwardMeta != null) {
+			switch (theAbstract.athis) {
+				case CClass(name, _):
+					switch (findInTrees(name, root)) {
+						case TClassdecl(realType):
+							if (forwardMeta.params == null || forwardMeta.params.length == 0) {
+								fields = fields.concat(realType.fields);
+							} else {
+								for (classField in realType.fields) {
+									if (forwardMeta.params.contains(classField.name))
+										fields.push(classField);
+								}
+							}
+						case _:
+					}
+				case CAbstract(name, _):
+					switch (findInTrees(name, root)) {
+						case TAbstractdecl(realType):
+							populateFieldsOfAbstract(realType, root);
+							if (forwardMeta.params == null || forwardMeta.params.length == 0) {
+								fields = fields.concat(realType.impl.fields);
+							} else {
+								for (classField in realType.impl.fields) {
+									if (forwardMeta.params.contains(classField.name))
+										fields.push(classField);
+								}
+							}
+						case _:
+					}
+				case _:
+			}
+		}
+		theAbstract.impl.statics = filterFields(statics);
+		theAbstract.impl.fields = filterFields(fields);
+		setMetaParam(theAbstract.impl.meta, ":dox", "is-populated");
 	}
 
 	function filterFields(fields:Array<ClassField>) {
@@ -127,6 +247,29 @@ class Processor {
 
 	function filterEnumFields(fields:Array<EnumField>) {
 		return fields.filter(ef -> !hasHideMetadata(ef.meta) || hasShowMetadata(ef.meta));
+	}
+
+	/** Searches for a TClassdecl or TAbstractdecl in the given trees */
+	static function findInTrees(path:String, trees:Array<TypeTree>):Null<TypeTree> {
+		for (tree in trees) {
+			final result = findInTree(path, tree);
+			if (result != null) return result;
+		}
+		return null;
+	}
+
+	/** Searches for a TClassdecl or TAbstractdecl in the given tree */
+	static function findInTree(path:String, tree:TypeTree):Null<TypeTree> {
+		switch (tree) {
+			case TPackage(_, full, subs):
+				return findInTrees(path, subs);
+			case TClassdecl(t):
+				if (t.path == path) return tree;
+			case TAbstractdecl(t):
+				if (t.path == path) return tree;
+			case _: return null;
+		}
+		return null;
 	}
 
 	function sort(root:TypeRoot) {
@@ -355,6 +498,10 @@ class Processor {
 		return hasInclusionFilter;
 	}
 
+	function findMeta(meta:MetaData, name:String):Null<{name:String, params:Array<String>}> {
+		return meta.find(meta -> meta.name == name);
+	}
+
 	function hasMeta(meta:MetaData, name:String) {
 		return meta.exists(meta -> meta.name == name);
 	}
@@ -369,5 +516,13 @@ class Processor {
 
 	function hasHideMetadata(meta:MetaData):Bool {
 		return hasDoxMetadata(meta, "hide") || hasMeta(meta, ":compilerGenerated") || hasMeta(meta, ":noCompletion");
+	}
+
+	function setMetaParam(meta:MetaData, name:String, param:String) {
+		var doxMeta = findMeta(meta, name);
+		if (doxMeta == null)
+			meta.push({name: name, params: [param]});
+		else if (!doxMeta.params.contains(param))
+			doxMeta.params.push(param);
 	}
 }
