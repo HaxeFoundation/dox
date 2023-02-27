@@ -1,6 +1,6 @@
 --no-output
 -cp test
-dox
+dox.sample
 -D doc-gen
 
 --each

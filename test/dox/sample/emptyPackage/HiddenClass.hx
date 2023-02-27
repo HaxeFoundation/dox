@@ -1,4 +1,4 @@
-package dox.emptyPackage;
+package dox.sample.emptyPackage;
 
 @:dox(hide)
 class HiddenClass {}

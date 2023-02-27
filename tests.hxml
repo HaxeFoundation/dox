@@ -1,0 +1,10 @@
+-lib hxtemplo
+-lib hxparse
+-lib hxargs
+-lib markdown
+-lib utest
+-cp src
+-cp test
+--macro include('dox.test')
+-xml bin/doc.xml
+--run dox.test.TestRunner
