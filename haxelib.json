@@ -10,7 +10,7 @@
 		"dependencies": {
 			"hxargs": "git:https://github.com/Simn/hxargs#1d8ec84f641833edd6f0cb2e4290b7524fd27219",
 			"hxtemplo": "git:https://github.com/Simn/hxtemplo#4b9ec0c07e9ec619c7c414c3a72af4be63d820cc",
-			"hxparse": "",
+			"hxparse": "git:https://github.com/Simn/hxparse#876070ec62a4869de60081f87763e23457a3bda8",
 			"markdown": ""
 	},
 	"classPath": "src"
