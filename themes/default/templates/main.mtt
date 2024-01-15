@@ -56,7 +56,7 @@
 ::use "footer.mtt"::::end::
 
 
-<script src="::api.config.rootPath::/highlighter.js"></script>
+<script src="::api.config.rootPath::highlighter.js"></script>
 <link href="::api.config.rootPath::highlighter.css" rel="stylesheet" />
 
 ::if (api.isDefined("googleAnalytics"))::
