@@ -13,5 +13,8 @@
 	"[javascript]": {
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "vscode.typescript-language-features"
-	}
+	},
+	"files.associations": {
+		"*.mtt": "html"
+  	}
 }
