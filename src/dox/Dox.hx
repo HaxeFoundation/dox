@@ -139,6 +139,18 @@ class Dox {
 			var name = new Path(path).file;
 			Sys.println('Parsing $path');
 			var data = sys.io.File.getContent(path);
+			var md5Hash = haxe.crypto.Md5.encode(data);
+
+			if (sys.FileSystem.exists(path + ".md5")) {
+				var previousHash = sys.io.File.getContent(path + ".md5");
+				if (md5Hash == previousHash) {
+					Sys.println('Skipping $path, no file changes detected');
+					return;
+				}
+			}
+
+			sys.io.File.saveContent(path + ".md5", md5Hash);
+
 			var xml = try Xml.parse(data).firstElement() catch (err:Dynamic) {
 				trace('Error while parsing $path');
 				throw err;
