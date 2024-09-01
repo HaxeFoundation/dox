@@ -16,7 +16,7 @@ class Dox {
 				output = output.substr(1); // remove leading "v"
 				var parts = output.split(".").map(Std.parseInt);
 				// min supported node version is 8.10.0 due to usage of regex dotall flag
-				isValidNode = parts[0] >= 8 && parts[1] >= 10;
+				isValidNode = parts[0] > 8 || parts[0] == 8 && parts[1] >= 10;
 			}
 			process.close();
 			if (isValidNode && FileSystem.exists("run.js")) {
