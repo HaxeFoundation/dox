@@ -9,17 +9,17 @@ A Haxe documentation generator used by many popular projects such as:
 
 - [Haxe](https://api.haxe.org/)
 - [OpenFL](https://api.openfl.org/)
-- [HaxeFlixel](http://api.haxeflixel.com/)
+- [HaxeFlixel](https://api.haxeflixel.com/)
 - [Heaps](https://heaps.io/api/)
-- [HaxePunk](http://haxepunk.com/documentation/api/)
 - [Kha](http://api.kha.tech/)
+- [Ceramic](https://ceramic-engine.com/api-docs/)
 
 ![image](resources/screenshot.png)
 
 
 ## Installation
 
-Install the library via [haxelib](http://lib.haxe.org/p/dox):
+Install the library via [haxelib](https://lib.haxe.org/p/dox):
 ```sh
 haxelib install dox
 ```
