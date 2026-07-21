@@ -110,7 +110,7 @@ class Processor {
 			switch (cf.type) {
 				// handling functions
 				case CFunction(args, _):
-					if (cf.name == "_new") { // constructor
+					if (cf.name == "_new" || cf.name == "_hx_new") { // constructor
 						cf.name = "new";
 						// the Haxe compiler automatically adds a ":noCompletion"
 						// so we remove the first auto-generated occurrence
